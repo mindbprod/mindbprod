@@ -26,7 +26,7 @@ class CompanyTcompany extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('id_company, id_typecompany', 'required'),
-			array('id_company, id_typecompany', 'numerical', 'integerOnly'=>true),
+			array('id_company', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id_company, id_typecompany', 'safe', 'on'=>'search'),

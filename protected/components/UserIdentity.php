@@ -16,39 +16,50 @@ class UserIdentity extends CUserIdentity
 	 * @return boolean whether authentication succeeds.
 	 */
 //    private $keyString="_.$|°p8";
+    const ERROR_USER_NOACTIVE=4;
+    private $_id;
     public function authenticate(){
-        $criteria = new CDbCriteria;
-        $criteria->select = 'password,id_sperson,id_typeuser';
-        $userFromDb=  User::model()->findByAttributes(array('username'=>$this->username),$criteria);
         
+        $criteria = new CDbCriteria;
+        $criteria->select = 'username,password,id_sperson,id_typeuser,active_user';
+        $userFromDb=  User::model()->findByAttributes(array('username'=>$this->username),$criteria);
+//        echo $this->username." ".$this->password;
         if(!is_object($userFromDb) && !isset($userFromDb->username)){
                 $this->errorCode=self::ERROR_USERNAME_INVALID;
         }
         else{
-            $verifyPass=$this->verifyPassword($userFromDb->password,$this->password);
+            $verifyPass=$this->verifyPassword($this->password,$userFromDb->password);
             if(!$verifyPass){
                 $this->errorCode=self::ERROR_PASSWORD_INVALID;
             }
             else{
-                $this->errorCode=self::ERROR_NONE;
-                $modelPerson=  Person::model()->findByPk($userFromDb->id_sperson);
-                $modelTypeUser= TypeUser::model()->findByPk($userFromDb->id_typeuser);
-                Yii::app()->user->setState('nombrePerson',$modelPerson->person_name." ".$modelPerson->person_lastname);
-                Yii::app()->user->setState('nombreUsuario',$this->username);
-                Yii::app()->user->setState('nombreRole',$modelTypeUser->typeuser_name);
-                Yii::app()->user->setState('codeRole',$modelTypeUser->typeuser_code);
-                
+                if($userFromDb->active_user==2){
+                    $this->errorCode=self::ERROR_USER_NOACTIVE;
+                }
+                else{
+                    $this->_id=$userFromDb->username;
+    //                $this->username=$userFromDb->username;
+
+                    $this->errorCode=self::ERROR_NONE;
+                    $modelPerson=  Person::model()->findByPk($userFromDb->id_sperson);
+                    $modelTypeUser= TypeUser::model()->findByPk($userFromDb->id_typeuser);
+                    Yii::app()->user->setState('nombrePerson',$modelPerson->person_name." ".$modelPerson->person_lastname);
+                    Yii::app()->user->setState('nombreUsuario',$this->username);
+                    Yii::app()->user->setState('nombreRole',$modelTypeUser->typeuser_name);
+                    Yii::app()->user->setState('codeRole',$modelTypeUser->typeuser_code);
+                }
             }
         }
         return !$this->errorCode;
     }
-    private function verifyPassword($passHash,$passwordForm){
-//        if (password_verify($passwordForm, $passHash)) {
-        if ($passwordForm==$passHash) {
+    private function verifyPassword($passwordForm, $passHash){
+        if (password_verify($passwordForm, $passHash)) {
+//        if ($passwordForm==$passHash) {
             return true;
         } else {
             return false;
         }
+//        return true;
     }
 //    private function cryptPassword($password){
 //        $td = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', MCRYPT_MODE_CBC, '');

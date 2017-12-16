@@ -40,6 +40,8 @@
     $this->breadcrumbs=array(
             'Login',
     );
+    echo password_verify("80760766", '$2y$12$WvBnf6JgfKfncrdEFZGjuuFxVhZWSVyy8Ui7sD2VRaLcLgOjGjVs2');
+//    echo Yii::app()->user->getId()."---------------------".dirname(__FILE__);
 ?>
     
 

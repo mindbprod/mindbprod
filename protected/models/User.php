@@ -9,6 +9,7 @@
  * @property integer $id_typeuser
  * @property string $username
  * @property string $password
+ * @property integer $active_user
  *
  * The followings are the available model relations:
  * @property Company[] $companies
@@ -33,12 +34,12 @@ class User extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('username, password', 'required'),
-			array('id_sperson, id_typeuser', 'numerical', 'integerOnly'=>true),
+			array('username, password, active_user', 'required'),
+			array('id_sperson, id_typeuser, active_user', 'numerical', 'integerOnly'=>true),
 			array('username', 'length', 'max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_user, id_sperson, id_typeuser, username, password', 'safe', 'on'=>'search'),
+			array('id_user, id_sperson, id_typeuser, username, password, active_user', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -67,6 +68,7 @@ class User extends CActiveRecord
 			'id_typeuser' => 'Id Typeuser',
 			'username' => 'Username',
 			'password' => 'Password',
+			'active_user' => 'Active User',
 		);
 	}
 
@@ -93,6 +95,7 @@ class User extends CActiveRecord
 		$criteria->compare('id_typeuser',$this->id_typeuser);
 		$criteria->compare('username',$this->username,true);
 		$criteria->compare('password',$this->password,true);
+		$criteria->compare('active_user',$this->active_user);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
