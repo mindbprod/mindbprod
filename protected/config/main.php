@@ -24,7 +24,7 @@ return array(
                     'class'=>'system.gii.GiiModule',
                     'password'=>'root',
                     // If removed, Gii defaults to localhost only. Edit carefully to taste.
-                    'ipFilters'=>array('127.0.0.1','::1'),
+                    'ipFilters'=>array('127.0.0.1','::1','192.168.0.*'),
             ),
 	),
 
@@ -33,12 +33,13 @@ return array(
 		'user'=>array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
+//            'enableAutoLogin' => true,
 		),
 		// uncomment the following to enable URLs in path-format
 		'urlManager'=>array(
                     'urlFormat'=>'path',
-                    'showScriptName'=>true,
-                    'caseSensitive'=>false,        
+//                    'showScriptName'=>false,
+//                    'caseSensitive'=>false,        
                     'rules'=>array(
                         '<controller:\w+>/<id:\d+>'=>'<controller>/view',
                         '<controller:\w+>/<action:\w+>/<id:\d+>/*'=>'<controller>/<action>',
@@ -51,10 +52,10 @@ return array(
 		// uncomment the following to use a MySQL database
 		
 		'db'=>array(
-			'connectionString' => 'mysql:host=mbpapp.db.3324307.3a8.hostedresource.net;dbname=mbpapp',
+			'connectionString' => 'mysql:host=localhost;dbname=mbp',
 			'emulatePrepare' => true,
-			'username' => 'mbpapp',
-			'password' => 'Mbap2017!',
+			'username' => 'root',
+			'password' => 'Nevulos$',
 			'charset' => 'utf8',
 		),
 		

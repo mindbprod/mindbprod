@@ -130,3 +130,358 @@ Stack trace:
 #5 {main}
 REQUEST_URI=/mbp/index.php?r=gii
 ---
+2017/12/11 09:15:28 [error] [php] Undefined variable: WvBnf6JgfKfncrdEFZGjuuFxVhZWSVyy8Ui7sD2VRaLcLgOjGjVs2 (/var/www/html/mbp/protected/views/site/login.php:43)
+Stack trace:
+#0 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(869): SiteController->renderFile()
+#1 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(782): SiteController->renderPartial()
+#2 /var/www/html/mbp/protected/controllers/SiteController.php(138): SiteController->render()
+#3 /var/www/html/mbp/vendor/square1-io/yii-framework/web/actions/CInlineAction.php(49): SiteController->actionLogin()
+#4 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(308): CInlineAction->runWithParams()
+#5 /var/www/html/mbp/vendor/square1-io/yii-framework/web/filters/CFilterChain.php(133): SiteController->runAction()
+#6 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(291): CFilterChain->run()
+#7 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(265): SiteController->runActionWithFilters()
+#8 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(282): SiteController->run()
+#9 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(141): CWebApplication->runController()
+#10 /var/www/html/mbp/vendor/square1-io/yii-framework/base/CApplication.php(180): CWebApplication->processRequest()
+#11 /var/www/html/mbp/index.php(13): CWebApplication->run()
+REQUEST_URI=/mbp/index.php/site/login
+in /var/www/html/mbp/protected/views/site/login.php (43)
+in /var/www/html/mbp/protected/controllers/SiteController.php (138)
+in /var/www/html/mbp/index.php (13)
+2017/12/11 09:23:55 [error] [exception.CHttpException.404] CHttpException: The system is unable to find the requested action "login.html". in /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php:483
+Stack trace:
+#0 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(270): CController->missingAction('login.html')
+#1 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(282): CController->run('login.html')
+#2 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(141): CWebApplication->runController('site/login.html')
+#3 /var/www/html/mbp/vendor/square1-io/yii-framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /var/www/html/mbp/index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/mbp/index.php/site/login.html
+HTTP_REFERER=http://192.168.0.8/mbp/index.php/site/index
+---
+2017/12/11 09:24:01 [error] [exception.CHttpException.404] CHttpException: The system is unable to find the requested action "blank.html". in /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php:483
+Stack trace:
+#0 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(270): CController->missingAction('blank.html')
+#1 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(282): CController->run('blank.html')
+#2 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(141): CWebApplication->runController('site/blank.html')
+#3 /var/www/html/mbp/vendor/square1-io/yii-framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /var/www/html/mbp/index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/mbp/index.php/site/blank.html
+HTTP_REFERER=http://192.168.0.8/mbp/index.php/site/index
+---
+2017/12/11 09:29:58 [error] [exception.ParseError] ParseError: syntax error, unexpected end of file, expecting elseif (T_ELSEIF) or else (T_ELSE) or endif (T_ENDIF) in /var/www/html/mbp/protected/views/layouts/main.php:312
+Stack trace:
+#0 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CBaseController.php(95): CBaseController->renderInternal('/var/www/html/m...', Array, true)
+#1 /var/www/html/mbp/vendor/square1-io/yii-framework/web/widgets/CContentDecorator.php(76): CBaseController->renderFile('/var/www/html/m...', Array, true)
+#2 /var/www/html/mbp/vendor/square1-io/yii-framework/web/widgets/CContentDecorator.php(54): CContentDecorator->decorate('<div id="conten...')
+#3 /var/www/html/mbp/vendor/square1-io/yii-framework/web/widgets/COutputProcessor.php(44): CContentDecorator->processOutput('<div id="conten...')
+#4 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CBaseController.php(206): COutputProcessor->run()
+#5 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CBaseController.php(300): CBaseController->endWidget('CContentDecorat...')
+#6 /var/www/html/mbp/protected/views/layouts/column1.php(6): CBaseController->endContent()
+#7 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CBaseController.php(126): require('/var/www/html/m...')
+#8 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CBaseController.php(95): CBaseController->renderInternal('/var/www/html/m...', Array, true)
+#9 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(784): CBaseController->renderFile('/var/www/html/m...', Array, true)
+#10 /var/www/html/mbp/protected/controllers/SiteController.php(138): CController->render('login', Array)
+#11 /var/www/html/mbp/vendor/square1-io/yii-framework/web/actions/CInlineAction.php(49): SiteController->actionLogin()
+#12 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#13 /var/www/html/mbp/vendor/square1-io/yii-framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#14 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(291): CFilterChain->run()
+#15 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#16 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(282): CController->run('login')
+#17 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(141): CWebApplication->runController('site/login')
+#18 /var/www/html/mbp/vendor/square1-io/yii-framework/base/CApplication.php(180): CWebApplication->processRequest()
+#19 /var/www/html/mbp/index.php(13): CApplication->run()
+#20 {main}
+REQUEST_URI=/mbp/index.php/site/login
+HTTP_REFERER=http://192.168.0.8/mbp/index.php/site/index
+---
+2017/12/11 09:30:28 [error] [exception.ParseError] ParseError: syntax error, unexpected ':', expecting ';' in /var/www/html/mbp/protected/views/layouts/main.php:170
+Stack trace:
+#0 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CBaseController.php(95): CBaseController->renderInternal('/var/www/html/m...', Array, true)
+#1 /var/www/html/mbp/vendor/square1-io/yii-framework/web/widgets/CContentDecorator.php(76): CBaseController->renderFile('/var/www/html/m...', Array, true)
+#2 /var/www/html/mbp/vendor/square1-io/yii-framework/web/widgets/CContentDecorator.php(54): CContentDecorator->decorate('<div id="conten...')
+#3 /var/www/html/mbp/vendor/square1-io/yii-framework/web/widgets/COutputProcessor.php(44): CContentDecorator->processOutput('<div id="conten...')
+#4 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CBaseController.php(206): COutputProcessor->run()
+#5 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CBaseController.php(300): CBaseController->endWidget('CContentDecorat...')
+#6 /var/www/html/mbp/protected/views/layouts/column1.php(6): CBaseController->endContent()
+#7 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CBaseController.php(126): require('/var/www/html/m...')
+#8 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CBaseController.php(95): CBaseController->renderInternal('/var/www/html/m...', Array, true)
+#9 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(784): CBaseController->renderFile('/var/www/html/m...', Array, true)
+#10 /var/www/html/mbp/protected/controllers/SiteController.php(138): CController->render('login', Array)
+#11 /var/www/html/mbp/vendor/square1-io/yii-framework/web/actions/CInlineAction.php(49): SiteController->actionLogin()
+#12 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#13 /var/www/html/mbp/vendor/square1-io/yii-framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#14 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(291): CFilterChain->run()
+#15 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#16 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(282): CController->run('login')
+#17 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(141): CWebApplication->runController('site/login')
+#18 /var/www/html/mbp/vendor/square1-io/yii-framework/base/CApplication.php(180): CWebApplication->processRequest()
+#19 /var/www/html/mbp/index.php(13): CApplication->run()
+#20 {main}
+REQUEST_URI=/mbp/index.php/site/login
+---
+2017/12/11 09:30:53 [error] [php] Missing argument 1 for CWebUser::getState(), called in /var/www/html/mbp/protected/views/layouts/main.php on line 136 and defined (/var/www/html/mbp/vendor/square1-io/yii-framework/web/auth/CWebUser.php:572)
+Stack trace:
+#0 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CBaseController.php(95): SiteController->renderInternal()
+#1 /var/www/html/mbp/vendor/square1-io/yii-framework/web/widgets/CContentDecorator.php(76): SiteController->renderFile()
+#2 /var/www/html/mbp/vendor/square1-io/yii-framework/web/widgets/CContentDecorator.php(54): CContentDecorator->decorate()
+#3 /var/www/html/mbp/vendor/square1-io/yii-framework/web/widgets/COutputProcessor.php(44): CContentDecorator->processOutput()
+#4 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CBaseController.php(206): CContentDecorator->run()
+#5 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CBaseController.php(300): SiteController->endWidget()
+#6 /var/www/html/mbp/protected/views/layouts/column1.php(6): SiteController->endContent()
+#7 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CBaseController.php(126): require()
+#8 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CBaseController.php(95): SiteController->renderInternal()
+#9 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(784): SiteController->renderFile()
+#10 /var/www/html/mbp/protected/controllers/SiteController.php(68): SiteController->render()
+#11 /var/www/html/mbp/vendor/square1-io/yii-framework/web/actions/CInlineAction.php(49): SiteController->actionIndex()
+#12 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(308): CInlineAction->runWithParams()
+#13 /var/www/html/mbp/vendor/square1-io/yii-framework/web/filters/CFilterChain.php(133): SiteController->runAction()
+#14 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(291): CFilterChain->run()
+#15 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(265): SiteController->runActionWithFilters()
+#16 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(282): SiteController->run()
+#17 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(141): CWebApplication->runController()
+#18 /var/www/html/mbp/vendor/square1-io/yii-framework/base/CApplication.php(180): CWebApplication->processRequest()
+#19 /var/www/html/mbp/index.php(13): CWebApplication->run()
+REQUEST_URI=/mbp/index.php/site/index
+in /var/www/html/mbp/protected/views/layouts/main.php (136)
+in /var/www/html/mbp/protected/views/layouts/column1.php (6)
+in /var/www/html/mbp/protected/controllers/SiteController.php (68)
+2017/12/11 09:47:41 [error] [exception.CHttpException.403] CHttpException: You are not allowed to access this page. in /var/www/html/mbp/vendor/square1-io/yii-framework/gii/GiiModule.php:170
+Stack trace:
+#0 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(263): GiiModule->beforeControllerAction(Object(DefaultController), Object(CInlineAction))
+#1 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(282): CController->run('')
+#2 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(141): CWebApplication->runController('gii')
+#3 /var/www/html/mbp/vendor/square1-io/yii-framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /var/www/html/mbp/index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/mbp/index.php/gii
+---
+2017/12/11 10:03:38 [error] [exception.CHttpException.404] CHttpException: Unable to resolve the request "GII". in /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php:286
+Stack trace:
+#0 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(141): CWebApplication->runController('GII')
+#1 /var/www/html/mbp/vendor/square1-io/yii-framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /var/www/html/mbp/index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/mbp/index.php/GII
+---
+2017/12/11 10:03:41 [error] [exception.CHttpException.404] CHttpException: The system is unable to find the requested action "gii". in /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php:483
+Stack trace:
+#0 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(270): CController->missingAction('gii')
+#1 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(282): CController->run('gii')
+#2 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(141): CWebApplication->runController('site/gii')
+#3 /var/www/html/mbp/vendor/square1-io/yii-framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /var/www/html/mbp/index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/mbp/index.php/site/gii
+---
+2017/12/11 11:27:53 [error] [php] Array to string conversion (/var/www/html/mbp/protected/views/company/registercompany.php:13)
+Stack trace:
+#0 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(869): CompanyController->renderFile()
+#1 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(782): CompanyController->renderPartial()
+#2 /var/www/html/mbp/protected/controllers/CompanyController.php(36): CompanyController->render()
+#3 /var/www/html/mbp/vendor/square1-io/yii-framework/web/actions/CInlineAction.php(49): CompanyController->actionRegisterCompany()
+#4 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(308): CInlineAction->runWithParams()
+#5 /var/www/html/mbp/vendor/square1-io/yii-framework/web/filters/CFilterChain.php(133): CompanyController->runAction()
+#6 /var/www/html/mbp/protected/controllers/CompanyController.php(21): CFilterChain->run()
+#7 /var/www/html/mbp/vendor/square1-io/yii-framework/web/filters/CInlineFilter.php(58): CompanyController->filterEnforcelogin()
+#8 /var/www/html/mbp/vendor/square1-io/yii-framework/web/filters/CFilterChain.php(130): CInlineFilter->filter()
+#9 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(291): CFilterChain->run()
+#10 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(265): CompanyController->runActionWithFilters()
+#11 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(282): CompanyController->run()
+#12 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(141): CWebApplication->runController()
+#13 /var/www/html/mbp/vendor/square1-io/yii-framework/base/CApplication.php(180): CWebApplication->processRequest()
+#14 /var/www/html/mbp/index.php(13): CWebApplication->run()
+REQUEST_URI=/mbp/index.php/company/registercompany
+in /var/www/html/mbp/protected/views/company/registercompany.php (13)
+in /var/www/html/mbp/protected/controllers/CompanyController.php (36)
+in /var/www/html/mbp/protected/controllers/CompanyController.php (21)
+2017/12/11 11:56:51 [error] [php] Undefined variable: devices (/var/www/html/mbp/protected/views/company/registercompany.php:89)
+Stack trace:
+#0 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(869): CompanyController->renderFile()
+#1 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(782): CompanyController->renderPartial()
+#2 /var/www/html/mbp/protected/controllers/CompanyController.php(37): CompanyController->render()
+#3 /var/www/html/mbp/vendor/square1-io/yii-framework/web/actions/CInlineAction.php(49): CompanyController->actionRegisterCompany()
+#4 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(308): CInlineAction->runWithParams()
+#5 /var/www/html/mbp/vendor/square1-io/yii-framework/web/filters/CFilterChain.php(133): CompanyController->runAction()
+#6 /var/www/html/mbp/protected/controllers/CompanyController.php(21): CFilterChain->run()
+#7 /var/www/html/mbp/vendor/square1-io/yii-framework/web/filters/CInlineFilter.php(58): CompanyController->filterEnforcelogin()
+#8 /var/www/html/mbp/vendor/square1-io/yii-framework/web/filters/CFilterChain.php(130): CInlineFilter->filter()
+#9 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(291): CFilterChain->run()
+#10 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(265): CompanyController->runActionWithFilters()
+#11 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(282): CompanyController->run()
+#12 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(141): CWebApplication->runController()
+#13 /var/www/html/mbp/vendor/square1-io/yii-framework/base/CApplication.php(180): CWebApplication->processRequest()
+#14 /var/www/html/mbp/index.php(13): CWebApplication->run()
+REQUEST_URI=/mbp/index.php/company/registercompany
+in /var/www/html/mbp/protected/views/company/registercompany.php (89)
+in /var/www/html/mbp/protected/controllers/CompanyController.php (37)
+in /var/www/html/mbp/protected/controllers/CompanyController.php (21)
+2017/12/11 17:06:38 [error] [php] Undefined variable: form (/var/www/html/mbp/protected/views/company/registercompany.php:33)
+Stack trace:
+#0 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(869): CompanyController->renderFile()
+#1 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(782): CompanyController->renderPartial()
+#2 /var/www/html/mbp/protected/controllers/CompanyController.php(37): CompanyController->render()
+#3 /var/www/html/mbp/vendor/square1-io/yii-framework/web/actions/CInlineAction.php(49): CompanyController->actionRegisterCompany()
+#4 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(308): CInlineAction->runWithParams()
+#5 /var/www/html/mbp/vendor/square1-io/yii-framework/web/filters/CFilterChain.php(133): CompanyController->runAction()
+#6 /var/www/html/mbp/protected/controllers/CompanyController.php(21): CFilterChain->run()
+#7 /var/www/html/mbp/vendor/square1-io/yii-framework/web/filters/CInlineFilter.php(58): CompanyController->filterEnforcelogin()
+#8 /var/www/html/mbp/vendor/square1-io/yii-framework/web/filters/CFilterChain.php(130): CInlineFilter->filter()
+#9 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(291): CFilterChain->run()
+#10 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(265): CompanyController->runActionWithFilters()
+#11 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(282): CompanyController->run()
+#12 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(141): CWebApplication->runController()
+#13 /var/www/html/mbp/vendor/square1-io/yii-framework/base/CApplication.php(180): CWebApplication->processRequest()
+#14 /var/www/html/mbp/index.php(13): CWebApplication->run()
+REQUEST_URI=/mbp/index.php/company/registercompany
+in /var/www/html/mbp/protected/views/company/registercompany.php (33)
+in /var/www/html/mbp/protected/controllers/CompanyController.php (37)
+in /var/www/html/mbp/protected/controllers/CompanyController.php (21)
+2017/12/11 18:09:09 [error] [php] Undefined variable: for (/var/www/html/mbp/protected/views/company/registercompany.php:43)
+Stack trace:
+#0 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(869): CompanyController->renderFile()
+#1 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(782): CompanyController->renderPartial()
+#2 /var/www/html/mbp/protected/controllers/CompanyController.php(40): CompanyController->render()
+#3 /var/www/html/mbp/vendor/square1-io/yii-framework/web/actions/CInlineAction.php(49): CompanyController->actionRegisterCompany()
+#4 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(308): CInlineAction->runWithParams()
+#5 /var/www/html/mbp/vendor/square1-io/yii-framework/web/filters/CFilterChain.php(133): CompanyController->runAction()
+#6 /var/www/html/mbp/protected/controllers/CompanyController.php(21): CFilterChain->run()
+#7 /var/www/html/mbp/vendor/square1-io/yii-framework/web/filters/CInlineFilter.php(58): CompanyController->filterEnforcelogin()
+#8 /var/www/html/mbp/vendor/square1-io/yii-framework/web/filters/CFilterChain.php(130): CInlineFilter->filter()
+#9 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(291): CFilterChain->run()
+#10 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(265): CompanyController->runActionWithFilters()
+#11 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(282): CompanyController->run()
+#12 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(141): CWebApplication->runController()
+#13 /var/www/html/mbp/vendor/square1-io/yii-framework/base/CApplication.php(180): CWebApplication->processRequest()
+#14 /var/www/html/mbp/index.php(13): CWebApplication->run()
+REQUEST_URI=/mbp/index.php/company/registercompany
+in /var/www/html/mbp/protected/views/company/registercompany.php (43)
+in /var/www/html/mbp/protected/controllers/CompanyController.php (40)
+in /var/www/html/mbp/protected/controllers/CompanyController.php (21)
+2017/12/11 21:02:49 [error] [exception.ParseError] ParseError: syntax error, unexpected ',', expecting ')' in /var/www/html/mbp/protected/controllers/CompanyController.php:41
+Stack trace:
+#0 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(276): CWebApplication->createController('registercompany...')
+#1 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(141): CWebApplication->runController('company/registe...')
+#2 /var/www/html/mbp/vendor/square1-io/yii-framework/base/CApplication.php(180): CWebApplication->processRequest()
+#3 /var/www/html/mbp/index.php(13): CApplication->run()
+#4 {main}
+REQUEST_URI=/mbp/index.php/company/registercompany
+---
+2017/12/11 22:05:02 [error] [php] Trying to get property of non-object (/var/www/html/mbp/protected/views/company/registercompany.php:55)
+Stack trace:
+#0 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(869): CompanyController->renderFile()
+#1 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(782): CompanyController->renderPartial()
+#2 /var/www/html/mbp/protected/controllers/CompanyController.php(46): CompanyController->render()
+#3 /var/www/html/mbp/vendor/square1-io/yii-framework/web/actions/CInlineAction.php(49): CompanyController->actionRegisterCompany()
+#4 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(308): CInlineAction->runWithParams()
+#5 /var/www/html/mbp/vendor/square1-io/yii-framework/web/filters/CFilterChain.php(133): CompanyController->runAction()
+#6 /var/www/html/mbp/protected/controllers/CompanyController.php(21): CFilterChain->run()
+#7 /var/www/html/mbp/vendor/square1-io/yii-framework/web/filters/CInlineFilter.php(58): CompanyController->filterEnforcelogin()
+#8 /var/www/html/mbp/vendor/square1-io/yii-framework/web/filters/CFilterChain.php(130): CInlineFilter->filter()
+#9 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(291): CFilterChain->run()
+#10 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(265): CompanyController->runActionWithFilters()
+#11 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(282): CompanyController->run()
+#12 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(141): CWebApplication->runController()
+#13 /var/www/html/mbp/vendor/square1-io/yii-framework/base/CApplication.php(180): CWebApplication->processRequest()
+#14 /var/www/html/mbp/index.php(13): CWebApplication->run()
+REQUEST_URI=/mbp/index.php/company/registercompany
+in /var/www/html/mbp/protected/views/company/registercompany.php (55)
+in /var/www/html/mbp/protected/controllers/CompanyController.php (46)
+in /var/www/html/mbp/protected/controllers/CompanyController.php (21)
+2017/12/11 22:20:42 [error] [php] Undefined variable: model (/var/www/html/mbp/protected/views/company/registercompany.php:63)
+Stack trace:
+#0 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(869): CompanyController->renderFile()
+#1 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(782): CompanyController->renderPartial()
+#2 /var/www/html/mbp/protected/controllers/CompanyController.php(46): CompanyController->render()
+#3 /var/www/html/mbp/vendor/square1-io/yii-framework/web/actions/CInlineAction.php(49): CompanyController->actionRegisterCompany()
+#4 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(308): CInlineAction->runWithParams()
+#5 /var/www/html/mbp/vendor/square1-io/yii-framework/web/filters/CFilterChain.php(133): CompanyController->runAction()
+#6 /var/www/html/mbp/protected/controllers/CompanyController.php(21): CFilterChain->run()
+#7 /var/www/html/mbp/vendor/square1-io/yii-framework/web/filters/CInlineFilter.php(58): CompanyController->filterEnforcelogin()
+#8 /var/www/html/mbp/vendor/square1-io/yii-framework/web/filters/CFilterChain.php(130): CInlineFilter->filter()
+#9 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(291): CFilterChain->run()
+#10 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(265): CompanyController->runActionWithFilters()
+#11 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(282): CompanyController->run()
+#12 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(141): CWebApplication->runController()
+#13 /var/www/html/mbp/vendor/square1-io/yii-framework/base/CApplication.php(180): CWebApplication->processRequest()
+#14 /var/www/html/mbp/index.php(13): CWebApplication->run()
+REQUEST_URI=/mbp/index.php/company/registercompany
+in /var/www/html/mbp/protected/views/company/registercompany.php (63)
+in /var/www/html/mbp/protected/controllers/CompanyController.php (46)
+in /var/www/html/mbp/protected/controllers/CompanyController.php (21)
+2017/12/11 22:35:50 [error] [php] include(Types.php): failed to open stream: No such file or directory (/var/www/html/mbp/vendor/square1-io/yii-framework/YiiBase.php:427)
+Stack trace:
+#0 /var/www/html/mbp/protected/views/company/registercompany.php(62): spl_autoload_call()
+#1 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CBaseController.php(126): require()
+#2 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CBaseController.php(95): CompanyController->renderInternal()
+#3 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(869): CompanyController->renderFile()
+#4 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(782): CompanyController->renderPartial()
+#5 /var/www/html/mbp/protected/controllers/CompanyController.php(46): CompanyController->render()
+#6 /var/www/html/mbp/vendor/square1-io/yii-framework/web/actions/CInlineAction.php(49): CompanyController->actionRegisterCompany()
+#7 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(308): CInlineAction->runWithParams()
+#8 /var/www/html/mbp/vendor/square1-io/yii-framework/web/filters/CFilterChain.php(133): CompanyController->runAction()
+#9 /var/www/html/mbp/protected/controllers/CompanyController.php(21): CFilterChain->run()
+#10 /var/www/html/mbp/vendor/square1-io/yii-framework/web/filters/CInlineFilter.php(58): CompanyController->filterEnforcelogin()
+#11 /var/www/html/mbp/vendor/square1-io/yii-framework/web/filters/CFilterChain.php(130): CInlineFilter->filter()
+#12 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(291): CFilterChain->run()
+#13 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(265): CompanyController->runActionWithFilters()
+#14 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(282): CompanyController->run()
+#15 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(141): CWebApplication->runController()
+#16 /var/www/html/mbp/vendor/square1-io/yii-framework/base/CApplication.php(180): CWebApplication->processRequest()
+#17 /var/www/html/mbp/index.php(13): CWebApplication->run()
+REQUEST_URI=/mbp/index.php/company/registercompany
+in /var/www/html/mbp/protected/views/company/registercompany.php (62)
+in /var/www/html/mbp/protected/controllers/CompanyController.php (46)
+in /var/www/html/mbp/protected/controllers/CompanyController.php (21)
+2017/12/12 10:40:17 [error] [exception.CException] CException: Property "Email.web" is not defined. in /var/www/html/mbp/vendor/square1-io/yii-framework/base/CComponent.php:130
+Stack trace:
+#0 /var/www/html/mbp/vendor/square1-io/yii-framework/db/ar/CActiveRecord.php(145): CComponent->__get('web')
+#1 /var/www/html/mbp/vendor/square1-io/yii-framework/web/helpers/CHtml.php(2529): CActiveRecord->__get('web')
+#2 /var/www/html/mbp/vendor/square1-io/yii-framework/web/helpers/CHtml.php(2252): CHtml::resolveValue(Object(Email), 'web')
+#3 /var/www/html/mbp/vendor/square1-io/yii-framework/web/helpers/CHtml.php(1434): CHtml::activeInputField('text', Object(Email), 'web', Array)
+#4 /var/www/html/mbp/vendor/square1-io/yii-framework/web/widgets/CActiveForm.php(725): CHtml::activeTextField(Object(Email), 'web', Array)
+#5 /var/www/html/mbp/protected/views/company/registercompany.php(67): CActiveForm->textField(Object(Email), 'web', Array)
+#6 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CBaseController.php(126): require('/var/www/html/m...')
+#7 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CBaseController.php(95): CBaseController->renderInternal('/var/www/html/m...', Array, true)
+#8 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(869): CBaseController->renderFile('/var/www/html/m...', Array, true)
+#9 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(782): CController->renderPartial('registercompany', Array, true)
+#10 /var/www/html/mbp/protected/controllers/CompanyController.php(48): CController->render('registercompany', Array)
+#11 /var/www/html/mbp/vendor/square1-io/yii-framework/web/actions/CInlineAction.php(49): CompanyController->actionRegisterCompany()
+#12 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#13 /var/www/html/mbp/vendor/square1-io/yii-framework/web/filters/CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#14 /var/www/html/mbp/protected/controllers/CompanyController.php(21): CFilterChain->run()
+#15 /var/www/html/mbp/vendor/square1-io/yii-framework/web/filters/CInlineFilter.php(58): CompanyController->filterEnforcelogin(Object(CFilterChain))
+#16 /var/www/html/mbp/vendor/square1-io/yii-framework/web/filters/CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#17 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(291): CFilterChain->run()
+#18 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#19 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(282): CController->run('registercompany')
+#20 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(141): CWebApplication->runController('company/registe...')
+#21 /var/www/html/mbp/vendor/square1-io/yii-framework/base/CApplication.php(180): CWebApplication->processRequest()
+#22 /var/www/html/mbp/index.php(13): CApplication->run()
+#23 {main}
+REQUEST_URI=/mbp/index.php/company/registercompany
+---
+2017/12/12 15:12:44 [error] [php] strcmp() expects parameter 2 to be string, array given (/var/www/html/mbp/vendor/square1-io/yii-framework/web/helpers/CHtml.php:1164)
+Stack trace:
+#0 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CBaseController.php(126): require()
+#1 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CBaseController.php(95): CompanyController->renderInternal()
+#2 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(869): CompanyController->renderFile()
+#3 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(782): CompanyController->renderPartial()
+#4 /var/www/html/mbp/protected/controllers/CompanyController.php(52): CompanyController->render()
+#5 /var/www/html/mbp/vendor/square1-io/yii-framework/web/actions/CInlineAction.php(49): CompanyController->actionRegisterCompany()
+#6 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(308): CInlineAction->runWithParams()
+#7 /var/www/html/mbp/vendor/square1-io/yii-framework/web/filters/CFilterChain.php(133): CompanyController->runAction()
+#8 /var/www/html/mbp/protected/controllers/CompanyController.php(21): CFilterChain->run()
+#9 /var/www/html/mbp/vendor/square1-io/yii-framework/web/filters/CInlineFilter.php(58): CompanyController->filterEnforcelogin()
+#10 /var/www/html/mbp/vendor/square1-io/yii-framework/web/filters/CFilterChain.php(130): CInlineFilter->filter()
+#11 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(291): CFilterChain->run()
+#12 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CController.php(265): CompanyController->runActionWithFilters()
+#13 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(282): CompanyController->run()
+#14 /var/www/html/mbp/vendor/square1-io/yii-framework/web/CWebApplication.php(141): CWebApplication->runController()
+#15 /var/www/html/mbp/vendor/square1-io/yii-framework/base/CApplication.php(180): CWebApplication->processRequest()
+#16 /var/www/html/mbp/index.php(13): CWebApplication->run()
+REQUEST_URI=/mbp/index.php/company/registercompany
+in /var/www/html/mbp/protected/views/company/registercompany.php (71)
+in /var/www/html/mbp/protected/controllers/CompanyController.php (52)
+in /var/www/html/mbp/protected/controllers/CompanyController.php (21)
