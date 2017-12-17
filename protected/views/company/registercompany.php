@@ -13,20 +13,21 @@ $this->breadcrumbs=array(
 //echo $this->breadcrumbs[0];
 ?>           
 <div class="row" id="divCompany">
+    <?php $form=$this->beginWidget('CActiveForm', array(
+        'id'=>'entityreg-form',
+        'enableClientValidation'=>true,
+        'enableAjaxValidation'=>true,
+        'clientOptions'=>array(
+            'validateOnSubmit'=>true,
+        )
+    )); ?>
     <div class="col-lg-5">
         <div class="panel panel-default">
             <div class="panel-heading">
                 Regstro de empresa
             </div>
             <div class="panel-body">
-                <?php $form=$this->beginWidget('CActiveForm', array(
-                    'id'=>'entityreg-form',
-                    'enableClientValidation'=>true,
-                    'enableAjaxValidation'=>true,
-                    'clientOptions'=>array(
-                        'validateOnSubmit'=>true,
-                    )
-                    )); ?>
+                
                     <div class="box-body">
                         <?php echo  $form->errorSummary(array($modelCompany,$modelTelephone,$modeloEmail,$modelTypeEnt,$modelWeb,$modelSNetw,$modelCountry,$modelState,$modelCity),'','',array('style' => 'font-size:14px;color:#F00')); ?>
                         
@@ -59,21 +60,24 @@ $this->breadcrumbs=array(
                             <?php echo $form->labelEx($modelCountry,'country_name'); ?>
                             <?php echo $form->textField($modelCountry,'country_name', array ('class' => 'form-control','placeholder'=>'Digite País')); ?>
                             <?php echo $form->error($modelCountry,'country_name'); ?>
+                            <input name="Country[id_country]" id="Country_id_country" type="hidden">
                         </div>
                         <div class="form-group">
                             <?php echo $form->labelEx($modelState,'state_name'); ?>
                             <?php echo $form->textField($modelState,'state_name', array ('class' => 'form-control','placeholder'=>'Digite Estado o departamento')); ?>
                             <?php echo $form->error($modelState,'state_name'); ?>
+                            <input name="State[id_state]" id="State_id_state" type="hidden">
                         </div>
                         <div class="form-group">
                             <?php echo $form->labelEx($modelCity,'city_name'); ?>
                             <?php echo $form->textField($modelCity,'city_name', array ('class' => 'form-control','placeholder'=>'Digite Ciudad')); ?>
                             <?php echo $form->error($modelCity,'city_name'); ?>
+                            <input name="City[id_city]" id="City_id_city" type="hidden">
                         </div>
                     </div>
                     <!-- /.box-body -->
                     
-                <?php $this->endWidget(); ?>
+                
             </div>
             <!-- /.panel-body -->
         </div>
@@ -105,9 +109,9 @@ $this->breadcrumbs=array(
                                 emails
                             </div>
                             <div class="panel-body">
-                               <form id="email-form">
+                               <div id="email-form">
                                     
-                                </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -135,9 +139,9 @@ $this->breadcrumbs=array(
                                 social networks
                             </div>
                             <div class="panel-body">
-                                <form id="snetw-form">
+                                <div id="snetw-form">
                                     
-                                </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -158,6 +162,8 @@ $this->breadcrumbs=array(
         </div>
         <!-- /.panel -->
     </div>
+    <?php $this->endWidget(); ?>
+    
     <!-- /.col-lg-12 -->
 </div>
                 <!-- /.row -->

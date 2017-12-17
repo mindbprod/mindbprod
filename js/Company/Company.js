@@ -52,11 +52,11 @@ var Company = function(){
         self.div.find("#btnCancelaCmp").hide();
         
         self.div.find("#btnAgregaEm").click(function(){
-            if(self.div.find('#Email_email').val()!=""){
+            if(Mbp.validateEmail(self.div.find('#Email_email').val())){
                 $("#email-form").append('<div><input type="text" name="email[]"  readonly value="'+self.div.find('#Email_email').val()+'"/><a href="#" class="remove_field">Remove</a></div>');
             }
             else{
-                msg="Error al consultar los departaentos, código del error: ";
+                msg="Debe digitar un e-mail válido ";
             typeMsg="warn";
             $.notify(msg, typeMsg);
             }
@@ -71,8 +71,8 @@ var Company = function(){
                 $("#snetw-form").append('<div><input type="text" name="snetw[]"  readonly value="'+self.div.find('#SocialNetwork_snetwork').val()+'"/><input size="10" type="text" readonly value="'+$("label[for='"+idVal+"']").text()+'"><input type="hidden" name="typesnet[]"  readonly value="'+$('input[name='+name+']:checked').val()+'"/><a href="#" class="remove_field_snet">Remove</a></div>');
             }
             else{
-                msg="Error al consultar los departaentos, código del error: ";
-            typeMsg="warn";
+                msg="Debe digitar una red social y seleccionar tipo de red social ";
+                typeMsg="warn";
             $.notify(msg, typeMsg);
             }
         });
@@ -82,7 +82,27 @@ var Company = function(){
         $("#snetw-form").on("click",".remove_field_snet", function(e){ //user click on remove text
             e.preventDefault(); $(this).parent('div').remove();
         });
-        
+        self.div.find("#entityreg-form #Country_country_name").on("blur",function(){
+             if(self.div.find("#entityreg-form #Country_country_name").val()==""){
+                 self.div.find("#entityreg-form #Country_id_country").val("");
+                 self.div.find("#entityreg-form #State_state_name").val("");
+                 self.div.find("#entityreg-form #State_id_state").val("");
+                 self.div.find("#entityreg-form #City_city_name").val("");
+                 self.div.find("#entityreg-form #City_id_city").val("");
+             }
+        });
+        self.div.find("#entityreg-form #State_state_name").on("blur",function(){
+             if(self.div.find("#entityreg-form #State_state_name").val()==""){
+                 self.div.find("#entityreg-form #State_id_state").val("");
+                 self.div.find("#entityreg-form #City_city_name").val("");
+                 self.div.find("#entityreg-form #City_id_city").val("");
+             }
+        });
+        self.div.find("#entityreg-form #City_city_name").on("blur",function(){
+             if(self.div.find("#entityreg-form #City_city_name").val()==""){
+                 self.div.find("#entityreg-form #City_id_city").val("");
+             }
+        });
         
 //        self.div.find("#Country_id_country").change(function (){
 //            if(self.div.find("#Country_id_country").val().length==0){
@@ -100,9 +120,9 @@ var Company = function(){
 //                self.searchCity(self.div.find("#State_id_state").val());
 //            }
 //        });
-//        self.div.find("#entity-form").change(function (){
-//            estadoGuarda=false;
-//        });
+        self.div.find("#entityreg-form").change(function (){
+            Mbp.estadoGuarda=true;
+        });
 //        self.div.find("#entity-form").keyup(function (){
 //            estadoGuarda=false;
 //        });
@@ -123,12 +143,14 @@ var Company = function(){
 //            self.registerEntity();
 //        });
         self.div.find("#btnRegCmp").click(function (){
-           var snet=self.div.find("#snetw-form").serialize();
-           var email=self.div.find("#email-form").serialize();
-           console.log(snet+'&'+email);
-           var dataSnet=snet+'&'+email;
-           self.registerCompany(dataSnet);
+           var data=self.div.find("#entityreg-form").serialize();
+//           var email=self.div.find("#email-form").serialize();
+           console.log(data);
+//           var dataSnet=snet+'&'+email;
+           self.registerCompany(data);
         });
+        
+        
         
 //       
     };    
@@ -140,14 +162,14 @@ var Company = function(){
     /******************************* SYNC METHODS *****************************/
     /**************************************************************************/ 
     /**
-     * Consume webservice consultaState para consultar los departamentos
+     * Consume servicio para registrar la compañía o empresa
      */
-    self.registerCompany=function(dataSnet){
+    self.registerCompany=function(data){
         $.ajax({
             type: "POST",
             dataType:'json',
             url: 'registerCompany',
-            data:dataSnet
+            data:data
         }).done(function(response) {
             
         }).fail(function(error, textStatus, xhr) {
@@ -156,66 +178,8 @@ var Company = function(){
             $.notify(msg, typeMsg);
         });
     };
-    /**
-     * Consume webservice consultaState para consultar los departamentos
-     */
     
-    self.searchState=function(idCountry){
-        var msg="";
-        var typeMsg;
-        self.div.find("#State_id_state").html("");
-        $.ajax({
-            type: "POST",
-            dataType:'json',
-            url: 'searchState',
-            data:{idCountry:idCountry}
-        }).done(function(response) {
-            if(response.length>0){
-                self.div.find("#State_id_state").append("<option value=''>Seleccione un departamento</option>");
-                $.each(response,function(key, value){
-                    self.div.find("#State_id_state").append("<option value='"+value.id_state+"'>"+value.state_name+"</option>");
-                });
-            }
-            else{
-                $.notify("No hay departamentos regitrados para este país", "warn");
-                self.div.find("#State_id_state").html("<option value=''>Seleccione otro país</option>");
-            }
-        }).fail(function(error, textStatus, xhr) {
-            msg="Error al consultar los departaentos, código del error: "+error.status+" "+xhr;
-            typeMsg="error";
-            $.notify(msg, typeMsg);
-        });
-    };
-    /**
-     * Consume webservice consultaCity para consultar las ciudades
-     */
     
-    self.searchCity=function(idState){
-        var msg="";
-        var typeMsg;
-        self.div.find("#CityEntity_id_city").html("");
-        $.ajax({
-            type: "POST",
-            dataType:'json',
-            url: 'searchCity',
-            data:{idState:idState}
-        }).done(function(response) {
-            if(response.length>0){
-                self.div.find("#CityEntity_id_city").append("<option value=''>Seleccione una ciudad</option>");
-                $.each(response,function(key, value){
-                    self.div.find("#CityEntity_id_city").append("<option value='"+value.id_city+"'>"+value.city_name+"</option>");
-                });
-            }
-            else{
-                $.notify("No hay ciudades regitradas para este departamento", "warn");
-                self.div.find("#CityEntity_id_city").html("<option value=''>Seleccione otro departamento</option>");
-            }
-        }).fail(function(error, textStatus, xhr) {
-            msg="Error al consultar las ciudades, código del error: "+error.status+" "+xhr;
-            typeMsg="error";
-            $.notify(msg, typeMsg);
-        });
-    };
     /**
      * Consume webservice createEntitypara registrar entidad
      */
@@ -277,19 +241,20 @@ var Company = function(){
          
     };
     /*
-     * Filtra por Tipo de curso disponibles para realizar un autocomplet
+     * Filtra por Paises disponibles para realizar un autocomplet
      * @param {type} param
      */
     
     self.filterCountry=function(){
-        self.div.find(".form-company #idiomaBeca").autocomplete({
+//        console.log("pasa");
+        self.div.find("#entityreg-form #Country_country_name").autocomplete({
             source: function(request, response){
                 $.ajax({
                     type: "POST",
-                    url:"buscarIdioma",
-                    data: {stringidioma:self.div.find(".formBeca #idiomaBeca").val()},
+                    url:"searchCountry",
+                    data: {stringcountry:self.div.find("#entityreg-form #Country_country_name").val()},
                     beforeSend:function (){
-                        self.div.find(".formBeca #idIdioma").val("");
+                        self.div.find("#entityreg-form #Country_id_country").val("");
                     },
                     success: response,
                     dataType: 'json',
@@ -300,11 +265,12 @@ var Company = function(){
             minLength: 1,
             select: function(event, ui) {
                 if(ui.item.id=="#"){
-                    self.div.find(".formBeca #idIdioma").val("");
+                    self.div.find("#entityreg-form #Country_id_country").val();
                 }
                 else{
-                    self.div.find(".formBeca #idIdioma").val(ui.item.id);
+                    self.div.find("#entityreg-form #Country_id_country").val(ui.item.id);
                 }
+                $(".ui-helper-hidden-accessible").hide();
             },
             html: true,
             open: function(event, ui) {
@@ -312,70 +278,99 @@ var Company = function(){
             }
         });
     };
-    /**
-     * Consume webservice registerCityEntity para registrar ciudad donde opera la entidad
+    
+    /*
+     * Filtra por Estados o departamentos disponibles para realizar un autocomplet
+     * @param {type} param
      */
-    self.registerCityEntity=function(){
-        var msg="";
-        var typeMsg="";
-        var dataCityEntity=self.div.find("#cityEntity-form").serialize();
-        //User.showLoading();
-        $.ajax({
-            type: "POST",
-            dataType:'json',
-            url: 'registerCityEntity',
-            data:dataCityEntity,
-            beforeSend: function() {
-                self.div.find("#cityEntity-form #cityEntity-form_es_").html("");                                                    
-		self.div.find("#cityEntity-form #cityEntity-form_es_").show();
-                self.div.find(".errorCityEntity").html("");                                                    
-		self.div.find(".errorCityEntity").show();
-                self.div.find("#btnRegCityEntity").hide();
-            }
-//            async:false
-        }).done(function(response) {
-            if(response.status=="nosession"){
-                $.notify("La sesión ha caducado, debe hacer login de nuevo", "warn");
-                setTimeout(function(){document.location.href="site/login";}, 3000);
-                return;
-            }
-            else{
-                if(response.status=="exito"){
-                    msg="Ciudad registrada satisfactoriamente,  puede registrar varias ciudades.";
-                    typeMsg="success";
-                    $("#Country_id_country").val("");
-                    $("#State_id_state").val("");
-                    $("#CityEntity_id_city").val("");
-                    estadoGuarda=true;
-                }
-                else{
-                    if(response.status=="noexito"){
-                         msg=response.msg;
-                        typeMsg="warn";
+    
+    self.filterState=function(){
+//        console.log("pasa");
+        
+            self.div.find("#entityreg-form #State_state_name").autocomplete({
+                source: function(request, response){
+                    $.ajax({
+                        type: "POST",
+                        url:"searchState",
+                        data: {stringstate:self.div.find("#entityreg-form #State_state_name").val(),idcountry:self.div.find("#entityreg-form #Country_id_country").val()},
+                        beforeSend:function (){
+                            self.div.find("#entityreg-form #State_id_state").val("");
+                            if(self.div.find("#entityreg-form #Country_id_country").val()==""&&self.div.find("#entityreg-form #Country_country_name").val()==""){
+                                var msg="Debe seleccionar un País";
+                                var typeMsg="warn";
+                                $.notify(msg, typeMsg);
+                                return false;
+                            }
+//                            return false;
+                        },
+                        success: response,
+                        dataType: 'json',
+                        minLength: 1,
+                        delay: 100
+                    });
+                },
+                minLength: 1,
+                select: function(event, ui) {
+                    if(ui.item.id=="#"){
+                        self.div.find("#entityreg-form #State_id_state").val("");
                     }
                     else{
-                        msg="Revise la validación del formuario";
-                        typeMsg="warn";
-                        var errores="Revise lo siguiente<br/><ul>";
-                        $.each(response, function(key, val) {
-                            errores+="<li>"+val+"</li>";
-                            $("#cityEntity-form #"+key+"_em_").text(val);                                                    
-                            $("#cityEntity-form #"+key+"_em_").show();                                                
-                        });
-                        errores+="</ul>";
-                        self.div.find("#cityEntity-form #cityEntity-form_es_").html(errores);                                                    
-                        self.div.find("#cityEntity-form #cityEntity-form_es_").show(); 
+                        self.div.find("#entityreg-form #State_id_state").val(ui.item.id);
                     }
+                    $(".ui-helper-hidden-accessible").hide();
+                },
+                html: true,
+                open: function(event, ui) {
+                    $(".ui-autocomplete").css("z-index", 1000);
                 }
-            }
-        }).fail(function(error, textStatus, xhr) {
-            msg="Error al crear la ciudad, el código del error es: "+error.status+" "+xhr;
-            typeMsg="error";
-        }).always(function(){
-            $.notify(msg, typeMsg);
-            self.div.find("#btnRegCityEntity").show();
-        });
-         
+            });
+        
+    };
+    /*
+     * Filtra por ciudades disponibles para realizar un autocomplet
+     * @param {type} param
+     */
+    
+    self.filterCity=function(){
+//        console.log("pasa");
+        
+            self.div.find("#entityreg-form #City_city_name").autocomplete({
+                source: function(request, response){
+                    $.ajax({
+                        type: "POST",
+                        url:"searchCity",
+                        data: {stringcity:self.div.find("#entityreg-form #City_city_name").val(),idstate:self.div.find("#entityreg-form #State_id_state").val()},
+                        beforeSend:function (){
+                            self.div.find("#entityreg-form #City_id_city").val("");
+                            if(self.div.find("#entityreg-form #State_id_state").val()==""&&self.div.find("#entityreg-form #State_state_name").val()==""){
+                                var msg="Debe seleccionar un estado o departamento";
+                                var typeMsg="warn";
+                                $.notify(msg, typeMsg);
+                                return false;
+                            }
+                        },
+                        success: response,
+                        dataType: 'json',
+                        minLength: 1,
+                        delay: 100
+                    });
+                },
+                minLength: 1,
+                select: function(event, ui) {
+                    if(ui.item.id=="#"){
+                        self.div.find("#entityreg-form #City_id_city").val("");
+                    }
+                    else{
+                        self.div.find("#entityreg-form #City_id_city").val(ui.item.id);
+                    }
+                    $(".ui-helper-hidden-accessible").hide();
+                },
+                html: true,
+                open: function(event, ui) {
+                    $(".ui-autocomplete").css("z-index", 1000);
+                }
+            });
+        
     };
     /**************************************************************************/
     /******************************* DOM METHODS ******************************/
@@ -387,8 +382,8 @@ var Company = function(){
     
 };
 $(document).ready(function() {
-//    console.log($("#divRegPerson").html()+"-----------------------------------");
-
     window.Company=new Company();
-//    Company.filtraIdioma();
+    Company.filterCountry();
+    Company.filterState();
+    Company.filterCity();
 });
