@@ -23,7 +23,8 @@
 
         <!-- Morris Charts CSS -->
         <link href="<?php echo Yii::app()->request->baseUrl; ?>/css/morris.css" rel="stylesheet">
-
+        <!-- autosugestion-->
+        <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/css/autocomplete.css">
         <!-- Custom Fonts -->
         <link href="<?php echo Yii::app()->request->baseUrl; ?>/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
@@ -294,6 +295,17 @@
         <!-- Custom Theme JavaScript -->
         <script src="<?php echo Yii::app()->request->baseUrl; ?>/js/startmin.js"></script>
         <script src="<?php echo Yii::app()->request->baseUrl; ?>/js/Mbp.js"></script>
+        <script>
+            $(document).ready(function() {
+                $(window).on('beforeunload', function() {
+                    $.notify(Mbp.estadoGuarda, "warn");
+                    if (!Mbp.estadoGuarda) {
+                        return "No ha guardado datos";
+                    }
+                });
+
+            });
+        </script>
     <?php
         else:
             echo $content;
