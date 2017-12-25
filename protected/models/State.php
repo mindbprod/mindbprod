@@ -31,12 +31,14 @@ class State extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('state_code, state_name', 'required'),
+			array('state_code, state_name,id_country', 'required'),
 			array('id_country', 'length', 'max'=>10),
 			array('state_code, state_name', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_state, id_country, state_code, state_name', 'safe', 'on'=>'search'),
+//                        array('id_state', 'safe'),
+                        array('id_state', 'safe'),
+			array('id_country, state_code, state_name', 'safe', 'on'=>'search'),
 		);
 	}
 

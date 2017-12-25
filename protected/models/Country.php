@@ -31,12 +31,14 @@ class Country extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('country_code, country_name', 'required'),
+			array('country_code, country_name,id_continent', 'required'),
 			array('id_continent', 'numerical', 'integerOnly'=>true),
 			array('country_code, country_name', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_country, id_continent, country_code, country_name', 'safe', 'on'=>'search'),
+//                        array('id_country', 'safe'),
+                        array('id_country', 'safe'),
+			array('id_continent, country_code, country_name', 'safe', 'on'=>'search'),
 		);
 	}
 

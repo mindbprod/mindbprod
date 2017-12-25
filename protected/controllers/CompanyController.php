@@ -33,18 +33,19 @@ class CompanyController extends Controller{
     }
     
     public function actionRegisterCompany(){
+        $modelCompany=new Company();
+        $modelTelephone=new Telephone();
+        $modeloEmail=new Email();
+        $modelTypeEnt=new CompanyTcompany();
+        $typeCompany=  TypeCompany::model()->findAll();
+        $modelWeb=new Web();
+        $modelSNetw=new SocialNetwork();
+        $typeSNetwork=  TypeSnetwork::model()->findAll();
+        $modelContinent=new Continent();
+        $modelCountry=new Country();
+        $modelState=new State();
+        $modelCity=new City();
         if(empty($_POST)){
-            $modelCompany=new Company();
-            $modelTelephone=new Telephone();
-            $modeloEmail=new Email();
-            $modelTypeEnt=new CompanyTcompany();
-            $typeCompany=  TypeCompany::model()->findAll();
-            $modelWeb=new Web();
-            $modelSNetw=new SocialNetwork();
-            $typeSNetwork=  TypeSnetwork::model()->findAll();
-            $modelCountry=new Country();
-            $modelState=new State();
-            $modelCity=new City();
             $this->render('registercompany',array(
                 'modelCompany'=>$modelCompany,
                 'modelTelephone'=>$modelTelephone,
@@ -54,19 +55,229 @@ class CompanyController extends Controller{
                 'modelWeb'=>$modelWeb,
                 'modelSNetw'=>$modelSNetw,
                 'typeSNetwork'=>$typeSNetwork,
+                'modelContinent'=>$modelContinent,
                 'modelCountry'=>$modelCountry,
                 'modelState'=>$modelState,
                 'modelCity'=>$modelCity
             ));
         }
         else{
-            print_r($_POST);
+//            print_r($_POST);exit();
+            $modelCompany->attributes=Yii::app()->request->getPost("Company");
+            $modelTelephone->attributes=Yii::app()->request->getPost("Telephone");
+            $typeEnt=Yii::app()->request->getPost("CompanyTcompany");
+            $modelWeb->attributes=Yii::app()->request->getPost("Web");
+            $modelContinent->attributes=Yii::app()->request->getPost("Continent");
+            $modelCountry->attributes=Yii::app()->request->getPost("Country");
+            $modelState->attributes=Yii::app()->request->getPost("State");
+            $modelCity->attributes=Yii::app()->request->getPost("City");
+            $email=Yii::app()->request->getPost("email");
+            $snetw=Yii::app()->request->getPost("snetw");
+            $typeSnet=Yii::app()->request->getPost("typesnet");
+            $saveContinent=Yii::app()->request->getPost("saveContinent");
+            $saveCountry=Yii::app()->request->getPost("saveCountry");
+            $saveState=Yii::app()->request->getPost("saveState");
+            $saveCity=Yii::app()->request->getPost("saveCity");
+            $modelSNetwReg=new SocialNetwork();
+            if(!empty($typeEnt)){
+                $modelTypeEnt->id_company=0;
+                $modelTypeEnt->id_typecompany=0;
+            }
+            else{
+                $modelTypeEnt->id_typecompany='';
+            }
+            if(!empty($email)){
+                $modeloEmail->email="aux";
+                $modeloEmail->id_email=0;
+                $modeloEmail->id_company=0;
+            }
+            else{
+                $modeloEmail->unsetAttributes();
+            }
+            if(!empty($snetw)&&!empty($typeSnet)){
+                $modelSNetwReg->snetwork="aux";
+                $modelSNetwReg->id_snetwork=0;
+                $modelSNetwReg->id_company=0;
+                $modelSNetwReg->id_typesnetwork=0;
+            }
+            else{
+                $modelSNetwReg->unsetAttributes();
+            }
+            
+//            print_r($modelState->attributes);exit();
+            if(!empty($modelContinent->continent_name)){
+                $modelContinent->continent_code=  strtoupper(preg_replace('/[^A-Za-z0-9]/', "", $modelContinent->continent_name));
+                $modelContinent->continent_name=strtoupper($modelContinent->continent_name);
+            }
+            if(!empty($modelCountry->country_name)){
+                $modelCountry->country_code=  strtoupper(preg_replace('/[^A-Za-z0-9]/', "", $modelCountry->country_name));
+                $modelCountry->country_name=strtoupper($modelCountry->country_name);
+                $modelCountry->id_continent=0;
+            }
+            if(!empty($modelState->state_name)){
+                $modelState->state_code=strtoupper(preg_replace('/[^A-Za-z0-9]/', "", $modelState->state_name));
+                $modelState->state_name=strtoupper($modelState->state_name);
+                $modelState->id_country=0;
+            }
+            if(!empty($modelCity->city_name)){
+                $modelCity->city_code=strtoupper(preg_replace('/[^A-Za-z0-9]/', "", $modelCity->city_name));
+                $modelCity->city_name=strtoupper($modelCity->city_name);
+                $modelCity->id_state=0;
+            }
+            if(empty($modelContinent->id_continent) && $saveContinent==0){
+                $modelContinent->continent_name=NULL;
+            }
+            if(empty($modelCountry->id_country) && $saveCountry==0){
+                $modelCountry->country_name="";
+                $modelCountry->id_continent=null;
+            }
+//            print_r($modelContinent->attributes);
+            if(empty($modelState->id_state) && $saveState==0){
+                $modelState->state_name="";
+                $modelState->id_country=null;
+            }
+//            print_r($modelState->attributes);exit();
+            if(empty($modelCity->id_city) && $saveCity==0){
+                $modelCity->city_name="";
+                $modelCity->id_state=null;
+            }
+//            print_r($modelCompany->validate());exit();
+            $this->performAjaxValidation(array($modelCompany,$modelTelephone,$modeloEmail,$modelTypeEnt,$modelWeb,$modelSNetwReg,$modelContinent,$modelCountry,$modelState,$modelCity),"entityreg-form");
+            if($modelCompany->validate()&&$modelTelephone->validate()&&$modelTypeEnt->validate()&&$modelWeb->validate()&&$modelContinent->validate()&&$modelCountry->validate()&&$modelState->validate()&&$modelCity->validate()&&$modeloEmail->validate()&&$modelSNetwReg->validate()){
+                $transaction=Yii::app()->db->beginTransaction();
+                    try{
+//                        print_r($_POST);
+                        if(empty($modelContinent->id_continent) && $saveContinent==1){
+                            $modelContinentN=new Continent();
+                            $modelContinentN->continent_code_code=$modelContinent->continent_code;
+                            $modelContinentN->continent_name=$modelCountry->continent_name;
+                            $modelContinentN->save();
+                            $modelContinent->id_continent=$modelContinentN->getPrimaryKey();
+                        }
+                        if(empty($modelCountry->id_country) && $saveCountry==1){
+                            $modelCountryN=new Country();
+                            $modelCountryN->country_code=$modelCountry->country_code;
+                            $modelCountryN->country_name=$modelCountry->country_name;
+                            $modelCountryN->id_continent=$modelContinent->id_continent;
+                            $modelCountryN->save();
+                            $modelCountry->id_country=$modelCountryN->getPrimaryKey();
+                        }
+                        if(empty($modelState->id_state) && $saveState==1){
+                            $modelStateN=new State();
+                            $modelStateN->state_code=$modelState->state_code;
+                            $modelStateN->state_name=$modelState->state_name;
+                            $modelStateN->id_country=$modelState->state_name;
+                            $modelStateN->id_country=$modelCountry->id_country;
+                            $modelStateN->save();
+                            $modelState->id_state=$modelStateN->getPrimaryKey();
+                        }
+                        if(empty($modelCity->id_city) && $saveCity==1){
+                            $modelCityN=new City();
+                            $modelCityN->city_code=$modelCity->city_code;
+                            $modelCityN->city_name=$modelCity->city_name;
+                            $modelCityN->id_state=$modelState->id_state;
+                            $modelCityN->save();
+                            $modelCity->id_city=$modelCityN->getPrimaryKey();
+                        }
+                        $modelCompany->id_city=$modelCity->id_city;
+                        $modelCompany->save();
+                        if(!empty($modelTelephone->telephone_number)){
+                            $modelTelephone->id_company=$modelCompany->getPrimaryKey();
+                            $modelTelephone->id_typetelephone=1;
+                            $modelTelephone->save();
+                        }
+                        $modelWeb->id_company=$modelCompany->getPrimaryKey();
+                        $modelWeb->save();
+                        foreach($email as $em){
+                            $modelEmailN=new Email();
+                            $modelEmailN->id_company=$modelCompany->getPrimaryKey();
+                            $modelEmailN->email=$em;
+                            $modelEmailN->save();
+                        }
+                        foreach($snetw as $pk=>$snet){
+                            $modelSNetN=new SocialNetwork();
+                            $modelSNetN->id_company=$modelCompany->getPrimaryKey();
+                            $modelSNetN->id_typesnetwork=$typeSnet[$pk];
+                            $modelSNetN->snetwork=$snet;
+                            $modelSNetN->save();
+                        }
+                        $transaction->commit();
+                        $response["status"]="exito";
+                    }
+                    catch(ErrorException $e){
+                        $transaction->rollback();
+                        throw new CHttpException($e->get,$e->getMessage());
+                    }
+//                
+                echo CJSON::encode($response);
+//                print_r($_POST);
+            }
+            else{
+                echo CActiveForm::validate(array($modelCompany,$modelTelephone,$modeloEmail,$modelTypeEnt,$modelWeb,$modelSNetwReg,$modelContinent,$modelCountry,$modelState,$modelCity));                
+            }
+//            print_r($_POST);
         }
         
     }
     
+     /*
+    * Devuelve el listado de continentes halla según lo digitado en el campo.
+    *
+    * @param type $continent captura el string digitado para realizar filtro por continentes
+    *
+    * @return $display_json Listado de continentes en formato json
+    */
+    public function actionSearchContinent(){
+        $stringContinent=Yii::app()->request->getPost("stringcontinent");
+        $json_arr=[];
+        $display_json=[];
+//        $model= Beca::model();
+        $continents=$this->searchContinentScript($stringContinent);//->searchCountryScript($_POST["stringtitulo"]);
+        if(!empty($continents)){
+            foreach($continents as $continent){
+                $json_arr["id"] = $continent["id_continent"];
+                $json_arr["value"] = $continent["continent_name"];
+                $json_arr["label"] = $continent["continent_name"];
+                array_push($display_json, $json_arr);
+            }
+        }
+        else{
+            $json_arr["id"] = "#";
+            $json_arr["value"] = $stringContinent;
+            $json_arr["label"] = "No hay resultados, desea agregar ".$stringContinent."?";
+            array_push($display_json, $json_arr);
+        }
+        echo CJSON::encode($display_json);
+    }
     
     /**
+    * Devuelve el listado de continentes.
+    *
+    * @param type $continent variable del modelo que guarda el string digitado en campo en vista beca.php
+    *
+    * @return $result array de continentes
+    */
+    public function searchContinentScript($continent){
+        $conect= Yii::app()->db;
+        $searchItem=  strtoupper($continent);
+        $sql="SELECT * FROM continent WHERE (continent_name LIKE :param1)
+            or (continent_name LIKE :param2)
+            or (continent_name LIKE :param3)
+            or (continent_name LIKE :param4) order by continent_name asc";
+        $query=$conect->createCommand($sql);
+        $param1='%%'.$searchItem.'%%';
+        $param2='%%'.$searchItem;
+        $param3=$searchItem.'%%';
+        $query->bindParam(':param1',$param1,PDO::PARAM_STR);
+        $query->bindParam(':param2',$param2,PDO::PARAM_STR);
+        $query->bindParam(':param3',$param3,PDO::PARAM_STR);
+        $query->bindParam(':param4',$searchItem,PDO::PARAM_STR);
+        $read=$query->query();
+        $result=$read->readAll();
+        $read->close();			
+        return $result;
+    }
+    /*
     * Devuelve el listado de paises halla según lo digitado en el campo.
     *
     * @param type $country captura el string digitado para realizar filtro por paises
@@ -75,10 +286,11 @@ class CompanyController extends Controller{
     */
     public function actionSearchCountry(){
         $stringCountry=Yii::app()->request->getPost("stringcountry");
+        $idContinent=Yii::app()->request->getPost("idcontinent");
         $json_arr=[];
         $display_json=[];
 //        $model= Beca::model();
-        $countries=$this->searchCountryScript($stringCountry);//->searchCountryScript($_POST["stringtitulo"]);
+        $countries=$this->searchCountryScript($stringCountry,$idContinent);//->searchCountryScript($_POST["stringtitulo"]);
         if(!empty($countries)){
             foreach($countries as $country){
                 $json_arr["id"] = $country["id_country"];
@@ -103,17 +315,18 @@ class CompanyController extends Controller{
     *
     * @return $result array de títulos de grado
     */
-    public function searchCountryScript($country){
+    public function searchCountryScript($country,$idcontinent){
         $conect= Yii::app()->db;
         $searchItem=  strtoupper($country);
-        $sql="SELECT * FROM country WHERE (country_name LIKE :param1)
+        $sql="SELECT * FROM country WHERE id_continent=:idcontinent and ((country_name LIKE :param1)
             or (country_name LIKE :param2)
             or (country_name LIKE :param3)
-            or (country_name LIKE :param4) order by country_name asc";
+            or (country_name LIKE :param4)) order by country_name asc";
         $query=$conect->createCommand($sql);
         $param1='%%'.$searchItem.'%%';
         $param2='%%'.$searchItem;
         $param3=$searchItem.'%%';
+        $query->bindParam(':idcontinent',$idcontinent,PDO::PARAM_STR);
         $query->bindParam(':param1',$param1,PDO::PARAM_STR);
         $query->bindParam(':param2',$param2,PDO::PARAM_STR);
         $query->bindParam(':param3',$param3,PDO::PARAM_STR);
@@ -240,7 +453,19 @@ class CompanyController extends Controller{
         $read->close();			
         return $result;
     }  
-        
+    /**
+    * Valida los modelos.
+    *
+    * @param type $titulos captura el string digitado para realizar filtro por ciudades de oficinas
+    *
+    * @return $display_json Listado de titulos en formato json
+    */
+    protected function performAjaxValidation($model,$nameForm){
+        if(isset($_POST['ajax']) && $_POST['ajax']==$nameForm){
+            echo CActiveForm::validate($model);
+            Yii::app()->end();
+        }
+    }    
 //    public function actionRegisterCompany(){
 //        print_r($_POST);
 //    }

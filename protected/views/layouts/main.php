@@ -27,7 +27,8 @@
         <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/css/autocomplete.css">
         <!-- Custom Fonts -->
         <link href="<?php echo Yii::app()->request->baseUrl; ?>/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
+        <!-- Css Mbp -->
+        <link href="<?php echo Yii::app()->request->baseUrl; ?>/css/stylesMbp.css" rel="stylesheet">
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -298,7 +299,6 @@
         <script>
             $(document).ready(function() {
                 $(window).on('beforeunload', function() {
-                    $.notify(Mbp.estadoGuarda, "warn");
                     if (!Mbp.estadoGuarda) {
                         return "No ha guardado datos";
                     }

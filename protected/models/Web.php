@@ -29,11 +29,13 @@ class Web extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('web', 'required'),
-			array('id_company', 'numerical', 'integerOnly'=>true),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
-			array('id_web, id_company, web', 'safe', 'on'=>'search'),
+                    array('web', 'required'),
+                    array('web', 'required'),
+                    array('web','url','defaultScheme' => 'http'),
+                    array('id_company', 'numerical', 'integerOnly'=>true),
+                    // The following rule is used by search().
+                    // @todo Please remove those attributes that should not be searched.
+                    array('id_web, id_company, web', 'safe', 'on'=>'search'),
 		);
 	}
 
