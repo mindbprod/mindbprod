@@ -47,7 +47,11 @@ var Company = function(){
             oLanguage: Mbp.getDatatableLang(),
             scrollX: true
         });
-        
+        dataTableShowDataCmp=self.div.find("#dataTableShowDataCmp").DataTable({
+            oLanguage: Mbp.getDatatableLang(),
+            scrollX: true
+        });
+        self.dataToEdit=[];
         self.div.find("#btnEditaCmp").hide();
         self.div.find("#btnCancelaCmp").hide();
         
@@ -81,6 +85,12 @@ var Company = function(){
         });
         $("#snetw-form").on("click",".remove_field_snet", function(e){ //user click on remove text
             e.preventDefault(); $(this).parent('div').remove();
+        });
+        self.div.find("#entitysearch-form #Company_city").on("blur",function(){
+            
+            if(self.div.find("#entitysearch-form #Company_city").val()==""){
+                self.div.find("#entitysearch-form #Company_id_city").val("");
+            }
         });
         self.div.find("#entityreg-form #Continent_continent_name").on("blur",function(){
              if(self.div.find("#entityreg-form #Continent_continent_name").val()==""){
@@ -124,50 +134,11 @@ var Company = function(){
                 localStorage.setItem("saveCity", 0);
              }
         });
-        
-//        self.div.find("#Country_id_country").change(function (){
-//            if(self.div.find("#Country_id_country").val().length==0){
-//                self.div.find("#State_id_state").html("<option val=''>Debe seleccionar un departamento</option>");
-//            }
-//            else{
-//                self.searchState(self.div.find("#Country_id_country").val());
-//            }
-//        });
-//        self.div.find("#State_id_state").change(function (){
-//            if(self.div.find("#State_id_state").val().length==0){
-//                self.div.find("#CityEntity_id_city").html("<option val=''>Debe seleccionar una ciudad</option>");
-//            }
-//            else{
-//                self.searchCity(self.div.find("#State_id_state").val());
-//            }
-//        });
         self.div.find("#entityreg-form").change(function (){
             Mbp.estadoGuarda=false;
         });
-//        self.div.find("#entity-form").keyup(function (){
-//            estadoGuarda=false;
-//        });
-//        self.div.find("#cityEntity-form").change(function (){
-//            estadoGuarda=false;
-//        });
-        
-//        self.div.find("#Entity_id_typeent").change(function(){
-//            if(self.div.find("#Entity_id_typeent").val()==1){
-//                self.div.find("#entityLastName").css("display","block");
-//            }
-//            else{
-//                self.div.find("#entityLastName").css("display","none");
-//                self.div.find("#Entity_entity_lastname").val("");
-//            }
-//        });
-//        self.div.find("#btnRegCmp").click(function(){
-//            self.registerEntity();
-//        });
         self.div.find("#btnRegCmp").click(function (){
            var data=self.div.find("#entityreg-form").serialize();
-//           var email=self.div.find("#email-form").serialize();
-//           console.log(data);
-//           var dataSnet=snet+'&'+email;
             self.div.find("#btnRegCmp").hide();
             var saveContinent=localStorage.getItem("saveContinent");
             var saveCountry=localStorage.getItem("saveCountry");
@@ -183,7 +154,71 @@ var Company = function(){
         localStorage.setItem("saveCountry", 0);
         localStorage.setItem("saveState", 0);
         localStorage.setItem("saveCity", 0);
-//       
+        localStorage.setItem('dataSearch',"");
+        /*Show hide company searh criterials  */
+        self.div.find("#aSearchCriteria").on('click',function(){
+            if(self.div.find("#aSearchCriteria").is(':checked')){
+                self.div.find("#divSearchCrit").show();
+            }
+            else{
+                self.div.find("#divSearchCrit").hide();
+            }
+        });
+        self.div.find("#criteriCmp").hide();
+        self.div.find("#chCmp").on('click',function(){
+            if(self.div.find("#chCmp").is(':checked')){
+                self.div.find("#criteriCmp").show();
+            }
+            else{
+                self.div.find("#criteriCmp").hide();
+            }
+        });
+        self.div.find("#criteriaTl").hide();
+        self.div.find("#chTl").on('click',function(){
+            if(self.div.find("#chTl").is(':checked')){
+                self.div.find("#criteriaTl").show();
+            }
+            else{
+                self.div.find("#criteriaTl").hide();
+            }
+        });
+        self.div.find("#criteriaWeb").hide();
+        self.div.find("#chWeb").on('click',function(){
+            if(self.div.find("#chWeb").is(':checked')){
+                self.div.find("#criteriaWeb").show();
+            }
+            else{
+                self.div.find("#criteriaWeb").hide();
+            }
+        });
+        self.div.find("#criteriaEm").hide();
+        self.div.find("#chEm").on('click',function(){
+            if(self.div.find("#chEm").is(':checked')){
+                self.div.find("#criteriaEm").show();
+            }
+            else{
+                self.div.find("#criteriaEm").hide();
+            }
+        });
+        self.div.find("#criteriaSN").hide();
+        self.div.find("#chSN").on('click',function(){
+            if(self.div.find("#chSN").is(':checked')){
+                self.div.find("#criteriaSN").show();
+            }
+            else{
+                self.div.find("#criteriaSN").hide();
+            }
+        });
+        self.div.find("#btnSearchCmp").click(function (){
+            self.searchDataCompany();
+        });
+        self.div.find("#btnCleanCmp").click(function (){
+            self.div.find("#entitysearch-form").trigger("reset");
+            self.div.find("#Company_id_city").val("");
+        });
+       $('.ui-dialog').css('z-index',100003);
+                $('.ui-widget-overlay').css('z-index',100002);
+    
     };    
     /**************************************************************************/
     /********************************** METHODS *******************************/
@@ -218,6 +253,7 @@ var Company = function(){
                      });
             });
     };
+      
     /**************************************************************************/
     /******************************* SYNC METHODS *****************************/
     /**************************************************************************/ 
@@ -232,18 +268,18 @@ var Company = function(){
             data:data
         }).done(function(response) {
             if(response.status=="nosession"){
-                $.notify("La sesión ha caducado, debe hacer login de nuevo", "warn");
+                $.notify("The session has expired, you have to login again", "warn");
                 setTimeout(function(){document.location.href="site/login";}, 3000);
                 Mbp.estadoGuarda=true;
                 return;
             }
             else{
                 if(response.status=="exito"){
-                    msg="Datos de entidad registrados satisfactoriamente";
+                    msg="Company saved";
                     typeMsg="success";
                     self.div.find("#entityreg-form").trigger("reset");
                     $("#email-form").html("");$("#snetw-form").html("");
-                    estadoGuarda=true;
+                    Mbp.estadoGuarda=true;
                     $(".errorMessage").hide();
                     $(".errorSummary").hide();
                     $.notify(msg, typeMsg);
@@ -254,9 +290,9 @@ var Company = function(){
                         typeMsg="warn";
                     }
                     else{
-                        msg="Revise la validación del formuario";
+                        msg="Check the form validation";
                         typeMsg="warn";
-                        var errores="Revise lo siguiente<br/><ul>";
+                        var errores="Check the form validation<br/><ul>";
                         $.each(response, function(key, val) {
                             errores+="<li>"+val+"</li>";
                             $("#entityreg-form #"+key+"_em_").text(val);                                                    
@@ -270,15 +306,96 @@ var Company = function(){
                 }
             }
         }).fail(function(error, textStatus, xhr) {
-            msg="Error al registrar la entidad, si el error persiste consulte con el desarrollador a cargo ";
+            msg="Error, contact support ";
             typeMsg="error";
             $.notify(msg, typeMsg);
         }).always(function(){
             self.div.find("#btnRegCmp").show();
         });
     };
+    /*
+     * Search company from search criteria
+     * @returns {json- for data table}
+     */
+    self.searchDataCompany=function(){
+        var msg="";
+        var typeMsg="";
+        var dataCompany=self.div.find("#entitysearch-form").serialize();
+        $.ajax({
+            type: "POST",
+            dataType:'json',
+            url: 'searchDataCompany',
+            data:dataCompany
+        }).done(function(response) {
+            if(response.status=="nosession"){
+                $.notify("The session has expired, you have to login again", "warn");
+                setTimeout(function(){document.location.href="site/login";}, 3000);
+                Mbp.estadoGuarda=true;
+                return;
+            }
+            else{
+                if(response.status=="exito"){
+                    dataTableShowDataCmp.clear();
+                    self.dataToEdit=response.data;
+//                    localStorage.setItem('dataSearch',response.data);
+                    $.each(response.data,function(key,value){
+                        dataTableShowDataCmp.row.add([
+                            value.company_number,
+                            value.company_name,
+                            value.company_address,
+                            value.company_fest_desc,
+                            value.city_name,
+                            value.telephone_number,
+                            value.web,
+                            value.email,
+                            value.snetwork,
+                            "<a href='javascript:Company.editDataCompany("+value.id_company+");'>Edit</a>"
+                        ]).draw();
+                    });
+                }
+                else{
+                    if(response.status=="noexito"){
+                        msg=response.msg;
+                        typeMsg="warn";
+                    }
+                }
+            }
+        }).fail(function(error, textStatus, xhr) {
+            msg="Error, contact support ";
+            typeMsg="error";
+            $.notify(msg, typeMsg);
+        });
+    };
+  /**
+     * Llama a editar datos de company
+     */
     
-    
+    self.editDataCompany=function(idCompany){
+        console.log(self.dataToEdit);
+//        var dataToEdit=JSON.parse(JSON.stringify(localStorage.getItem('dataSearch')));
+        $.each(self.dataToEdit, function(i, v) {
+            if (v.id_company == idCompany) {
+                console.log(self.dataToEdit[i].company_name);
+                $('#entityedit-form #Company_company_name').val(self.dataToEdit[i].company_name);
+                $('#entityedit-form #Company_company_number').val(self.dataToEdit[i].company_number);
+                $('#entityedit-form #Company_company_address').val(self.dataToEdit[i].company_address);
+                $('#entityedit-form #Telephone_telephone_number').val(self.dataToEdit[i].telephone_number);
+                $('#entityedit-form #Company_company_fest_desc').text(self.dataToEdit[i].company_fest_desc);
+                $('#entityedit-form #Web_web').val(self.dataToEdit[i].web);
+                $('#entityedit-form #Company_company_observations').text(self.dataToEdit[i].company_observations);
+            }
+            
+        });
+        $('#entityedit-form #btnEditCmpName').on('click',function(){console.log("sdf");});
+        $("#editDataCmp").dialog({
+            open: function (event, ui) {
+                $('.ui-dialog').css('z-index',100003);
+                $('.ui-widget-overlay').css('z-index',100002);
+            }
+        });
+//        
+        $("#editDataCmp").dialog("open");
+    };
     /**
      * Consume webservice createEntitypara registrar entidad
      */
@@ -491,7 +608,7 @@ var Company = function(){
                         beforeSend:function (){
                             self.div.find("#entityreg-form #City_id_city").val("");
                             if(self.div.find("#entityreg-form #State_id_state").val()==""&&self.div.find("#entityreg-form #State_state_name").val()==""){
-                                var msg="Debe seleccionar un estado o departamento";
+                                var msg="You have to select a state";
                                 var typeMsg="warn";
                                 $.notify(msg, typeMsg);
                                 return false;
@@ -505,6 +622,7 @@ var Company = function(){
                 },
                 minLength: 1,
                 select: function(event, ui) {
+                    
                     if(ui.item.id=="#"){
                         self.div.find("#entityreg-form #City_id_city").val("");
                         localStorage.setItem("saveCity", 1);
@@ -520,7 +638,46 @@ var Company = function(){
                     $(".ui-autocomplete").css("z-index", 1000);
                 }
             });
+    };
+    /*
+     * Filtra por ciudades disponibles para realizar un autocomplet
+     * @param {type} param
+     */
+    
+    self.filterCityToSearch=function(){
+//        console.log("pasa");
         
+            self.div.find("#entitysearch-form #Company_city").autocomplete({
+                source: function(request, response){
+                    $.ajax({
+                        type: "POST",
+                        url:"searchCitySearch",
+                        data: {stringcity:self.div.find("#entitysearch-form #Company_city").val()},
+                        beforeSend:function (){
+                            self.div.find("#entitysearch-form #Company_id_city").val("");
+                            
+                        },
+                        success: response,
+                        dataType: 'json',
+                        minLength: 1,
+                        delay: 100
+                    });
+                },
+                minLength: 1,
+                select: function(event, ui) {
+                    if(ui.item.id=="#"){
+                        self.div.find("#entitysearch-form #Company_id_city").val("");
+                    }
+                    else{
+                        self.div.find("#entitysearch-form #Company_id_city").val(ui.item.id);
+                    }
+                    $(".ui-helper-hidden-accessible").hide();
+                },
+                html: true,
+                open: function(event, ui) {
+                    $(".ui-autocomplete").css("z-index", 1000);
+                }
+            });
     };
     /**************************************************************************/
     /******************************* DOM METHODS ******************************/
@@ -537,4 +694,5 @@ $(document).ready(function() {
     Company.filterState();
     Company.filterCity();
     Company.filterContinent();
+    Company.filterCityToSearch();
 });

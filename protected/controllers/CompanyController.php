@@ -78,6 +78,7 @@ class CompanyController extends Controller{
             $saveCountry=Yii::app()->request->getPost("saveCountry");
             $saveState=Yii::app()->request->getPost("saveState");
             $saveCity=Yii::app()->request->getPost("saveCity");
+            
             $modelSNetwReg=new SocialNetwork();
             if(!empty($typeEnt)){
                 $modelTypeEnt->id_company=0;
@@ -137,10 +138,12 @@ class CompanyController extends Controller{
                 $modelState->id_country=null;
             }
 //            print_r($modelState->attributes);exit();
+//            print_r($modelCity->attributes);
             if(empty($modelCity->id_city) && $saveCity==0){
                 $modelCity->city_name="";
                 $modelCity->id_state=null;
             }
+//             print_r($modelCity->attributes);exit();
 //            print_r($modelCompany->validate());exit();
             $this->performAjaxValidation(array($modelCompany,$modelTelephone,$modeloEmail,$modelTypeEnt,$modelWeb,$modelSNetwReg,$modelContinent,$modelCountry,$modelState,$modelCity),"entityreg-form");
             if($modelCompany->validate()&&$modelTelephone->validate()&&$modelTypeEnt->validate()&&$modelWeb->validate()&&$modelContinent->validate()&&$modelCountry->validate()&&$modelState->validate()&&$modelCity->validate()&&$modeloEmail->validate()&&$modelSNetwReg->validate()){
@@ -201,6 +204,12 @@ class CompanyController extends Controller{
                             $modelSNetN->snetwork=$snet;
                             $modelSNetN->save();
                         }
+                        foreach($typeEnt["id_typecompany"] as $tEnt){
+                            $modelTCompanyN=new CompanyTcompany();
+                            $modelTCompanyN->id_company=$modelCompany->getPrimaryKey();
+                            $modelTCompanyN->id_typecompany=$tEnt;
+                            $modelTCompanyN->save();
+                        }
                         $transaction->commit();
                         $response["status"]="exito";
                     }
@@ -219,7 +228,95 @@ class CompanyController extends Controller{
         }
         
     }
-    
+    public function actionShowEditcompany(){
+        $modelCompany=new Company();
+        $modelTelephone=new Telephone();
+        $modeloEmail=new Email();
+        $modelTypeEnt=new CompanyTcompany();
+        $typeCompany=  TypeCompany::model()->findAll();
+        $modelWeb=new Web();
+        $modelSNetw=new SocialNetwork();
+        $typeSNetwork=  TypeSnetwork::model()->findAll();
+        $modelContinent=new Continent();
+        $modelCountry=new Country();
+        $modelState=new State();
+        $modelCity=new City();
+            $this->render('showeditcompany',array(
+                'modelCompany'=>$modelCompany,
+                'modelTelephone'=>$modelTelephone,
+                'modeloEmail'=>$modeloEmail,
+                'modelTypeEnt'=>$modelTypeEnt,
+                'typeCompany'=>$typeCompany,
+                'modelWeb'=>$modelWeb,
+                'modelSNetw'=>$modelSNetw,
+                'typeSNetwork'=>$typeSNetwork,
+                'modelContinent'=>$modelContinent,
+                'modelCountry'=>$modelCountry,
+                'modelState'=>$modelState,
+                'modelCity'=>$modelCity
+            ));
+        
+        
+    }
+    public function actionSearchDataCompany(){
+        $conn=Yii::app()->db;
+        $data=$_POST;
+//        print_r($data);exit();
+        $columns="";
+        $sql="SELECT *,a.id_company FROM company AS a "
+                . "LEFT JOIN city AS b ON b.id_city=a.id_city "
+                . "LEFT JOIN telephone AS c ON c.id_company=a.id_company "
+                . "LEFT JOIN web AS d ON d.id_company=a.id_company "
+                . "LEFT JOIN email AS e ON e.id_company=a.id_company "
+                . "LEFT JOIN social_network AS f on f.id_company=a.id_company "
+                . "LEFT JOIN company_tcompany AS g on g.id_company=a.id_company ";
+        if(isset($data["chCmp"])||isset($data["chTl"])||isset($data["chWeb"])||isset($data["chEm"])||isset($data["chSN"])){
+            $searchCriteria=" WHERE ";
+        }
+        $sql.=$searchCriteria;
+        $dataSearch="";
+        if(isset($data["chCmp"])&&!empty($data["chCmp"])){
+            $ori=$orii=$oriii=$oriv=$orv=$orvi="";
+            if(isset($data["Company"]["company_name"])&&!empty($data["Company"]["company_name"])){$dataSearch.=" a.company_name LIKE :company_name ";$ori=" AND ";}
+            if(isset($data["Company"]["company_number"])&&!empty($data["Company"]["company_number"])){$dataSearch.=$ori." a.company_number LIKE :company_number ";$orii=" AND ";}
+            if(isset($data["Company"]["company_address"])&&!empty($data["Company"]["company_address"])){if(!empty($ori)||!empty($orii)){$oriii=" AND ";}$dataSearch.=$oriii." a.company_address LIKE :company_address ";$oriii=" AND ";}
+            if(isset($data["Company"]["company_fest_desc"])&&!empty($data["Company"]["company_fest_desc"])){if(!empty($ori)||!empty($orii)||!empty($oriii)){$oriv=" AND ";}$dataSearch.=$oriv." a.company_fest_desc LIKE :company_fest_desc ";$oriv=" AND ";}
+            if(isset($data["Company"]["id_city"])&&!empty($data["Company"]["id_city"])){if(!empty($ori)||!empty($orii)||!empty($oriii)||!empty($oriv)){$orv=" AND ";}$dataSearch.=$orv." a.id_city = :id_city ";$orv=" AND ";}           
+            if(isset($data["Company"]["company_type"])){
+                foreach($data["Company"]["company_type"] as $pk=>$cptype){
+                    if(!empty($ori)||!empty($orii)||!empty($oriii)||!empty($oriv)||!empty($orv)){
+                        $orvi=" AND ";
+                    }
+                    $var=":id_typecompani".$pk;
+                    $dataSearch.=$orvi." g.id_typecompany=".$var;
+                    $orvi=" AND ";
+                }
+            }
+            
+        }
+        $sql.=$dataSearch." AND a.id_company IS NOT NULL GROUP BY a.id_company ";
+        echo $sql;exit();
+        $query=$conn->createCommand($sql);
+        if(isset($data["chCmp"])&&!empty($data["chCmp"])){
+            if(isset($data["Company"]["company_name"])&&!empty($data["Company"]["company_name"])){$data["Company"]["company_name"]='%%'.$data["Company"]["company_name"].'%%';$query->bindParam(":company_name", $data["Company"]["company_name"]);}
+            if(isset($data["Company"]["company_number"])&&!empty($data["Company"]["company_number"])){$data["Company"]["company_number"]='%%'.$data["Company"]["company_number"].'%%';$query->bindParam(":company_number", $data["Company"]["company_number"]);}
+            if(isset($data["Company"]["company_address"])&&!empty($data["Company"]["company_address"])){$data["Company"]["company_address"]='%%'.$data["Company"]["company_address"].'%%';$query->bindParam(":company_address", $data["Company"]["company_address"]);}
+            if(isset($data["Company"]["company_fest_desc"])&&!empty($data["Company"]["company_fest_desc"])){$data["Company"]["company_fest_desc"]='%%'.$data["Company"]["company_fest_desc"].'%%';$query->bindParam(":company_fest_desc", $data["Company"]["company_fest_desc"]);}
+            if(isset($data["Company"]["id_city"])&&!empty($data["Company"]["id_city"])){$query->bindParam(":id_city", $data["Company"]["id_city"]);}
+            if(isset($data["Company"]["company_type"])){
+                foreach($data["Company"]["company_type"] as $pk=>$cptype){
+                    $var=":id_typecompani".$pk;
+                    $query->bindParam($var,$cptype);
+                }
+            }
+        }
+        $read=$query->query();
+        $res=$read->readAll();
+        $read->close();
+        $response['data']=$res;
+        $response["status"]="exito";
+        echo CJSON::encode($response);
+    }
      /*
     * Devuelve el listado de continentes halla según lo digitado en el campo.
     *
@@ -452,7 +549,64 @@ class CompanyController extends Controller{
         $result=$read->readAll();
         $read->close();			
         return $result;
-    }  
+    }
+    
+    /**
+    * Devuelve el listado de estados o departamentos que halla según lo digitado en el campo.
+    *
+    * @param type $state captura el string digitado para realizar filtro por estados o departamentos
+    *
+    * @return $display_json Listado de states en formato json
+    */
+    public function actionSearchCitySearch(){
+        $stringCity=Yii::app()->request->getPost("stringcity");
+        $json_arr=[];
+        $display_json=[];
+//        $model= Beca::model();
+        $cities=$this->searchCityScriptSearhc($stringCity);//->searchCountryScript($_POST["stringtitulo"]);
+        if(!empty($cities)){
+            foreach($cities as $city){
+                $json_arr["id"] = $city["id_city"];
+                $json_arr["value"] = $city["city_name"];
+                $json_arr["label"] = $city["city_name"];
+                array_push($display_json, $json_arr);
+            }
+        }
+        else{
+            $json_arr["id"] = "#";
+            $json_arr["value"] = $stringCity;
+            $json_arr["label"] = "No hay resultados, desea agregar ".$stringCity."?";
+            array_push($display_json, $json_arr);
+        }
+        echo CJSON::encode($display_json);
+    } 
+    /**
+    * Devuelve el listado de estados o departamentos.
+    *
+    * @param $searchItem,$conditionItem
+    *
+    * @return $result array de ciudades de grado
+    */
+    public function searchCityScriptSearhc($searchItem){
+        $conect= Yii::app()->db;
+        $item=  strtoupper($searchItem);
+        $sql="SELECT * FROM city WHERE (city_name LIKE :param1)
+            OR (city_name LIKE :param2)
+            OR (city_name LIKE :param3)
+            OR (city_name LIKE :param4) ORDER BY city_name asc";
+        $query=$conect->createCommand($sql);
+        $param1='%%'.$item.'%%';
+        $param2='%%'.$item;
+        $param3=$item.'%%';
+        $query->bindParam(':param1',$param1,PDO::PARAM_STR);
+        $query->bindParam(':param2',$param2,PDO::PARAM_STR);
+        $query->bindParam(':param3',$param3,PDO::PARAM_STR);
+        $query->bindParam(':param4',$item,PDO::PARAM_STR);
+        $read=$query->query();
+        $result=$read->readAll();
+        $read->close();			
+        return $result;
+    }
     /**
     * Valida los modelos.
     *
