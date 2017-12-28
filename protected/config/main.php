@@ -54,7 +54,7 @@ return array(
 		'db'=>array(
 			'connectionString' => 'mysql:host=mbpapp.db.3324307.3a8.hostedresource.net;dbname=mbpapp',
 			'emulatePrepare' => true,
-			'username' => 'root',
+			'username' => 'mbpapp',
 			'password' => 'Mbap2017!',
 			'charset' => 'utf8',
 		),
