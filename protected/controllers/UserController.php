@@ -49,18 +49,12 @@ class UserController extends Controller{
                         'cost' => 9
                     ];
             $modelUser->password=password_hash($modelUser->password, PASSWORD_BCRYPT, $opciones);
-            echo $modelUser->password;
-            exit();
             $this->performAjaxValidation(array($modelPerson,$modelUser),"userreg-form");
             if($modelPerson->validate()&&$modelUser->validate()){ 
                 $transaction=Yii::app()->db->beginTransaction();
                 try{
                     $modelPerson->save();
                     $modelUser->id_sperson=$modelPerson->getPrimaryKey();
-//                    $opciones = [
-//                        'cost' => 9
-//                    ];
-//                    $modelUser->password=password_hash($modelUser->password, PASSWORD_BCRYPT, $opciones);
                     $modelUser->save();
                     $transaction->commit();
                     $response["status"]="exito";
