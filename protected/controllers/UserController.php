@@ -45,6 +45,9 @@ class UserController extends Controller{
             $modelUser->attributes=Yii::app()->request->getPost("User");
             $modelUser->id_sperson=0;
             $modelUser->active_user=2;
+            $opciones = [
+                        'cost' => 9
+                    ];
             echo password_hash($modelUser->password, PASSWORD_BCRYPT, $opciones);exit();
             $this->performAjaxValidation(array($modelPerson,$modelUser),"userreg-form");
             if($modelPerson->validate()&&$modelUser->validate()){ 
