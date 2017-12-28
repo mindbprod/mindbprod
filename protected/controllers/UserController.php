@@ -51,10 +51,10 @@ class UserController extends Controller{
                 try{
                     $modelPerson->save();
                     $modelUser->id_sperson=$modelPerson->getPrimaryKey();
-                    $opciones = [
-                        'cost' => 9
-                    ];
-                    $modelUser->password=password_hash($modelUser->password, PASSWORD_BCRYPT, $opciones);
+//                    $opciones = [
+//                        'cost' => 9
+//                    ];
+//                    $modelUser->password=password_hash($modelUser->password, PASSWORD_BCRYPT, $opciones);
                     $modelUser->save();
                     $transaction->commit();
                     $response["status"]="exito";
