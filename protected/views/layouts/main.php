@@ -7,7 +7,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>Startmin - Bootstrap Admin Theme</title>
+        
 
         <!-- Bootstrap Core CSS -->
         <link href="<?php echo Yii::app()->request->baseUrl; ?>/css/bootstrap.min.css" rel="stylesheet">
