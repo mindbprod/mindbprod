@@ -565,7 +565,7 @@ class CompanyController extends Controller{
     }
     public function actionSearchDataCompany(){
         $conn=Yii::app()->db;
-        $data=$_POST;
+        $data=  $_POST;
 //        print_r($data);exit();
         $columns="";
         $sql="SELECT *,a.id_company FROM company AS a "

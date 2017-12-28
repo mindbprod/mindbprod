@@ -49,7 +49,7 @@ class User extends CActiveRecord
 	 * 	al momento de registrar el usuario en el sistema, éste verifica si la clave digitada coincide con el campo de verificación de clave.
 	 */
 	public function confirmUsername(){
-		if(Yii::app()->controller->action->id=="registerUser"){
+		if(Yii::app()->controller->action->id=="registerUser" ){
                     $paramsUser=Yii::app()->request->getPost("User");
                     if(isset($paramsUser["username"])){
                         $modelUser=  User::model()->findByAttributes(array("username"=>$paramsUser["username"]));
@@ -63,7 +63,7 @@ class User extends CActiveRecord
 	 * 	al momento de registrar el usuario en el sistema, éste verifica si la clave digitada coincide con el campo de verificación de clave.
 	 */
 	public function confirmPassword(){
-		if(Yii::app()->controller->action->id=="registerUser"){
+		if(Yii::app()->controller->action->id=="registerUser" || Yii::app()->controller->action->id=="changePassword"){
                     $paramsUser=Yii::app()->request->getPost("User");
 			if(isset($paramsUser["password"])){
                             if($paramsUser["password"]!=$paramsUser["confirm_password"]){

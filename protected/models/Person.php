@@ -8,6 +8,7 @@
  * @property string $person_id
  * @property string $person_name
  * @property string $person_lastname
+ * @property string $person_email
  *
  * The followings are the available model relations:
  * @property User[] $users
@@ -30,12 +31,15 @@ class Person extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('person_id, person_name, person_lastname', 'required'),
-			array('person_id, person_name, person_lastname', 'length', 'max'=>50),
+			array('person_id, person_name, person_lastname, person_email', 'required'),
+			array('person_id, person_name, person_lastname, person_email', 'length', 'max'=>50),
+			array('person_email', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_sperson, person_id, person_name, person_lastname', 'safe', 'on'=>'search'),
-                        array('person_id','validatepersonid')
+			array('id_sperson, person_id, person_name, person_lastname, person_email', 'safe', 'on'=>'search'),
+                        array('person_id','validatepersonid'),
+                        array('person_email','validatepersonemail'),
+                    
 		);
 	}
         /**
@@ -54,7 +58,22 @@ class Person extends CActiveRecord
 		}
 //            }
 	}
-        
+        /**
+	 * 	al momento de registrar el usuario en el sistema, éste verifica si ya existe un usuario con el id digitado en campo person_id.
+	 */
+	public function validatepersonemail(){
+//            if(!$this->hasErrors()){
+		if(Yii::app()->controller->action->id=="registerUser"){
+                    $personData=Yii::app()->request->getPost("Person");
+                    if(isset($personData["person_email"])){
+                        $modelPerson=  Person::model()->findByAttributes(array("person_email"=>$personData["person_email"]));
+                        if(!empty($modelPerson)){
+                                $this->addError('person_email',"The person email exists in database, type other email.");
+                        }
+                    }	
+		}
+//            }
+	}
 	/**
 	 * @return array relational rules.
 	 */
@@ -77,6 +96,7 @@ class Person extends CActiveRecord
 			'person_id' => 'Person ID',
 			'person_name' => 'Person Name',
 			'person_lastname' => 'Person Lastname',
+			'person_email' => 'Person Email',
 		);
 	}
 
@@ -102,6 +122,7 @@ class Person extends CActiveRecord
 		$criteria->compare('person_id',$this->person_id,true);
 		$criteria->compare('person_name',$this->person_name,true);
 		$criteria->compare('person_lastname',$this->person_lastname,true);
+		$criteria->compare('person_email',$this->person_email,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
