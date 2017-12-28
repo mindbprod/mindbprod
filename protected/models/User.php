@@ -66,17 +66,17 @@ class User extends CActiveRecord
 		if(Yii::app()->controller->action->id=="registerUser"){
                     $paramsUser=Yii::app()->request->getPost("User");
 			if(isset($paramsUser["password"])){
-                            if($this->password!=$paramsUser["confirm_password"]){
+                            if($paramsUser["password"]!=$paramsUser["confirm_password"]){
                                     $this->addError('password',"Passowrds do not match");
-                            }elseif(strlen($this->password) < 6){
+                            }elseif(strlen($paramsUser["password"]) < 6){
 				  $this->addError('password',"The password has to contain at least 6 caracters");
-			   }elseif(strlen($this->password) > 16){
+			   }elseif(strlen($paramsUser["password"]) > 16){
 				  $this->addError('password',"The password can not be longer than 16 characters");
-			   }elseif (!preg_match('`[a-z]`',$this->password)){
+			   }elseif (!preg_match('`[a-z]`',$paramsUser["password"])){
 				  $this->addError('password',"The password must have at least one lower case letter");
-			   }elseif (!preg_match('`[A-Z]`',$this->password)){
+			   }elseif (!preg_match('`[A-Z]`',$paramsUser["password"])){
 				  $this->addError('password',"The password must have at least one upper case letter");
-			   }elseif (!preg_match('`[0-9]`',$this->password)){
+			   }elseif (!preg_match('`[0-9]`',$paramsUser["password"])){
 				  $this->addError('password',"The password must have at least one numeric caracter");
 			   }
 			}	

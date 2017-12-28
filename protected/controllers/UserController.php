@@ -45,19 +45,25 @@ class UserController extends Controller{
             $modelUser->attributes=Yii::app()->request->getPost("User");
             $modelUser->id_sperson=0;
             $modelUser->active_user=2;
+            $opciones = [
+                        'cost' => 9
+                    ];
+            $passworCrypt=password_hash($modelUser->password, PASSWORD_BCRYPT, $opciones);
             $this->performAjaxValidation(array($modelPerson,$modelUser),"userreg-form");
             if($modelPerson->validate()&&$modelUser->validate()){ 
+                $modelUser->password=$passworCrypt;
                 $transaction=Yii::app()->db->beginTransaction();
                 try{
                     $modelPerson->save();
                     $modelUser->id_sperson=$modelPerson->getPrimaryKey();
-                    $opciones = [
-                        'cost' => 9
-                    ];
-                    $modelUser->password=password_hash($modelUser->password, PASSWORD_BCRYPT, $opciones);
-                    $modelUser->save();
-                    $transaction->commit();
-                    $response["status"]="exito";
+                    if($modelUser->save()){
+                        $response["status"]="exito";
+                        $transaction->commit();
+                    }
+                    else{
+                        $transaction->rollback();
+                        $response["status"]="noexito";
+                    }
                 }
                 catch(ErrorException $e){
                     $transaction->rollback();
@@ -156,3 +162,6 @@ class UserController extends Controller{
 	}
 	*/
 }
+
+
+
