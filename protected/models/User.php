@@ -21,6 +21,7 @@ class User extends CActiveRecord
 	/**
 	 * @return string the associated database table name
 	 */
+        public $confirm_password;
 	public function tableName()
 	{
 		return 'user';
@@ -34,15 +35,53 @@ class User extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('username, password, active_user', 'required'),
+			array('id_sperson, id_typeuser, username, password, active_user', 'required'),
 			array('id_sperson, id_typeuser, active_user', 'numerical', 'integerOnly'=>true),
 			array('username', 'length', 'max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_user, id_sperson, id_typeuser, username, password, active_user', 'safe', 'on'=>'search'),
+			array('id_user, id_sperson, id_typeuser, username, password, active_user, confirm_password', 'safe', 'on'=>'search'),
+                        array('password','confirmPassword'),
+                        array('username','confirmUsername'),
 		);
 	}
-
+        /**
+	 * 	al momento de registrar el usuario en el sistema, éste verifica si la clave digitada coincide con el campo de verificación de clave.
+	 */
+	public function confirmUsername(){
+		if(Yii::app()->controller->action->id=="registerUser"){
+                    $paramsUser=Yii::app()->request->getPost("User");
+                    if(isset($paramsUser["username"])){
+                        $modelUser=  User::model()->findByAttributes(array("username"=>$paramsUser["username"]));
+                        if(!empty($modelUser)){
+                                $this->addError('username',"The username exists in database, type another username");
+                        }
+                    }	
+		}
+	}
+        /**
+	 * 	al momento de registrar el usuario en el sistema, éste verifica si la clave digitada coincide con el campo de verificación de clave.
+	 */
+	public function confirmPassword(){
+		if(Yii::app()->controller->action->id=="registerUser"){
+                    $paramsUser=Yii::app()->request->getPost("User");
+			if(isset($paramsUser["password"])){
+                            if($this->password!=$paramsUser["confirm_password"]){
+                                    $this->addError('password',"Passowrds do not match");
+                            }elseif(strlen($this->password) < 6){
+				  $this->addError('password',"The password has to contain at least 6 caracters");
+			   }elseif(strlen($this->password) > 16){
+				  $this->addError('password',"The password can not be longer than 16 characters");
+			   }elseif (!preg_match('`[a-z]`',$this->password)){
+				  $this->addError('password',"The password must have at least one lower case letter");
+			   }elseif (!preg_match('`[A-Z]`',$this->password)){
+				  $this->addError('password',"The password must have at least one upper case letter");
+			   }elseif (!preg_match('`[0-9]`',$this->password)){
+				  $this->addError('password',"The password must have at least one numeric caracter");
+			   }
+			}	
+		}
+	}
 	/**
 	 * @return array relational rules.
 	 */

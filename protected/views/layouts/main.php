@@ -23,16 +23,20 @@
 
         <!-- Morris Charts CSS -->
         <link href="<?php echo Yii::app()->request->baseUrl; ?>/css/morris.css" rel="stylesheet">
-
+        <!-- autosugestion-->
+        <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/css/autocomplete.css">
         <!-- Custom Fonts -->
         <link href="<?php echo Yii::app()->request->baseUrl; ?>/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
+        <!-- Css Mbp -->
+        <link href="<?php echo Yii::app()->request->baseUrl; ?>/css/stylesMbp.css" rel="stylesheet">
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
+        <!-- Css jquery confirm -->
+        <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
     </head>
     <body>
         <?php
@@ -137,13 +141,25 @@
                         ?>
                             <ul class="nav" id="side-menu">
                                 <li>
-                                    <a href="#"><i class="fa fa-sitemap fa-fw"></i> Registro<span class="fa arrow"></span></a>
+                                    <a href="#"><i class="fa fa-sitemap fa-fw"></i> Company Manager<span class="fa arrow"></span></a>
                                     <ul class="nav nav-second-level">
                                         <li>
-                                            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/company/registercompany">Crer/editar registro de empresa</a>
+                                            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/company/registercompany">Register company information</a>
                                         </li>
                                         <li>
-                                            <a href="#">Cargar archivo</a>
+                                            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/company/showEditcompany">Show/Edit company information</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Load information from file</a>
+                                        </li>
+                                    </ul>
+                                    <!-- /.nav-second-level -->
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-sitemap fa-fw"></i> User Manager <span class="fa arrow"></span></a>
+                                    <ul class="nav nav-second-level">
+                                        <li>
+                                            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/user/registerUser">Register user</a>
                                         </li>
                                     </ul>
                                     <!-- /.nav-second-level -->
@@ -155,7 +171,7 @@
                         ?>
                             <ul class="nav" id="side-menu">
                                 <li>
-                                    <a href="#">Consultar empresas</a>
+                                    <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/company/showEditcompany">Show/Edit company information</a>
                                 </li>
                             </ul>
                         <?php endif;?>
@@ -294,6 +310,18 @@
         <!-- Custom Theme JavaScript -->
         <script src="<?php echo Yii::app()->request->baseUrl; ?>/js/startmin.js"></script>
         <script src="<?php echo Yii::app()->request->baseUrl; ?>/js/Mbp.js"></script>
+        <!-- Confirm jquery-->
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $(window).on('beforeunload', function() {
+                    if (!Mbp.estadoGuarda) {
+                        return "No ha guardado datos";
+                    }
+                });
+
+            });
+        </script>
     <?php
         else:
             echo $content;

@@ -35,9 +35,26 @@ class Person extends CActiveRecord
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id_sperson, person_id, person_name, person_lastname', 'safe', 'on'=>'search'),
+                        array('person_id','validatepersonid')
 		);
 	}
-
+        /**
+	 * 	al momento de registrar el usuario en el sistema, éste verifica si ya existe un usuario con el id digitado en campo person_id.
+	 */
+	public function validatepersonid(){
+//            if(!$this->hasErrors()){
+		if(Yii::app()->controller->action->id=="registerUser"){
+                    $personData=Yii::app()->request->getPost("Person");
+                    if(isset($personData["person_id"])){
+                        $modelPerson=  Person::model()->findByAttributes(array("person_id"=>$personData["person_id"]));
+                        if(!empty($modelPerson)){
+                                $this->addError('person_id',"The person id exists in database, type other person id.");
+                        }
+                    }	
+		}
+//            }
+	}
+        
 	/**
 	 * @return array relational rules.
 	 */
@@ -57,7 +74,7 @@ class Person extends CActiveRecord
 	{
 		return array(
 			'id_sperson' => 'Id Sperson',
-			'person_id' => 'Person',
+			'person_id' => 'Person ID',
 			'person_name' => 'Person Name',
 			'person_lastname' => 'Person Lastname',
 		);

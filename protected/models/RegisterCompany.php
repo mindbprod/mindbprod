@@ -6,6 +6,7 @@
  * The followings are the available columns in table 'register_company':
  * @property integer $id_user
  * @property integer $id_company
+ * @property string $register_date
  */
 class RegisterCompany extends CActiveRecord
 {
@@ -25,11 +26,11 @@ class RegisterCompany extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_user, id_company', 'required'),
+			array('id_user, id_company, register_date', 'required'),
 			array('id_user, id_company', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_user, id_company', 'safe', 'on'=>'search'),
+			array('id_user, id_company, register_date', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -52,6 +53,7 @@ class RegisterCompany extends CActiveRecord
 		return array(
 			'id_user' => 'Id User',
 			'id_company' => 'Id Company',
+			'register_date' => 'Register Date',
 		);
 	}
 
@@ -75,6 +77,7 @@ class RegisterCompany extends CActiveRecord
 
 		$criteria->compare('id_user',$this->id_user);
 		$criteria->compare('id_company',$this->id_company);
+		$criteria->compare('register_date',$this->register_date,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

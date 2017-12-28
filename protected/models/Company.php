@@ -8,6 +8,9 @@
  * @property integer $id_city
  * @property string $company_number
  * @property string $company_name
+ * @property string $company_address
+ * @property string $company_fest_desc
+ * @property string $company_observations
  *
  * The followings are the available model relations:
  * @property City $idCity
@@ -37,12 +40,14 @@ class Company extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
+			array('company_name, company_fest_desc', 'required'),
 			array('id_city', 'numerical', 'integerOnly'=>true),
 			array('company_number', 'length', 'max'=>50),
-			array('company_name', 'length', 'max'=>500),
+			array('company_name, company_address', 'length', 'max'=>500),
+			array('company_observations', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_company, id_city, company_number, company_name', 'safe', 'on'=>'search'),
+			array('id_company, id_city, company_number, company_name, company_address, company_fest_desc, company_observations', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -75,6 +80,9 @@ class Company extends CActiveRecord
 			'id_city' => 'Id City',
 			'company_number' => 'Company Number',
 			'company_name' => 'Company Name',
+			'company_address' => 'Company Address',
+			'company_fest_desc' => 'Company Fest Desc',
+			'company_observations' => 'Company Observations',
 		);
 	}
 
@@ -100,6 +108,9 @@ class Company extends CActiveRecord
 		$criteria->compare('id_city',$this->id_city);
 		$criteria->compare('company_number',$this->company_number,true);
 		$criteria->compare('company_name',$this->company_name,true);
+		$criteria->compare('company_address',$this->company_address,true);
+		$criteria->compare('company_fest_desc',$this->company_fest_desc,true);
+		$criteria->compare('company_observations',$this->company_observations,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

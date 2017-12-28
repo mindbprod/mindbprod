@@ -4,7 +4,7 @@
  * This is the model class for table "country".
  *
  * The followings are the available columns in table 'country':
- * @property string $id_country
+ * @property integer $id_country
  * @property integer $id_continent
  * @property string $country_code
  * @property string $country_name
@@ -31,13 +31,14 @@ class Country extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_country, country_code, country_name', 'required'),
+			array('country_code, country_name,id_continent', 'required'),
 			array('id_continent', 'numerical', 'integerOnly'=>true),
-			array('id_country', 'length', 'max'=>10),
 			array('country_code, country_name', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_country, id_continent, country_code, country_name', 'safe', 'on'=>'search'),
+//                        array('id_country', 'safe'),
+                        array('id_country', 'safe'),
+			array('id_continent, country_code, country_name', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -85,7 +86,7 @@ class Country extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id_country',$this->id_country,true);
+		$criteria->compare('id_country',$this->id_country);
 		$criteria->compare('id_continent',$this->id_continent);
 		$criteria->compare('country_code',$this->country_code,true);
 		$criteria->compare('country_name',$this->country_name,true);

@@ -31,7 +31,7 @@ class SocialNetwork extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('snetwork', 'required'),
+			array('snetwork,id_typesnetwork', 'required'),
 			array('id_company, id_typesnetwork', 'numerical', 'integerOnly'=>true),
 			array('snetwork', 'length', 'max'=>100),
 			// The following rule is used by search().

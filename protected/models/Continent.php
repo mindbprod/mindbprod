@@ -33,7 +33,9 @@ class Continent extends CActiveRecord
 			array('continent_code, continent_name', 'length', 'max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_continent, continent_code, continent_name', 'safe', 'on'=>'search'),
+//			array('id_continent', 'safe'),
+                        array('id_continent', 'safe'),
+			array('continent_code, continent_name', 'safe', 'on'=>'search'),
 		);
 	}
 

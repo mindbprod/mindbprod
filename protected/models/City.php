@@ -31,12 +31,14 @@ class City extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('city_code, city_name', 'required'),
+			array('city_code, city_name,id_state', 'required'),
 			array('id_state', 'numerical', 'integerOnly'=>true),
 			array('city_code, city_name', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_city, id_state, city_code, city_name', 'safe', 'on'=>'search'),
+//                        array('id_city', 'safe'),
+                        array('id_city', 'safe'),
+			array('id_state, city_code, city_name', 'safe', 'on'=>'search'),
 		);
 	}
 
