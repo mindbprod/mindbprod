@@ -228,6 +228,311 @@ class CompanyController extends Controller{
         }
         
     }
+    public function actionEditDataUbication(){
+        $data=Yii::app()->request->getPost("DCmp");
+        $dataVal=[];
+        parse_str($data["valueContent"], $dataVal);
+//        print_r($dataVal);
+        $modelContinent=  Continent::model();
+        $modelContinent->attributes=$dataVal["Continent"];
+        $modelCountry=Country::model();
+        $modelCountry->attributes=$dataVal["Country"];
+        $modelState=State::model();
+        $modelState->attributes=$dataVal["State"];
+        $modelCity=City::model();
+        $modelCity->attributes=$dataVal["City"];
+        $modelCompany=Company::model();
+        $saveContinent=$dataVal["saveContinent"];
+        $saveCountry=$dataVal["saveCountry"];
+        $saveState=$dataVal["saveState"];
+        $saveCity=$dataVal["saveCity"];
+        if(!empty($modelContinent->continent_name)){
+            $modelContinent->continent_code=strtoupper($this->removeAccents( $modelContinent->continent_name));
+            $modelContinent->continent_name=mb_strtoupper($modelContinent->continent_name, 'UTF-8');
+        }
+        if(!empty($modelCountry->country_name)){
+            $modelCountry->country_code=  strtoupper($this->removeAccents( $modelCountry->country_name));
+            $modelCountry->country_name= mb_strtoupper($modelCountry->country_name, 'UTF-8');
+            $modelCountry->id_continent=0;
+        }
+        if(!empty($modelState->state_name)){
+            $modelState->state_code=strtoupper($this->removeAccents( $modelState->state_name));
+            $modelState->state_name=mb_strtoupper($modelState->state_name, 'UTF-8');
+            $modelState->id_country=0;
+        }
+        if(!empty($modelCity->city_name)){
+            $modelCity->city_code=strtoupper($this->removeAccents($modelCity->city_name));
+            $modelCity->city_name=mb_strtoupper($modelCity->city_name);
+            $modelCity->id_state=0;
+        }
+//        echo $modelCity->city_code;exit();
+        if(empty($modelContinent->id_continent) && $saveContinent==0){
+            $modelContinent->continent_name=NULL;
+        }
+        if(empty($modelCountry->id_country) && $saveCountry==0){
+            $modelCountry->country_name="";
+            $modelCountry->id_continent=null;
+        }
+//            print_r($modelContinent->attributes);
+        if(empty($modelState->id_state) && $saveState==0){
+            $modelState->state_name="";
+            $modelState->id_country=null;
+        }
+//            print_r($modelState->attributes);exit();
+//            print_r($modelCity->attributes);
+        if(empty($modelCity->id_city) && $saveCity==0){
+            $modelCity->city_name="";
+            $modelCity->id_state=null;
+        }
+        $this->performAjaxValidation(array($modelContinent,$modelCountry,$modelState,$modelCity),"entityedit-form");
+        if($modelContinent->validate()&&$modelCountry->validate()&&$modelState->validate()&&$modelCity->validate()){
+            $transaction=Yii::app()->db->beginTransaction();
+            try{
+                if(empty($modelContinent->id_continent) && $saveContinent==1){
+                    $modelContinentN=new Continent();
+                    $modelContinentN->continent_code_code=$modelContinent->continent_code;
+                    $modelContinentN->continent_name=$modelCountry->continent_name;
+                    $modelContinentN->save();
+                    $modelContinent->id_continent=$modelContinentN->getPrimaryKey();
+                }
+                if(empty($modelCountry->id_country) && $saveCountry==1){
+                    $modelCountryN=new Country();
+                    $modelCountryN->country_code=$modelCountry->country_code;
+                    $modelCountryN->country_name=$modelCountry->country_name;
+                    $modelCountryN->id_continent=$modelContinent->id_continent;
+                    $modelCountryN->save();
+                    $modelCountry->id_country=$modelCountryN->getPrimaryKey();
+                }
+                if(empty($modelState->id_state) && $saveState==1){
+                    $modelStateN=new State();
+                    $modelStateN->state_code=$modelState->state_code;
+                    $modelStateN->state_name=$modelState->state_name;
+                    $modelStateN->id_country=$modelState->state_name;
+                    $modelStateN->id_country=$modelCountry->id_country;
+                    $modelStateN->save();
+                    $modelState->id_state=$modelStateN->getPrimaryKey();
+                }
+                if(empty($modelCity->id_city) && $saveCity==1){
+                    $modelCityN=new City();
+                    $modelCityN->city_code=$modelCity->city_code;
+                    $modelCityN->city_name=$modelCity->city_name;
+                    $modelCityN->id_state=$modelState->id_state;
+                    $modelCityN->save();
+                    $modelCity->id_city=$modelCityN->getPrimaryKey();
+                }
+                $modelCompany->updateByPk($data["idCompany"], array("id_city"=>$modelCity->id_city));
+                $transaction->commit();
+                $response["status"]="exito";
+            }
+            catch(ErrorException $e){
+                $transaction->rollback();
+                $response["status"]="noexito";
+            }
+            echo CJSON::encode($response);
+        }
+        else{
+            echo CActiveForm::validate(array($modelContinent,$modelCountry,$modelState,$modelCity));
+        }
+//        print_r($modelCity->attributes);
+    }
+    private function removeAccents($str) {
+        $a = array('À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Æ', 'Ç', 'È', 'É', 'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ð', 'Ñ', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ø', 'Ù', 'Ú', 'Û', 'Ü', 'Ý', 'ß', 'à', 'á', 'â', 'ã', 'ä', 'å', 'æ', 'ç', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ñ', 'ò', 'ó', 'ô', 'õ', 'ö', 'ø', 'ù', 'ú', 'û', 'ü', 'ý', 'ÿ', 'Ā', 'ā', 'Ă', 'ă', 'Ą', 'ą', 'Ć', 'ć', 'Ĉ', 'ĉ', 'Ċ', 'ċ', 'Č', 'č', 'Ď', 'ď', 'Đ', 'đ', 'Ē', 'ē', 'Ĕ', 'ĕ', 'Ė', 'ė', 'Ę', 'ę', 'Ě', 'ě', 'Ĝ', 'ĝ', 'Ğ', 'ğ', 'Ġ', 'ġ', 'Ģ', 'ģ', 'Ĥ', 'ĥ', 'Ħ', 'ħ', 'Ĩ', 'ĩ', 'Ī', 'ī', 'Ĭ', 'ĭ', 'Į', 'į', 'İ', 'ı', 'Ĳ', 'ĳ', 'Ĵ', 'ĵ', 'Ķ', 'ķ', 'Ĺ', 'ĺ', 'Ļ', 'ļ', 'Ľ', 'ľ', 'Ŀ', 'ŀ', 'Ł', 'ł', 'Ń', 'ń', 'Ņ', 'ņ', 'Ň', 'ň', 'ŉ', 'Ō', 'ō', 'Ŏ', 'ŏ', 'Ő', 'ő', 'Œ', 'œ', 'Ŕ', 'ŕ', 'Ŗ', 'ŗ', 'Ř', 'ř', 'Ś', 'ś', 'Ŝ', 'ŝ', 'Ş', 'ş', 'Š', 'š', 'Ţ', 'ţ', 'Ť', 'ť', 'Ŧ', 'ŧ', 'Ũ', 'ũ', 'Ū', 'ū', 'Ŭ', 'ŭ', 'Ů', 'ů', 'Ű', 'ű', 'Ų', 'ų', 'Ŵ', 'ŵ', 'Ŷ', 'ŷ', 'Ÿ', 'Ź', 'ź', 'Ż', 'ż', 'Ž', 'ž', 'ſ', 'ƒ', 'Ơ', 'ơ', 'Ư', 'ư', 'Ǎ', 'ǎ', 'Ǐ', 'ǐ', 'Ǒ', 'ǒ', 'Ǔ', 'ǔ', 'Ǖ', 'ǖ', 'Ǘ', 'ǘ', 'Ǚ', 'ǚ', 'Ǜ', 'ǜ', 'Ǻ', 'ǻ', 'Ǽ', 'ǽ', 'Ǿ', 'ǿ', 'Ά', 'ά', 'Έ', 'έ', 'Ό', 'ό', 'Ώ', 'ώ', 'Ί', 'ί', 'ϊ', 'ΐ', 'Ύ', 'ύ', 'ϋ', 'ΰ', 'Ή', 'ή');
+        $b = array('A', 'A', 'A', 'A', 'A', 'A', 'AE', 'C', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I', 'D', 'N', 'O', 'O', 'O', 'O', 'O', 'O', 'U', 'U', 'U', 'U', 'Y', 's', 'a', 'a', 'a', 'a', 'a', 'a', 'ae', 'c', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i', 'n', 'o', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'y', 'y', 'A', 'a', 'A', 'a', 'A', 'a', 'C', 'c', 'C', 'c', 'C', 'c', 'C', 'c', 'D', 'd', 'D', 'd', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'G', 'g', 'G', 'g', 'G', 'g', 'G', 'g', 'H', 'h', 'H', 'h', 'I', 'i', 'I', 'i', 'I', 'i', 'I', 'i', 'I', 'i', 'IJ', 'ij', 'J', 'j', 'K', 'k', 'L', 'l', 'L', 'l', 'L', 'l', 'L', 'l', 'l', 'l', 'N', 'n', 'N', 'n', 'N', 'n', 'n', 'O', 'o', 'O', 'o', 'O', 'o', 'OE', 'oe', 'R', 'r', 'R', 'r', 'R', 'r', 'S', 's', 'S', 's', 'S', 's', 'S', 's', 'T', 't', 'T', 't', 'T', 't', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'W', 'w', 'Y', 'y', 'Y', 'Z', 'z', 'Z', 'z', 'Z', 'z', 's', 'f', 'O', 'o', 'U', 'u', 'A', 'a', 'I', 'i', 'O', 'o', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'A', 'a', 'AE', 'ae', 'O', 'o', 'Α', 'α', 'Ε', 'ε', 'Ο', 'ο', 'Ω', 'ω', 'Ι', 'ι', 'ι', 'ι', 'Υ', 'υ', 'υ', 'υ', 'Η', 'η');
+        return str_replace($a, $b, $str);
+    }
+    /*
+     * Guardar datos editados de compañía
+     */
+    public function actionEditDataCompany(){
+        $data=Yii::app()->request->getPost("DCmp");
+//        print_r($data);
+        $tableName="";
+        $columnName="";
+        $updAct=true;
+        switch ($data["tableName"]){
+            case "company":
+                $tableName="company";
+                switch ($data["columnName"]){
+                    case "company_name":
+                        $columnName="company_name";
+                    break;
+                    case "company_number":
+                        $columnName="company_number";
+                    break;
+                    case "company_address":
+                        $columnName="company_address";
+                    break;
+                    case "company_fest_desc":
+                        $columnName="company_fest_desc";
+                    break;
+                    case "company_observations":
+                        $columnName="company_observations";
+                    break;
+                }
+            break;
+            case "telephone":
+                $tableName="telephone";
+                $columnName="telephone_number";
+                $modelTelephone=  Telephone::model()->findByAttributes(array("id_company"=>$data["idCompany"]));
+                if(empty($modelTelephone)){
+                    $updAct=false;
+                }
+            break;
+            case "web":
+                $tableName="web";
+                $columnName="web";
+                $modelWeb= Web::model()->findByAttributes(array("id_company"=>$data["idCompany"]));
+                if(empty($modelWeb)){
+                    $updAct=false;
+                }
+            break;
+            case "email":
+                $tableName="email";
+                $columname="email";
+                $dataVal=[];
+                parse_str($data["valueContent"], $dataVal);
+//                print_r($dataVal);exit();
+                $this->saveDataEmailSn($tableName,$columname,$data["idCompany"],$dataVal);
+            break;
+            case "social_network":
+                $dataVal=[];
+                parse_str($data["valueContent"], $dataVal);
+//                print_r($dataVal,$dataVal);exit();
+                $this->saveDataSnet($data["idCompany"],$dataVal);
+            break;
+            case "company_tcompany":
+                $tableName="company_tcompany";
+                $columname="id_typecompany";
+                $dataVal=[];
+                parse_str($data["valueContent"], $dataVal);
+//                print_r($dataVal);exit();
+                $this->saveDataTyCompany($data["idCompany"],$dataVal);
+            break;
+        }
+        if(!empty($tableName)&&!empty($columnName)&&!empty($data["valueContent"])){
+            $conn=Yii::app()->db;
+            if($updAct){
+                $sql="update ".$tableName." set ".$columnName."=:datatoedit where id_company=:id_company";
+                $query=$conn->createCommand($sql);
+                $query->bindParam(":datatoedit",$data["valueContent"]);
+                $query->bindParam(":id_company",$data["idCompany"]);
+                if($query->execute()==0){
+                    $response["status"]="noexito";
+                }
+                else{
+                   $response["status"]="exito"; 
+                }
+            }
+            else{
+                $sql="INSERT INTO ".$tableName." (id_company,".$columnName.") VALUES (:id_company,:datatoedit)";
+                $query=$conn->createCommand($sql);
+                $query->bindParam(":id_company",$data["idCompany"]);
+                $query->bindParam(":datatoedit",$data["valueContent"]);
+                if($query->execute()==0){    
+                    $response["status"]="noexito";
+                }
+                else{
+                   $response["status"]="exito"; 
+                }
+            }
+        }
+        else{
+            $response["status"]="noexito";
+        }
+        echo CJSON::encode($response);
+    }
+    public function saveDataEmailSn($tableName,$columname,$idCompany,$valueContent){
+        if(!empty($valueContent)&&!empty($idCompany)){
+            $conn=Yii::app()->db;
+            $transaction=Yii::app()->db->beginTransaction();
+            try{
+                $sqlDel="DELETE FROM email WHERE id_company=:id_company";
+                $query=$conn->createCommand($sqlDel);
+                $query->bindParam(":id_company",$idCompany);
+                $query->execute();
+                $sql="INSERT INTO email (id_company,email) VALUES (:id_company,:email) ";
+                foreach($valueContent["email"] as $val){
+                    $query=$conn->createCommand($sql);
+                    $query->bindParam(":id_company",$idCompany);
+                    $query->bindParam(":email",$val);
+                    $query->execute();
+                }
+                $transaction->commit();
+                $response["status"]="exito";
+            }
+            catch(ErrorException $e){
+                $transaction->rollback();
+                $response["status"]= "noexito";
+            }
+        }
+        else{
+            $response["status"]="noexito";
+        }
+        echo CJSON::encode($response);
+        exit();
+    }
+    private function saveDataTyCompany($idCompany,$dataVal){
+        if(!empty($dataVal)&&!empty($idCompany)){
+            $conn=Yii::app()->db;
+            $transaction=Yii::app()->db->beginTransaction();
+            try{
+                $sqlDel="DELETE FROM company_tcompany WHERE id_company=:id_company";
+                $query=$conn->createCommand($sqlDel);
+                $query->bindParam(":id_company",$idCompany);
+                $query->execute();
+                $sql="INSERT INTO company_tcompany (id_company,id_typecompany) VALUES (:id_company,:id_typecompany) ";
+                foreach($dataVal["company_type"] as $val){
+                    $query=$conn->createCommand($sql);
+                    $query->bindParam(":id_company",$idCompany);
+                    $query->bindParam(":id_typecompany",$val);
+                    $query->execute();
+                }
+                $transaction->commit();
+                $response["status"]="exito";
+            }
+            catch(ErrorException $e){
+                $transaction->rollback();
+                $response["status"]= "noexito";
+            }
+        }
+        else{
+            $response["status"]="noexito";
+        }
+        echo CJSON::encode($response);
+        exit();
+    }
+    public function saveDataSnet($idCompany,$valueContent){
+        if(!empty($valueContent)&&!empty($idCompany)){
+            $conn=Yii::app()->db;
+            $transaction=Yii::app()->db->beginTransaction();
+            try{
+                $sqlDel="DELETE FROM social_network WHERE id_company=:id_company";
+                $query=$conn->createCommand($sqlDel);
+                $query->bindParam(":id_company",$idCompany);
+                $query->execute();
+                $sql="INSERT INTO social_network (id_company,id_typesnetwork,snetwork) VALUES (:id_company,:typesnet,:snetwork) ";
+                foreach($valueContent["snetw"] as $pk=>$val){
+                    $query=$conn->createCommand($sql);
+                    $query->bindParam(":id_company",$idCompany);
+                    $query->bindParam(":typesnet",$valueContent["typesnet"][$pk]);
+                    $query->bindParam(":snetwork",$val);
+                    $query->execute();
+                }
+                $transaction->commit();
+                $response["status"]="exito";
+            }
+            catch(ErrorException $e){
+                $transaction->rollback();
+                $response["status"]= "noexito";
+            }
+        }
+        else{
+            $response["status"]="noexito";
+        }
+        echo CJSON::encode($response);
+        exit();
+    }
+    
     public function actionShowEditcompany(){
         $modelCompany=new Company();
         $modelTelephone=new Telephone();
@@ -269,10 +574,13 @@ class CompanyController extends Controller{
                 . "LEFT JOIN web AS d ON d.id_company=a.id_company "
                 . "LEFT JOIN email AS e ON e.id_company=a.id_company "
                 . "LEFT JOIN social_network AS f on f.id_company=a.id_company "
-                . "LEFT JOIN company_tcompany AS g on g.id_company=a.id_company ";
-        if(isset($data["chCmp"])||isset($data["chTl"])||isset($data["chWeb"])||isset($data["chEm"])||isset($data["chSN"])){
+                . "LEFT JOIN company_tcompany AS g on g.id_company=a.id_company "
+                . "LEFT JOIN state AS h ON h.id_state=b.id_state "
+                . "LEFT JOIN country AS i ON i.id_country=h.id_country "
+                . "LEFT JOIN continent AS j ON j.id_continent=i.id_continent ";
+//        if(isset($data["chCmp"])||isset($data["chTl"])||isset($data["chWeb"])||isset($data["chEm"])||isset($data["chSN"])){
             $searchCriteria=" WHERE ";
-        }
+//        }
         $sql.=$searchCriteria;
         $dataSearch="";
         if(isset($data["chCmp"])&&!empty($data["chCmp"])){
@@ -292,10 +600,32 @@ class CompanyController extends Controller{
                     $orvi=" AND ";
                 }
             }
-            
         }
-        $sql.=$dataSearch." AND a.id_company IS NOT NULL GROUP BY a.id_company ";
-        echo $sql;exit();
+        
+        if(isset($data["chTl"])&&!empty($data["chTl"])){
+            $orvii="";
+            if(isset($data["Telephone"]["number"])&&!empty($data["Telephone"]["number"])){if(!empty($ori)||!empty($orii)||!empty($oriii)||!empty($oriv)||!empty($orv)||!empty($orvi)){$orvii=" AND ";}$dataSearch.=$orvii." c.telephone_number LIKE :telephone_number ";$orvii=" AND ";}           
+         }
+         
+         if(isset($data["chWeb"])&&!empty($data["chWeb"])){
+            $orviii="";
+            if(isset($data["Web"]["web"])&&!empty($data["Web"]["web"])){if(!empty($ori)||!empty($orii)||!empty($oriii)||!empty($oriv)||!empty($orv)||!empty($orvi)||!empty($orvii)){$orviii=" AND ";}$dataSearch.=$orviii." d.web LIKE :web ";$orviii=" AND ";}           
+         }
+         if(isset($data["chEm"])&&!empty($data["chEm"])){
+            $orix="";
+            if(isset($data["Email"]["email"])&&!empty($data["Email"]["email"])){if(!empty($ori)||!empty($orii)||!empty($oriii)||!empty($oriv)||!empty($orv)||!empty($orvi)||!empty($orvii)||!empty($orviii)){$orix=" AND ";}$dataSearch.=$orix." e.email LIKE :email ";$orix=" AND ";}           
+         }
+         if(isset($data["chSN"])&&!empty($data["chSN"])){
+            $orx="";
+            if(isset($data["Socialnetwork"]["snetwork"])&&!empty($data["Socialnetwork"]["snetwork"])){if(!empty($ori)||!empty($orii)||!empty($oriii)||!empty($oriv)||!empty($orv)||!empty($orvi)||!empty($orvii)||!empty($orviii)||!empty($orix)){$orx=" AND ";}$dataSearch.=$orx." f.snetwork LIKE :snetwork ";$orx=" AND ";}           
+         }
+         $orFin="";
+         if(!empty($ori)||!empty($orii)||!empty($oriii)||!empty($oriv)||!empty($orv)||!empty($orvi)||!empty($orvii)||!empty($orviii)||!empty($orix)||!empty($orx)){
+             $orFin=" AND ";
+         }
+        $sql.=$dataSearch.$orFin."  a.id_company IS NOT NULL GROUP BY a.id_company ";
+//        echo $sql;exit();
+//        echo $sql;exit();
         $query=$conn->createCommand($sql);
         if(isset($data["chCmp"])&&!empty($data["chCmp"])){
             if(isset($data["Company"]["company_name"])&&!empty($data["Company"]["company_name"])){$data["Company"]["company_name"]='%%'.$data["Company"]["company_name"].'%%';$query->bindParam(":company_name", $data["Company"]["company_name"]);}
@@ -310,9 +640,66 @@ class CompanyController extends Controller{
                 }
             }
         }
+         if(isset($data["chTl"])&&!empty($data["chTl"])){
+            if(isset($data["Telephone"]["number"])&&!empty($data["Telephone"]["number"])){
+                $data["Telephone"]["number"]='%%'.$data["Telephone"]["number"].'%%';
+                $query->bindParam(":telephone_number", $data["Telephone"]["number"]);
+            }           
+         }
+        if(isset($data["chWeb"])&&!empty($data["chWeb"])){
+            if(isset($data["Web"]["web"])&&!empty($data["Web"]["web"])){
+                $data["Web"]["web"]='%%'.$data["Web"]["web"].'%%';
+                $query->bindParam(":web", $data["Web"]["web"]);
+            }         
+         }
+        if(isset($data["chEm"])&&!empty($data["chEm"])){
+            if(isset($data["Email"]["email"])&&!empty($data["Email"]["email"])){
+                $data["Email"]["email"]='%%'.$data["Email"]["email"].'%%';
+                $query->bindParam(":email", $data["Email"]["email"]);
+            }
+        }
+        if(isset($data["chSN"])&&!empty($data["chSN"])){
+            if(isset($data["Socialnetwork"]["snetwork"])&&!empty($data["Socialnetwork"]["snetwork"])){
+                $data["Socialnetwork"]["snetwork"]='%%'.$data["Socialnetwork"]["snetwork"].'%%';
+                $query->bindParam(":snetwork", $data["Socialnetwork"]["snetwork"]);
+            }
+        }
+//  if(isset($data["Telephone"]["number"])&&!empty($data["Telephone"]["number"])){$dataSearch.=" d.web LIKE :web ";$ori=" AND ";}
+        
+        
         $read=$query->query();
         $res=$read->readAll();
         $read->close();
+        if(!empty($res)){
+            foreach($res as $pk=>$row){
+                $sql="SELECT email FROM email WHERE id_company=:id_company";
+                $queryE=$conn->createCommand($sql);
+                $queryE->bindParam(":id_company", $row["id_company"]);
+                $readE=$queryE->query();
+                $resE=$readE->readAll();
+                $readE->close();
+                $res[$pk]["emails"]=$resE;
+                
+                $sql="SELECT snetwork,typesnetwork_name,a.id_typesnetwork FROM social_network AS a LEFT JOIN type_snetwork AS b ON b.id_typesnetwork = a.id_typesnetwork WHERE id_company=:id_company";
+                $querySn=$conn->createCommand($sql);
+                $querySn->bindParam(":id_company", $row["id_company"]);
+                $readSn=$querySn->query();
+                $resSn=$readSn->readAll();
+                $readSn->close();
+                $res[$pk]["snewtorks"]=$resSn;
+                
+                $sql="SELECT typecompany_name,a.id_typecompany FROM company_tcompany AS a LEFT JOIN type_company AS b ON b.id_typecompany=a.id_typecompany WHERE id_company=:id_company";
+                $queryTC=$conn->createCommand($sql);
+                $queryTC->bindParam(":id_company", $row["id_company"]);
+                $readTC=$queryTC->query();
+                $resTC=$readTC->readAll();
+                $readTC->close();
+                $res[$pk]["tcompanys"]=$resTC;
+                
+            }
+        }
+        
+        
         $response['data']=$res;
         $response["status"]="exito";
         echo CJSON::encode($response);

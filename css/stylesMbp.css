@@ -16,3 +16,6 @@ z-index:100003 !important;
 .ui-widget-overlay{
     z-index:100003 !important; 
 }
+.superpos{
+    z-index:100005
+}

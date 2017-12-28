@@ -160,15 +160,15 @@ $this->breadcrumbs=array(
             </div>
         </div>
     <?php
-                $this->beginWidget('zii.widgets.jui.CJuiDialog',array(
-                    'id'=>'editDataCmp',
-                    'options'=>array(
-                        'title'=>'Edit data',
-                        'autoOpen'=>false,
-                        'width'=>'80%',
-                        'height'=>'auto'
+    $this->beginWidget('zii.widgets.jui.CJuiDialog',array(
+        'id'=>'editDataCmp',
+        'options'=>array(
+            'title'=>'Edit data',
+            'autoOpen'=>false,
+            'width'=>'80%',
+            'height'=>'auto'
 
-                    )));?>
+        )));?>
     <div class="row" id="divCompanyEdit">
     <?php $form=$this->beginWidget('CActiveForm', array(
         'id'=>'entityedit-form',
@@ -208,10 +208,12 @@ $this->breadcrumbs=array(
                             <?php echo $form->textField($modelTelephone,'telephone_number', array ('class' => 'form-control','placeholder'=>'Digite el teléfono')); ?>
                             <?php echo CHtml::button('Edit', array ('class' => 'btn btn-warning','id'=>'btnEditCmpTel')); ?>
                         </div>
-                        <div class="form-group">
-                            <?php echo $form->labelEx($modelTypeEnt,'id_typecompany'); ?><br>
-                            <?php echo $form->checkBoxList($modelTypeEnt,'id_typecompany',CHtml::listData($typeCompany,'id_typecompany','typecompany_name'));  ?>
-                            <?php echo CHtml::button('Edit', array ('class' => 'btn btn-warning','id'=>'btnEditCmpTc')); ?>
+                        <div id="typeCmpEdit">
+                            <div class="form-group">
+                                <?php echo $form->labelEx($modelTypeEnt,'id_typecompany'); ?><br>
+                                <?php echo CHtml::checkBoxList('company_type',"",CHtml::listData($typeCompany,'id_typecompany','typecompany_name'),array("class"=>"checktc")); ?><br>
+                                <?php echo CHtml::button('Edit', array ('class' => 'btn btn-warning','id'=>'btnEditCmpTc')); ?>
+                            </div>
                         </div>
                         <div class="form-group">
                             <?php echo $form->labelEx($modelCompany,'company_fest_desc'); ?>
@@ -223,29 +225,32 @@ $this->breadcrumbs=array(
                             <?php echo $form->textField($modelWeb,'web', array ('class' => 'form-control','placeholder'=>'Digite portal web')); ?>
                             <?php echo CHtml::button('Edit', array ('class' => 'btn btn-warning','id'=>'btnEditCmpWeb')); ?>
                         </div>
-                        <div class="form-group">
-                            <?php echo $form->labelEx($modelContinent,'continent_name'); ?>
-                            <?php echo $form->textField($modelContinent,'continent_name', array ('class' => 'form-control','placeholder'=>'Digite Continente')); ?>
-                            <?php echo $form->error($modelContinent,'continent_name'); ?>
-                            <input name="Continent[id_continent]" id="Continent_id_continent" type="hidden">
-                        </div>
-                        <div class="form-group">
-                            <?php echo $form->labelEx($modelCountry,'country_name'); ?>
-                            <?php echo $form->textField($modelCountry,'country_name', array ('class' => 'form-control','placeholder'=>'Digite País')); ?>
-                            <?php echo $form->error($modelCountry,'country_name'); ?>
-                            <input name="Country[id_country]" id="Country_id_country" type="hidden">
-                        </div>
-                        <div class="form-group">
-                            <?php echo $form->labelEx($modelState,'state_name'); ?>
-                            <?php echo $form->textField($modelState,'state_name', array ('class' => 'form-control','placeholder'=>'Digite Estado o departamento')); ?>
-                            <?php echo $form->error($modelState,'state_name'); ?>
-                            <input name="State[id_state]" id="State_id_state" type="hidden">
-                        </div>
-                        <div class="form-group">
-                            <?php echo $form->labelEx($modelCity,'city_name'); ?>
-                            <?php echo $form->textField($modelCity,'city_name', array ('class' => 'form-control','placeholder'=>'Digite Ciudad')); ?>
-                            <?php echo CHtml::button('Edit', array ('class' => 'btn btn-warning','id'=>'btnEditCmpCity')); ?>
-                            <input name="Company[id_city]" id="Company_id_city" type="hidden">
+                        <div id="groupUbication">
+                            <div class="form-group">
+                                <?php echo $form->labelEx($modelContinent,'continent_name'); ?>
+                                <?php echo $form->textField($modelContinent,'continent_name', array ('class' => 'form-control','placeholder'=>'Digite Continente')); ?>
+                                <?php echo $form->error($modelContinent,'continent_name'); ?>
+                                <input name="Continent[id_continent]" id="Continent_id_continent" type="hidden">
+                            </div>
+                            <div class="form-group">
+                                <?php echo $form->labelEx($modelCountry,'country_name'); ?>
+                                <?php echo $form->textField($modelCountry,'country_name', array ('class' => 'form-control','placeholder'=>'Digite País')); ?>
+                                <?php echo $form->error($modelCountry,'country_name'); ?>
+                                <input name="Country[id_country]" id="Country_id_country" type="hidden">
+                            </div>
+                            <div class="form-group">
+                                <?php echo $form->labelEx($modelState,'state_name'); ?>
+                                <?php echo $form->textField($modelState,'state_name', array ('class' => 'form-control','placeholder'=>'Digite Estado o departamento')); ?>
+                                <?php echo $form->error($modelState,'state_name'); ?>
+                                <input name="State[id_state]" id="State_id_state" type="hidden">
+                            </div>
+                            <div class="form-group">
+                                <?php echo $form->labelEx($modelCity,'city_name'); ?>
+                                <?php echo $form->textField($modelCity,'city_name', array ('class' => 'form-control','placeholder'=>'Digite Ciudad')); ?>
+                                <?php echo $form->error($modelCity,'city_name'); ?>
+                                <?php echo CHtml::button('Edit', array ('class' => 'btn btn-warning','id'=>'btnEditCmpCity')); ?>
+                                <input name="City[id_city]" id="City_id_city" type="hidden">
+                            </div>
                         </div>
                     </div>
                     <!-- /.box-body -->
@@ -281,7 +286,7 @@ $this->breadcrumbs=array(
                                 <div class="form-group">
                                     <label for="Email_email" class="required">Email <span class="required">*</span></label>
                                     <?php echo CHtml::textField('input_email', "",array('id'=>'input_email','class'=>"form-control",'placeholder'=>'Digite email')); ?>
-                                    <?php echo CHtml::button('Agregar email', array ('class' => 'btn btn-warning','id'=>'btnAgregaEm')); ?>
+                                    <?php echo CHtml::button('Add email', array ('class' => 'btn btn-warning','id'=>'btnAgregaEmEdit')); ?>
                                     <?php echo CHtml::button('Edit', array ('class' => 'btn btn-warning','id'=>'btnEditCmpEmls')); ?>
                                 </div>
                             </div>
@@ -307,12 +312,13 @@ $this->breadcrumbs=array(
                                 <div class="form-group">
                                     <label for="SocialNetwork_snetwork" class="required">Snetwork <span class="required">*</span></label>
                                     <?php echo CHtml::textField('input_snet', "",array('id'=>'input_snet','class'=>"form-control",'placeholder'=>'Digite red social')); ?>
-                                    <?php echo CHtml::button('Edit', array ('class' => 'btn btn-warning','id'=>'btnEditCmpSNet')); ?>
+                                    
                                 </div>
                                 <div class="form-group">
                                     <?php echo CHtml::label("S-network type", "snetwork type") ?><br>
                                     <?php echo CHtml::radioButtonList('TypeSNetwork','TypeSNetwork',CHtml::listData($typeSNetwork,'id_typesnetwork','typesnetwork_name'));  ?><br>
-                                    <?php echo CHtml::button('Agregar s-network', array ('class' => 'btn btn-warning','id'=>'btnAgregaRsocial')); ?>
+                                    <?php echo CHtml::button('Add s-network', array ('class' => 'btn btn-warning','id'=>'btnAgregaRsocialEd')); ?>
+                                    <?php echo CHtml::button('Edit', array ('class' => 'btn btn-warning','id'=>'btnEditCmpSNet')); ?>
                                 </div>
                             </div>
                         </div>
@@ -327,17 +333,6 @@ $this->breadcrumbs=array(
                                     
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row" >
-                    <div class="box-footer">
-                        <div class="col-xs-4">
-                            <?php echo CHtml::button('Registrar', array ('class' => 'btn btn-primary','id'=>'btnRegCmp')); ?>
-                            <?php echo CHtml::button('Editar', array ('class' => 'btn btn-warning','id'=>'btnEditaCmp')); ?>
-                        </div>
-                        <div class="col-xs-4">
-                            <?php echo CHtml::button('Cancelar edición', array ('class' => 'btn btn-danger','id'=>'btnCancelaCmp')); ?>
                         </div>
                     </div>
                 </div>
