@@ -49,6 +49,11 @@ $this->breadcrumbs=array(
                             <?php echo $form->error($modelUser,'id_typeuser'); ?>
                         </div>
                         <div class="form-group">
+                            <?php echo $form->labelEx($modelPerson,'person_email'); ?>
+                            <?php echo $form->textField($modelPerson,'person_email', array ('class' => 'form-control','placeholder'=>'Type person email')); ?>
+                            <?php echo $form->error($modelPerson,'person_email'); ?>
+                        </div>
+                        <div class="form-group">
                             <?php echo $form->labelEx($modelUser,'username'); ?>
                             <?php echo $form->textField($modelUser,'username', array ('class' => 'form-control','placeholder'=>'Type username')); ?>
                             <?php echo $form->error($modelUser,'username'); ?>
@@ -90,6 +95,7 @@ $this->breadcrumbs=array(
                             <th>Person ID</th>
                             <th>Person name</th>
                             <th>Person lastname</th>
+                            <th>Person email</th>
                             <th>User type</th>
                             <th>Username</th>
                             <th>State</th>
@@ -116,6 +122,7 @@ $this->breadcrumbs=array(
                                         <td><?php echo $user["person_id"]?></td>
                                         <td><?php echo $user["person_name"]?></td>
                                         <td><?php echo $user["person_lastname"]?></td>
+                                        <td><?php echo $user["person_email"]?></td>
                                         <td><?php echo $user["typeuser_name"]?></td>
                                         <td><?php echo $user["username"]?></td>
                                         <td><?php echo $actualState?></td><td><a href='javascript:User.changeStatePre("<?php echo $state?>","<?php echo $user["person_id"]?>");'><?php echo $codeState;?></a></td>
@@ -129,6 +136,7 @@ $this->breadcrumbs=array(
                             <th>Person ID</th>
                             <th>Person name</th>
                             <th>Person lastname</th>
+                            <th>Person email</th>
                             <th>User type</th>
                             <th>Username</th>
                             <th>State</th>

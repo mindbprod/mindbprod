@@ -85,6 +85,9 @@ var User = function(params,callback){
         self.div.find("#btnCancelEdicion").click(function(){            
 //            self.cancelaEdicion();
         });
+        self.div.find("#btnChangePss").click(function(){            
+            self.changePassword();
+        });
     };    
     /**************************************************************************/
     /********************************** METHODS *******************************/
@@ -181,6 +184,42 @@ var User = function(params,callback){
                         typeMsg="warn";
                     }
                     
+                }
+            }
+        }).fail(function(error, textStatus, xhr) {
+            msg="Error, contact support ";
+            typeMsg="error";
+        }).always(function(){
+            $.notify(msg, typeMsg);
+        });
+    }; 
+    /**
+     * Carga datos del Dispositivo seleccionado en el formulario para editar
+     */
+    self.changeState=function(state,personid){
+        var dataCP=$("#changepass-form").serialize();
+         $.ajax({
+            type: "POST",
+            dataType:'json',
+            url: 'changePassword',
+            data:dataCP
+        }).done(function(response) {
+            if(response.status=="nosession"){
+                $.notify("The session has expired, you have to login again", "warn");
+                setTimeout(function(){document.location.href="site/login";}, 3000);
+                return;
+            }
+            else{
+                if(response.status=="exito"){
+                    msg=response.msg;
+                    typeMsg="success";
+                    self.loadUserData();
+                }
+                else{
+                    if(response.status=="noexito"){
+                         msg=response.msg;
+                        typeMsg="warn";
+                    }
                 }
             }
         }).fail(function(error, textStatus, xhr) {
@@ -384,6 +423,7 @@ var User = function(params,callback){
                     value.person_id,
                     value.person_name,
                     value.person_lastname,
+                    value.person_email,
                     value.typeuser_name,
                     value.username,
                     actualState,

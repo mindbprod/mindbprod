@@ -97,7 +97,7 @@ class UserController extends Controller{
     public function listUsers(){
         $selfUsername=Yii::app()->user->getState('nombreUsuario');
         $conn=Yii::app()->db;
-        $sql="SELECT person_id,person_name,person_lastname,username,active_user,typeuser_name,c.id_typeuser FROM person AS a "
+        $sql="SELECT person_id,person_name,person_lastname,person_email,username,active_user,typeuser_name,c.id_typeuser FROM person AS a "
                 . "LEFT JOIN user AS b ON b.id_sperson=a.id_sperson "
                 . "LEFT JOIN type_user as c on c.id_typeuser=b.id_typeuser "
                 . "WHERE b.username<>:username";
@@ -111,7 +111,7 @@ class UserController extends Controller{
     public function actionListUsers(){
         $selfUsername=Yii::app()->user->getState('nombreUsuario');
         $conn=Yii::app()->db;
-        $sql="SELECT person_id,person_name,person_lastname,username,active_user,typeuser_name,c.id_typeuser FROM person AS a "
+        $sql="SELECT person_id,person_name,person_lastname,person_email,username,active_user,typeuser_name,c.id_typeuser FROM person AS a "
                 . "LEFT JOIN user AS b ON b.id_sperson=a.id_sperson "
                 . "LEFT JOIN type_user as c on c.id_typeuser=b.id_typeuser "
                 . "WHERE b.username<>:username";
@@ -121,6 +121,52 @@ class UserController extends Controller{
         $res=$read->readAll();
         $read->close();
         echo CJSON::encode($res);
+    }
+    
+    public function actionChangePassword(){
+        $modelUser= User::model();
+        if(empty($_POST)){
+            $this->render("changepassword",array('modelUser'=>$modelUser));
+        }
+        else{
+            $username=Yii::app()->user->id;
+            $criteria = new CDbCriteria;
+            $criteria->select = 'id_user, id_sperson,id_typeuser,active_user'; // select fields which you want in output
+            $criteria->condition = 'username = :username';
+            $criteria->params = array(':username'=>$username);
+            $passwords=Yii::app()->request->getPost("User");
+            $modelUser=$modelUser->findAll($criteria)[0];
+            $modelUser->username=$username;
+            $opciones = [
+                        'cost' => 9
+                    ];
+            $passworCrypt=password_hash($passwords["password"], PASSWORD_BCRYPT, $opciones);
+            $modelUser->password=$passworCrypt;
+            $this->performAjaxValidation($modelUser,"changepass-form");
+            if($modelUser->validate()){ 
+                $modelUser->password=$passworCrypt;
+                $transaction=Yii::app()->db->beginTransaction();
+                try{
+                    if($modelUser->updateByPk($modelUser->id_user,array("password"=>$passworCrypt))){
+                        $response["status"]="exito";
+                        $transaction->commit();
+                    }
+                    else{
+                        $transaction->rollback();
+                        $response["status"]="noexito";
+                    }
+                }
+                catch(ErrorException $e){
+                    $transaction->rollback();
+                    throw new CHttpException($e->get,$e->getMessage());
+                }
+                echo CJSON::encode($response);
+                    
+            }
+            else{
+                echo CActiveForm::validate($modelUser);
+            }
+        }
     }
     /**
     * Valida los modelos.
@@ -162,3 +208,6 @@ class UserController extends Controller{
 	}
 	*/
 }
+
+
+
