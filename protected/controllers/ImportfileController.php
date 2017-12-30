@@ -95,24 +95,24 @@ class ImportfileController extends Controller{
                                 $whatsApp=trim($data->sheets[0]['cells'][$i][30]);
                                 $address=trim($data->sheets[0]['cells'][$i][31]);
                                 $observations=trim($data->sheets[0]['cells'][$i][32]);
-                                $resContinent=$this->setIdContinent(mb_strtoupper($this->removeAccents($continent)));
+                                $resContinent=$this->setIdContinent(strtoupper($this->removeAccents($continent)));
                                 if($resContinent==0){
                                     $save=0;
                                     continue;
                                 }
-                                $resCountry=$this->setIdCountry(mb_strtoupper($this->removeAccents($country)),$resContinent);
+                                $resCountry=$this->setIdCountry(strtoupper($this->removeAccents($country)),$resContinent);
                                 if($resCountry==0){
                                     $save=0;
                                     continue;
                                 }
                                 
-                                $resState=$this->setIdState(mb_strtoupper($this->removeAccents($state)),$resCountry);
+                                $resState=$this->setIdState(strtoupper($this->removeAccents($state)),$resCountry);
                                 if($resState==0){
                                     $save=0;
                                     continue;
                                 }
 //                                echo $resState."--";continue;
-                                $resCity=$this->setIdCity(mb_strtoupper($this->removeAccents($city)),$resState);
+                                $resCity=$this->setIdCity(strtoupper($this->removeAccents($city)),$resState);
                                 if($resCity==0){
                                     $save=0;
                                     continue;
