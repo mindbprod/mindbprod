@@ -95,7 +95,7 @@
                                             <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/company/showEditcompany">Show/Edit company information</a>
                                         </li>
                                         <li>
-                                            <a href="#">Load information from file</a>
+                                            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/importfile">Load information from file</a>
                                         </li>
                                     </ul>
                                     <!-- /.nav-second-level -->

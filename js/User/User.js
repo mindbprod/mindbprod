@@ -196,7 +196,7 @@ var User = function(params,callback){
     /**
      * Carga datos del Dispositivo seleccionado en el formulario para editar
      */
-    self.changeState=function(state,personid){
+    self.changePassword=function(state,personid){
         var dataCP=$("#changepass-form").serialize();
          $.ajax({
             type: "POST",

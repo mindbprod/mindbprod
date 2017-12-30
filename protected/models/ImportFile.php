@@ -12,7 +12,7 @@ class ImportFile extends CFormModel
         // will receive user inputs.
         return array(  
              array('file', 'file', 
-                                            'types'=>'xlsx,xls,csv',
+                                            'types'=>'xls',
                                             'maxSize'=>1024 * 1024 * 5, // 5MB
                                             'tooLarge'=>'The file was larger than 5MB. Please upload a smaller file.',
                                             'allowEmpty' => false

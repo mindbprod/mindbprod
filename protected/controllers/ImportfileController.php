@@ -40,92 +40,128 @@ class ImportfileController extends Controller{
 //           var_dump($_FILES["ImportFile"]);
 //           print_r($_POST);
             if($model->validate()){
-                $uploaded = $file->saveAs($dir.$file->getName());
-                $data=new JPhpExcelReader($dir.$file->getName());
-                if($data->sheets[0]['numRows']<=2000&&$data->sheets[0]['numRows']>1&&$data->sheets[0]['numCols']<=32&&$data->sheets[0]['numCols']>0){
-                    for($i = 1; $i <= $data->sheets[0]['numRows']; $i++){
-                        $save=1;
-                        $continent="";
-                        $country="";
-                        $state="";
-                        $city="";
-                        $companyName="";
-                        $companyNumber="";
-                        $companyTypei=0;
-                        $companyTypeii=0;
-                        $companyFestDesc="";//Descripción de la empresa
-                        $email=array();
-                        $web="";
-                        $facebook=array();
-                        $twitter="";
-                        $instagram="";
-                        $googlePl="";
-                        $whatsApp="";
-                        $address="";
-                        $observations="";
-                        $continent=$data->sheets[0]['cells'][$i][1];
-                        $country=$data->sheets[0]['cells'][$i][2];
-                        $state=$data->sheets[0]['cells'][$i][3];
-                        $city=$data->sheets[0]['cells'][$i][4];
-                        $companyNumber=$companyName=$data->sheets[0]['cells'][$i][5];
-                        $companyTypei=$data->sheets[0]['cells'][$i][6];
-                        if(!empty($data->sheets[0]['cells'][$i][7])){$companyTypeii=$data->sheets[0]['cells'][$i][7];}
-                        $companyFestDesc=$data->sheets[0]['cells'][$i][8];
-                        for($j=1;$j<=10;$j++){
-                            if(!empty($data->sheets[0]['cells'][$i][$j+8])){
-                                array_push($email,$data->sheets[0]['cells'][$i][$j+8]);
+                try{
+                    $uploaded = $file->saveAs($dir.$file->getName());
+                    
+                        $data=new JPhpExcelReader($dir.$file->getName());
+                    
+                    
+                    
+                    if($data->sheets[0]['numRows']<=2000&&$data->sheets[0]['numRows']>1&&$data->sheets[0]['numCols']<=32&&$data->sheets[0]['numCols']>0){
+//                        echo $data->sheets[0]['numRows'];
+//                        exit();
+                        for($i = 2; $i <= $data->sheets[0]['numRows']; $i++){
+                            try{
+                                $save=1;
+                                $continent="";
+                                $country="";
+                                $state="";
+                                $city="";
+                                $companyName="";
+                                $companyNumber="";
+                                $companyTypei=0;
+                                $companyTypeii=0;
+                                $companyFestDesc="";//Descripción de la empresa
+                                $email=array();
+                                $web="";
+                                $facebook=array();
+                                $twitter="";
+                                $instagram="";
+                                $googlePl="";
+                                $whatsApp="";
+                                $address="";
+                                $observations="";               
+                                $country=trim($data->sheets[0]['cells'][$i][2]);
+                                $state=trim($data->sheets[0]['cells'][$i][3]);
+                                $city=trim($data->sheets[0]['cells'][$i][4]);
+                                $companyNumber=$companyName=trim($data->sheets[0]['cells'][$i][5]);
+                                $companyTypei=trim($data->sheets[0]['cells'][$i][6]);
+                                if(!empty($data->sheets[0]['cells'][$i][7])){$companyTypeii=trim($data->sheets[0]['cells'][$i][7]);}
+                                $companyFestDesc=trim($data->sheets[0]['cells'][$i][8]);
+                                for($j=1;$j<=10;$j++){
+                                    if(!empty($data->sheets[0]['cells'][$i][$j+8])){
+                                        array_push($email,trim($data->sheets[0]['cells'][$i][$j+8]));
+                                    }
+                                }
+                                $web=trim($data->sheets[0]['cells'][$i][19]);
+                                for($k=1;$k<=7;$k++){
+                                    if(!empty($data->sheets[0]['cells'][$i][$k+19])){
+                                        array_push($facebook,trim($data->sheets[0]['cells'][$i][$k+8]));
+                                    }
+                                }
+                                $twitter=trim($data->sheets[0]['cells'][$i][27]);
+                                $instagram=trim($data->sheets[0]['cells'][$i][28]);
+                                if(!empty($data->sheets[0]['cells'][$i][29])){$googlePl=trim($data->sheets[0]['cells'][$i][29]);}
+                                $whatsApp=trim($data->sheets[0]['cells'][$i][30]);
+                                $address=trim($data->sheets[0]['cells'][$i][31]);
+                                $observations=trim($data->sheets[0]['cells'][$i][32]);
+                                $resContinent=$this->setIdContinent(mb_strtoupper($this->removeAccents($continent)));
+                                if($resContinent==0){
+                                    $save=0;
+                                    continue;
+                                }
+                                $resCountry=$this->setIdCountry(mb_strtoupper($this->removeAccents($country)),$resContinent);
+                                if($resCountry==0){
+                                    $save=0;
+                                    continue;
+                                }
+                                
+                                $resState=$this->setIdState(mb_strtoupper($this->removeAccents($state)),$resCountry);
+                                if($resState==0){
+                                    $save=0;
+                                    continue;
+                                }
+//                                echo $resState."--";continue;
+                                $resCity=$this->setIdCity(mb_strtoupper($this->removeAccents($city)),$resState);
+                                if($resCity==0){
+                                    $save=0;
+                                    continue;
+                                }
+                                $modelCompany=new Company();
+                                $modelCompany->company_name=$companyName;
+                                $modelCompany->company_number=$companyNumber;
+                                $modelCompany->company_address=$address;
+                                $modelCompany->company_fest_desc=$companyFestDesc;
+                                $modelCompany->company_observations=$observations;
+                                $modelCompany->id_city=$resCity;
+                                if($modelCompany->validate()){
+                                    if($modelCompany->save()){
+                                        
+                                    }
+                                    else{
+                                        //genera log de no save
+                                        
+                                    }
+                                }
+                                else{
+                                    //genera log de no save
+                                    
+                                }
+//                                $modelCompany->company_fest_desc=;
                             }
-                        }
-                        $web=$data->sheets[0]['cells'][$i][19];
-                        for($k=1;$k<=7;$k++){
-                            if(!empty($data->sheets[0]['cells'][$i][$k+19])){
-                                array_push($facebook,$data->sheets[0]['cells'][$i][$k+8]);
+                            catch(CException $e){
+                                continue;
                             }
+                            //$data->sheets[0]['cells'][$i][1];
                         }
-                        $twitter=$data->sheets[0]['cells'][$i][27];
-                        $instagram=$data->sheets[0]['cells'][$i][28];
-                        $googlePl=$data->sheets[0]['cells'][$i][29];
-                        $whatsApp=$data->sheets[0]['cells'][$i][30];
-                        $address=$data->sheets[0]['cells'][$i][31];
-                        $observations=$data->sheets[0]['cells'][$i][32];
-                        $resContinent=$this->setIdContinent(mb_strtoupper($continent));
-                        if($resContinent==0){
-                            $save=0;
-                            continue;
-                        }
-                        $resCountry=$this->setIdCountry(mb_strtoupper($country),$resContinent);
-                        if($resCountry==0){
-                            $save=0;
-                            continue;
-                        }
-                        $resState=$this->setIdState(mb_strtoupper($state),$resCountry);
-                        if($resState==0){
-                            $save=0;
-                            continue;
-                        }
-                        $resCity=$this->setIdCity(mb_strtoupper($city),$resState);
-                        if($resCity==0){
-                            $save=0;
-                            continue;
-                        }
-                        //$data->sheets[0]['cells'][$i][1];
+                        Yii::app()->getUser()->setFlash('success','The excel file was successfully imported. --'.$data->sheets[0]['numCols']);
+                        $this->refresh();
                     }
-                    
-                    
-                    
-                    Yii::app()->getUser()->setFlash('success','The excel file was successfully imported. --'.$data->sheets[0]['numCols']);
-                    $this->refresh();
+                    else{
+                        if($data->sheets[0]['numRows']==0){
+                            $msn="The file is empty--".$data->sheets[0]['numCols'];
+
+                        }else{
+                            $msn="The file must not have more than 2000 records and not have mor than 31 columns  --".$data->sheets[0]['numCols'];
+                        }
+                        Yii::app()->getUser()->setFlash('error',$msn);
+                        $this->refresh();
+
+                    }
                 }
-                else{
-                    if($data->sheets[0]['numRows']==0){
-                        $msn="The file is empty--".$data->sheets[0]['numCols'];
-                        
-                    }else{
-                        $msn="The file must not have more than 2000 records and not have mor than 31 columns  --".$data->sheets[0]['numCols'];
-                    }
-                    Yii::app()->getUser()->setFlash('error',$msn);
+                catch(CException $e){
+                    Yii::app()->getUser()->setFlash('error',$e->getMessage());
                     $this->refresh();
-                   
                 }
 
              }
@@ -144,18 +180,18 @@ class ImportfileController extends Controller{
     public function setIdContinent($continent){
        $conn=Yii::app()->db;
        $sql="SELECT id_continent FROM continent WHERE continent_name LIKE :continentname ";
-       $search='%%'.$continent.'%%';
+       $search='%'.$continent.'%';
        $query=$conn->createCommand($sql);
        $query->bindParam(":continentname", $search);
        $read=$query->query();
        $res=$read->read();
        $read->close();
-       if(empty($res)){
+       if(!empty($res)){
           return $res["id_continent"]; 
        }
        else{
            $modelContinent=new Continent();
-           $modelContinent->continent_code=strtoupper($this->removeAccents( $continent));
+           $modelContinent->continent_code=strtoupper($continent);
            $modelContinent->continent_name=  $modelContinent->continent_code;
            if($modelContinent->validate()){
                if($modelContinent->save()){
@@ -180,13 +216,13 @@ class ImportfileController extends Controller{
        $read=$query->query();
        $res=$read->read();
        $read->close();
-       if(empty($res)){
+       if(!empty($res)){
           return $res["id_country"]; 
        }
        else{
            $modelCountry=new Country();
            $modelCountry->country_code=strtoupper($this->removeAccents($country));
-           $modelCountry->country_name=  $modelContinent->country_code;
+           $modelCountry->country_name=  $modelCountry->country_code;
            $modelCountry->id_continent=$idContinent;
            if($modelCountry->validate()){
                if($modelCountry->save()){
@@ -211,14 +247,14 @@ class ImportfileController extends Controller{
        $read=$query->query();
        $res=$read->read();
        $read->close();
-       if(empty($res)){
+       if(!empty($res)){
           return $res["id_state"]; 
        }
        else{
            $modelState=new State();
            $modelState->state_code=strtoupper($this->removeAccents($state));
            $modelState->state_name=  $modelState->state_code;
-           $modelState->id_state=$idCountry;
+           $modelState->id_country=$idCountry;
            if($modelState->validate()){
                if($modelState->save()){
                    return $modelState->getPrimaryKey();
@@ -242,14 +278,14 @@ class ImportfileController extends Controller{
        $read=$query->query();
        $res=$read->read();
        $read->close();
-       if(empty($res)){
+       if(!empty($res)){
           return $res["id_city"]; 
        }
        else{
            $modelCity=new City();
            $modelCity->city_code=strtoupper($this->removeAccents($city));
            $modelCity->city_name=  $modelCity->city_code;
-           $modelCity->id_city=$idState;
+           $modelCity->id_state=$idState;
            if($modelCity->validate()){
                if($modelCity->save()){
                    return $modelCity->getPrimaryKey();

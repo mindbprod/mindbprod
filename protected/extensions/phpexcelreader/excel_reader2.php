@@ -982,7 +982,7 @@ class Spreadsheet_Excel_Reader {
 			if($this->_ole->error == 1) {
 				// bad file
                 //die('The filename ' . $sFileName . ' is not readable');
-				throw new Exception('The filename ' . $sFileName . ' is not readable'); // jerry2801 2010-5-18 15:41
+				throw new CHttpException('4','The filename ' . $sFileName . ' is not readable'); // jerry2801 2010-5-18 15:41
 			}
 			// check other error codes here (eg bad fileformat, etc...)
 		}
