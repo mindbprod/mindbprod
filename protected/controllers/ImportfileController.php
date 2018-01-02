@@ -42,14 +42,8 @@ class ImportfileController extends Controller{
             if($model->validate()){
                 try{
                     $uploaded = $file->saveAs($dir.$file->getName());
-                    
-                        $data=new JPhpExcelReader($dir.$file->getName());
-                    
-                    
-                    
+                    $data=new JPhpExcelReader($dir.$file->getName());
                     if($data->sheets[0]['numRows']<=2000&&$data->sheets[0]['numRows']>1&&$data->sheets[0]['numCols']<=32&&$data->sheets[0]['numCols']>0){
-//                        echo $data->sheets[0]['numRows'];
-//                        exit();
                         for($i = 2; $i <= $data->sheets[0]['numRows']; $i++){
                             try{
                                 $save=1;
@@ -70,31 +64,35 @@ class ImportfileController extends Controller{
                                 $googlePl="";
                                 $whatsApp="";
                                 $address="";
-                                $observations="";               
-                                $country=trim($data->sheets[0]['cells'][$i][2]);
-                                $state=trim($data->sheets[0]['cells'][$i][3]);
-                                $city=trim($data->sheets[0]['cells'][$i][4]);
-                                $companyNumber=$companyName=trim($data->sheets[0]['cells'][$i][5]);
-                                $companyTypei=trim($data->sheets[0]['cells'][$i][6]);
+                                $observations="";
+                                if(!empty($data->sheets[0]['cells'][$i][1])){$continent=trim($data->sheets[0]['cells'][$i][1]);}
+                                if(!empty($data->sheets[0]['cells'][$i][2])){$country=trim($data->sheets[0]['cells'][$i][2]);}
+                                if(!empty($data->sheets[0]['cells'][$i][3])){$state=trim($data->sheets[0]['cells'][$i][3]);}
+                                if(!empty($data->sheets[0]['cells'][$i][4])){$city=trim($data->sheets[0]['cells'][$i][4]);}
+                                if(!empty($data->sheets[0]['cells'][$i][5])){$companyName=trim($data->sheets[0]['cells'][$i][5]);}
+                                if(!empty($data->sheets[0]['cells'][$i][6])){$companyTypei=trim($data->sheets[0]['cells'][$i][6]);}
                                 if(!empty($data->sheets[0]['cells'][$i][7])){$companyTypeii=trim($data->sheets[0]['cells'][$i][7]);}
-                                $companyFestDesc=trim($data->sheets[0]['cells'][$i][8]);
+                                $companyNumber=$companyName;
+                                if(!empty($data->sheets[0]['cells'][$i][8])){$companyFestDesc=trim($data->sheets[0]['cells'][$i][8]);}
                                 for($j=1;$j<=10;$j++){
                                     if(!empty($data->sheets[0]['cells'][$i][$j+8])){
                                         array_push($email,trim($data->sheets[0]['cells'][$i][$j+8]));
                                     }
                                 }
-                                $web=trim($data->sheets[0]['cells'][$i][19]);
+                                if(!empty($data->sheets[0]['cells'][$i][19])){$web=trim($data->sheets[0]['cells'][$i][19]);}
+//                                $web=trim($data->sheets[0]['cells'][$i][19]);
                                 for($k=1;$k<=7;$k++){
                                     if(!empty($data->sheets[0]['cells'][$i][$k+19])){
                                         array_push($facebook,trim($data->sheets[0]['cells'][$i][$k+8]));
                                     }
                                 }
-                                $twitter=trim($data->sheets[0]['cells'][$i][27]);
-                                $instagram=trim($data->sheets[0]['cells'][$i][28]);
+                                if(!empty($data->sheets[0]['cells'][$i][27])){$twitter=trim($data->sheets[0]['cells'][$i][27]);}
+                                if(!empty($data->sheets[0]['cells'][$i][28])){$instagram=trim($data->sheets[0]['cells'][$i][28]);}
                                 if(!empty($data->sheets[0]['cells'][$i][29])){$googlePl=trim($data->sheets[0]['cells'][$i][29]);}
-                                $whatsApp=trim($data->sheets[0]['cells'][$i][30]);
-                                $address=trim($data->sheets[0]['cells'][$i][31]);
-                                $observations=trim($data->sheets[0]['cells'][$i][32]);
+                                if(!empty($data->sheets[0]['cells'][$i][30])){$whatsApp=trim($data->sheets[0]['cells'][$i][30]);}
+                                if(!empty($data->sheets[0]['cells'][$i][31])){$address=trim($data->sheets[0]['cells'][$i][31]);}
+                                if(!empty($data->sheets[0]['cells'][$i][32])){$observations=trim($data->sheets[0]['cells'][$i][32]);}
+                                
                                 $resContinent=$this->setIdContinent(strtoupper($this->removeAccents($continent)));
                                 if($resContinent==0){
                                     $save=0;
@@ -127,7 +125,71 @@ class ImportfileController extends Controller{
                                 $modelCompany->id_city=$resCity;
                                 if($modelCompany->validate()){
                                     if($modelCompany->save()){
-                                        
+                                        if(!empty($companyTypei)){
+                                            $ctype=1;
+                                            $modelTCompany=new CompanyTcompany();
+                                            $modelTCompany->id_typecompany=$ctype;
+                                            $modelTCompany->id_company=$modelCompany->getPrimaryKey();
+                                            if($modelTCompany->validate()&&$modelTCompany->save()){$vacio;}
+                                        }
+                                        if(!empty($companyTypeii)){
+                                            $ctype=2;
+                                            $modelTCompany=new CompanyTcompany();
+                                            $modelTCompany->id_typecompany=$ctype;
+                                            $modelTCompany->id_company=$modelCompany->getPrimaryKey();
+                                            if($modelTCompany->validate()&&$modelTCompany->save()){$vacio;}
+                                        }
+                                        if(!empty($whatsApp)){
+                                            $modelTelephone=new Telephone();
+                                            $modelTelephone->id_typetelephone=1;
+                                            $modelTelephone->telephone_number=$whatsApp;
+                                            $modelTelephone->id_company=$modelCompany->getPrimaryKey();
+                                            if($modelTelephone->validate()&&$modelTelephone->save()){$vacios;}
+                                        }
+                                        if(!empty($web)){
+                                            $modelWeb=new Web();
+                                            $modelWeb->id_company=$modelCompany->getPrimaryKey();
+                                            $modelWeb->web=$web;
+                                            if($modelWeb->validate()&&$modelWeb->save()){$vacios;}
+                                        }
+                                        if(!empty($email)){
+                                            foreach($email as $em){
+                                                $modelEmail=new Email();
+                                                $modelEmail->id_company=$modelCompany->getPrimaryKey();
+                                                $modelEmail->email=$em;
+                                                if($modelEmail->validate()&&$modelEmail->save()){$vacios;}
+                                            }
+                                        }
+                                        if(!empty($facebook)){
+                                            foreach($facebook as $fb){
+                                                $modelSNet=new SocialNetwork();
+                                                $modelSNet->id_typesnetwork=1;
+                                                $modelSNet->id_company=$modelCompany->getPrimaryKey();
+                                                $modelSNet->snetwork=$fb;
+                                                if($modelSNet->validate()&&$modelSNet->save()){$vacios;}
+                                            }
+                                        }
+                                        if(!empty($twitter)){
+                                            $modelSNet=new SocialNetwork();
+                                            $modelSNet->id_typesnetwork=2;
+                                            $modelSNet->id_company=$modelCompany->getPrimaryKey();
+                                            $modelSNet->snetwork=$twitter;
+                                            if($modelSNet->validate()&&$modelSNet->save()){$vacios;}
+                                        }
+                                        if(!empty($instagram)){
+                                            $modelSNet=new SocialNetwork();
+                                            $modelSNet->id_typesnetwork=3;
+                                            $modelSNet->id_company=$modelCompany->getPrimaryKey();
+                                            $modelSNet->snetwork=$instagram;
+                                            if($modelSNet->validate()&&$modelSNet->save()){$vacios;}
+                                        }
+                                        if(!empty($googlePl)){
+                                            $modelSNet=new SocialNetwork();
+                                            $modelSNet->id_typesnetwork=4;
+                                            $modelSNet->id_company=$modelCompany->getPrimaryKey();
+                                            $modelSNet->snetwork=$googlePl;
+                                            if($modelSNet->validate()&&$modelSNet->save()){$vacios;}
+                                        }
                                     }
                                     else{
                                         //genera log de no save
