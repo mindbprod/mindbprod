@@ -44,6 +44,7 @@ class ImportfileController extends Controller{
                     $uploaded = $file->saveAs($dir.$file->getName());
                     $data=new JPhpExcelReader($dir.$file->getName());
                     if($data->sheets[0]['numRows']<=2000&&$data->sheets[0]['numRows']>1&&$data->sheets[0]['numCols']<=32&&$data->sheets[0]['numCols']>0){
+                        $registros=0;
                         for($i = 2; $i <= $data->sheets[0]['numRows']; $i++){
                             try{
                                 $save=1;
@@ -93,27 +94,31 @@ class ImportfileController extends Controller{
                                 if(!empty($data->sheets[0]['cells'][$i][31])){$address=trim($data->sheets[0]['cells'][$i][31]);}
                                 if(!empty($data->sheets[0]['cells'][$i][32])){$observations=trim($data->sheets[0]['cells'][$i][32]);}
                                 
-                                $resContinent=$this->setIdContinent(mb_strtoupper($this->removeAccents($continent)));
+                                $resContinent=$this->setIdContinent(strtoupper($this->removeAccents($continent)));
                                 if($resContinent==0){
                                     $save=0;
                                     continue;
                                     
                                 }
-                                $resCountry=$this->setIdCountry(mb_strtoupper($this->removeAccents($country)),$resContinent);
+                                $resCountry=$this->setIdCountry(strtoupper($this->removeAccents($country)),$resContinent);
                                 if($resCountry==0){
                                     $save=0;
                                     continue;
                                 }
                                 
-                                $resState=$this->setIdState(mb_strtoupper($this->removeAccents($state)),$resCountry);
+                                $resState=$this->setIdState(strtoupper($this->removeAccents($state)),$resCountry);
                                 if($resState==0){
                                     $save=0;
                                     continue;
                                 }
 //                                echo $resState."--";continue;
-                                $resCity=$this->setIdCity(mb_strtoupper($this->removeAccents($city)),$resState);
+                                $resCity=$this->setIdCity(strtoupper($this->removeAccents($city)),$resState);
                                 if($resCity==0){
                                     $save=0;
+                                    continue;
+                                }
+                                if(empty($resCity)){
+                                    $vacio;
                                     continue;
                                 }
                                 $modelCompany=new Company();
@@ -190,6 +195,7 @@ class ImportfileController extends Controller{
                                             $modelSNet->snetwork=$googlePl;
                                             if($modelSNet->validate()&&$modelSNet->save()){$vacios;}
                                         }
+                                        $registros++;
                                     }
                                     else{
                                         //genera log de no save
@@ -207,7 +213,7 @@ class ImportfileController extends Controller{
                             }
                             //$data->sheets[0]['cells'][$i][1];
                         }
-                        Yii::app()->getUser()->setFlash('success','The excel file was successfully imported. --'.$data->sheets[0]['numCols']);
+                        Yii::app()->getUser()->setFlash('success','The excel file was successfully imported. Imported records: '.$registros);
                         $this->refresh();
                     }
                     else{
@@ -241,6 +247,9 @@ class ImportfileController extends Controller{
             $this->render('importfile');
     }
     public function setIdContinent($continent){
+       if(empty($continent)){
+           return 0;
+       }
        $conn=Yii::app()->db;
        $sql="SELECT id_continent FROM continent WHERE continent_name LIKE :continentname ";
        $search='%'.$continent.'%';
@@ -270,6 +279,9 @@ class ImportfileController extends Controller{
        }
     }
     public function setIdCountry($country,$idContinent){
+        if(empty($country)){
+           return 0;
+        }
        $conn=Yii::app()->db;
        $sql="SELECT id_country FROM country WHERE country_name LIKE :countryname and id_continent=:idcontinent ";
        $search='%%'.$country.'%%';
@@ -301,37 +313,43 @@ class ImportfileController extends Controller{
        }
     }
     private function setIdState($state,$idCountry){
+        if(empty($state)){
+           return 0;
+        }
         $conn=Yii::app()->db;
-       $sql="SELECT id_state FROM state WHERE state_name LIKE :statename and id_country=:idcountry ";
-       $search='%%'.$state.'%%';
-       $query=$conn->createCommand($sql);
-       $query->bindParam(":statename", $search);
-       $query->bindParam(":idcountry", $idCountry);
-       $read=$query->query();
-       $res=$read->read();
-       $read->close();
-       if(!empty($res)){
-          return $res["id_state"]; 
-       }
-       else{
-           $modelState=new State();
-           $modelState->state_code=strtoupper($this->removeAccents($state));
-           $modelState->state_name=  $modelState->state_code;
-           $modelState->id_country=$idCountry;
-           if($modelState->validate()){
-               if($modelState->save()){
-                   return $modelState->getPrimaryKey();
-               }
-               else{
-                   return 0;
-               }
-           }
-           else{
-               return 0;
-           }
-       }
+        $sql="SELECT id_state FROM state WHERE state_name LIKE :statename and id_country=:idcountry ";
+        $search='%%'.$state.'%%';
+        $query=$conn->createCommand($sql);
+        $query->bindParam(":statename", $search);
+        $query->bindParam(":idcountry", $idCountry);
+        $read=$query->query();
+        $res=$read->read();
+        $read->close();
+        if(!empty($res)){
+           return $res["id_state"]; 
+        }
+        else{
+            $modelState=new State();
+            $modelState->state_code=strtoupper($this->removeAccents($state));
+            $modelState->state_name=  $modelState->state_code;
+            $modelState->id_country=$idCountry;
+            if($modelState->validate()){
+                if($modelState->save()){
+                    return $modelState->getPrimaryKey();
+                }
+                else{
+                    return 0;
+                }
+            }
+            else{
+                return 0;
+            }
+        }
     }
     private function setIdCity($city,$idState){
+        if(empty($city)){
+           return 0;
+        }
         $conn=Yii::app()->db;
        $sql="SELECT id_city FROM city WHERE city_name LIKE :cityname and id_state=:idstate ";
        $search='%%'.$city.'%%';
