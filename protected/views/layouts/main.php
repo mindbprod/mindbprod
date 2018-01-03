@@ -82,7 +82,7 @@
                 <div class="navbar-default sidebar" role="navigation">
                     <div class="sidebar-nav navbar-collapse">
                         <?php
-                            if(Yii::app()->user->getState('codeRole')=="RECORDER"):
+                            if(Yii::app()->user->getState('codeRole')=="SUPERADMIN"):
                         ?>
                             <ul class="nav" id="side-menu">
                                 <li>
@@ -105,6 +105,27 @@
                                     <ul class="nav nav-second-level">
                                         <li>
                                             <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/user/registerUser">Register user</a>
+                                        </li>
+                                    </ul>
+                                    <!-- /.nav-second-level -->
+                                </li>
+                            </ul>
+                        <?php endif;?>
+                        <?php
+                            if(Yii::app()->user->getState('codeRole')=="RECORDER"):
+                        ?>
+                            <ul class="nav" id="side-menu">
+                                <li>
+                                    <a href="#"><i class="fa fa-sitemap fa-fw"></i> Company Manager<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-second-level">
+                                        <li>
+                                            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/company/registercompany">Register company information</a>
+                                        </li>
+                                        <li>
+                                            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/company/showEditcompany">Show/Edit company information</a>
+                                        </li>
+                                        <li>
+                                            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/importfile">Load information from file</a>
                                         </li>
                                     </ul>
                                     <!-- /.nav-second-level -->
