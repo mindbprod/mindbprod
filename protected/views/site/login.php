@@ -40,7 +40,9 @@
     $this->breadcrumbs=array(
             'Login',
     );
-    echo password_verify("80760766", '$2y$12$WvBnf6JgfKfncrdEFZGjuuFxVhZWSVyy8Ui7sD2VRaLcLgOjGjVs2');
+//    echo realpath(__DIR__)."/../modules/audit<br>";
+//    echo realpath(__DIR__)."/../../vendor/crisu83/yiistrap";
+//    echo Yii::app()->hasComponent('user');
 //    echo Yii::app()->user->getId()."---------------------".dirname(__FILE__);
 ?>
     

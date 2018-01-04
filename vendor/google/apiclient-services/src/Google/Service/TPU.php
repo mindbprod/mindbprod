@@ -160,10 +160,6 @@ class Google_Service_TPU extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
-                'tensorflowVersion' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
               ),
             ),'reset' => array(
               'path' => 'v1alpha1/{+name}:reset',

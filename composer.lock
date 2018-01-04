@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a13dc5952b25ea979d913b5275f63028",
-    "content-hash": "1d2251587c44b06bb979f976b90314fb",
+    "hash": "cef603d139b9ebd6c322ee7e734fd867",
+    "content-hash": "a4cdabb7b06e9e40aba357d782069aa6",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -69,6 +69,125 @@
                 "sdk"
             ],
             "time": "2016-07-25 18:03:20"
+        },
+        {
+            "name": "cornernote/yii-audit-module",
+            "version": "1.1.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cornernote/yii-audit-module.git",
+                "reference": "0c23e258051d97c038c576329e0b57c3d7fd59b8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cornernote/yii-audit-module/zipball/0c23e258051d97c038c576329e0b57c3d7fd59b8",
+                "reference": "0c23e258051d97c038c576329e0b57c3d7fd59b8",
+                "shasum": ""
+            },
+            "require": {
+                "crisu83/yiistrap": ">=1.0.0"
+            },
+            "require-dev": {
+                "yiisoft/yii": "1.1.15"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "audit/components/",
+                    "audit/models/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Brett O'Donnell",
+                    "email": "cornernote@gmail.com",
+                    "homepage": "http://mrphp.com.au/"
+                },
+                {
+                    "name": "Zain ul abidin",
+                    "email": "zainengineer@gmail.com"
+                }
+            ],
+            "description": "Track and store usage information including page requests, database field changes and system errors.",
+            "keywords": [
+                "Audit",
+                "error handler",
+                "logging",
+                "model logging",
+                "mrphp",
+                "request logging",
+                "yii"
+            ],
+            "time": "2015-02-24 08:32:04"
+        },
+        {
+            "name": "crisu83/yiistrap",
+            "version": "2.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/crisu83/yiistrap.git",
+                "reference": "98ba4b081070c6285be26ef676106608edfe40ea"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/crisu83/yiistrap/zipball/98ba4b081070c6285be26ef676106608edfe40ea",
+                "reference": "98ba4b081070c6285be26ef676106608edfe40ea",
+                "shasum": ""
+            },
+            "require": {
+                "twbs/bootstrap": ">=3.3.0"
+            },
+            "require-dev": {
+                "apigen/apigen": "~4.0",
+                "codeception/codeception": "@stable",
+                "crisu83/yii-composer": ">=1.0.0",
+                "yiisoft/yii": ">=1.1.13"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "2.0.x-dev"
+                },
+                "yii-install-writable": [
+                    "tests/_log"
+                ]
+            },
+            "autoload": {
+                "classmap": [
+                    "behaviors/",
+                    "components/",
+                    "form/",
+                    "helpers/",
+                    "widgets/",
+                    "gii/bootstrap/BootstrapCode.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Christoffer Niska",
+                    "email": "christoffer.niska@gmail.com",
+                    "homepage": "http://www.cniska.net/"
+                },
+                {
+                    "name": "Antonio Ramirez",
+                    "email": "ramirez.cobos@gmail.com",
+                    "homepage": "http://www.ramirezcobos.com/"
+                }
+            ],
+            "description": "Twitter Bootstrap for the Yii PHP framework.",
+            "keywords": [
+                "bootstrap",
+                "yii"
+            ],
+            "time": "2015-04-17 07:37:12"
         },
         {
             "name": "firebase/php-jwt",
@@ -171,16 +290,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.35",
+            "version": "v0.40",
             "source": {
                 "type": "git",
                 "url": "https://github.com/google/google-api-php-client-services.git",
-                "reference": "8c3926a9dafcd1bc86e5af06a1bb7e4aa931c73c"
+                "reference": "5f474421169fc2d830cb46035cbc27f88c53ba8f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/google-api-php-client-services/zipball/8c3926a9dafcd1bc86e5af06a1bb7e4aa931c73c",
-                "reference": "8c3926a9dafcd1bc86e5af06a1bb7e4aa931c73c",
+                "url": "https://api.github.com/repos/google/google-api-php-client-services/zipball/5f474421169fc2d830cb46035cbc27f88c53ba8f",
+                "reference": "5f474421169fc2d830cb46035cbc27f88c53ba8f",
                 "shasum": ""
             },
             "require": {
@@ -204,7 +323,7 @@
             "keywords": [
                 "google"
             ],
-            "time": "2017-11-18 00:23:16"
+            "time": "2017-12-23 00:23:13"
         },
         {
             "name": "google/auth",
@@ -654,16 +773,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPMailer/PHPMailer.git",
-                "reference": "dd2b4bc5fb4a988ca080b5613903d04c88d410c1"
+                "reference": "c8613a447bf50f08893d659906036b8e0bcb753d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/dd2b4bc5fb4a988ca080b5613903d04c88d410c1",
-                "reference": "dd2b4bc5fb4a988ca080b5613903d04c88d410c1",
+                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/c8613a447bf50f08893d659906036b8e0bcb753d",
+                "reference": "c8613a447bf50f08893d659906036b8e0bcb753d",
                 "shasum": ""
             },
             "require": {
                 "ext-ctype": "*",
+                "ext-filter": "*",
                 "php": ">=5.5.0"
             },
             "require-dev": {
@@ -711,20 +831,20 @@
                 }
             ],
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
-            "time": "2017-11-17 11:24:17"
+            "time": "2017-12-22 10:40:15"
         },
         {
             "name": "phpseclib/phpseclib",
-            "version": "2.0.7",
+            "version": "2.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "f4b6a522dfa1fd1e477c9cfe5909d5b31f098c0b"
+                "reference": "c9a3fe35e20eb6eeaca716d6a23cde03f52d1558"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/f4b6a522dfa1fd1e477c9cfe5909d5b31f098c0b",
-                "reference": "f4b6a522dfa1fd1e477c9cfe5909d5b31f098c0b",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/c9a3fe35e20eb6eeaca716d6a23cde03f52d1558",
+                "reference": "c9a3fe35e20eb6eeaca716d6a23cde03f52d1558",
                 "shasum": ""
             },
             "require": {
@@ -803,7 +923,7 @@
                 "x.509",
                 "x509"
             ],
-            "time": "2017-10-23 05:04:54"
+            "time": "2017-11-29 06:38:08"
         },
         {
             "name": "psr/http-message",
@@ -994,7 +1114,7 @@
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.8.31",
+            "version": "v2.8.32",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
@@ -1053,17 +1173,68 @@
             "time": "2017-11-05 15:25:56"
         },
         {
+            "name": "twbs/bootstrap",
+            "version": "v3.3.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twbs/bootstrap.git",
+                "reference": "0b9c4a4007c44201dce9a6cc1a38407005c26c86"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twbs/bootstrap/zipball/0b9c4a4007c44201dce9a6cc1a38407005c26c86",
+                "reference": "0b9c4a4007c44201dce9a6cc1a38407005c26c86",
+                "shasum": ""
+            },
+            "replace": {
+                "twitter/bootstrap": "self.version"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.3.x-dev"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jacob Thornton",
+                    "email": "jacobthornton@gmail.com"
+                },
+                {
+                    "name": "Mark Otto",
+                    "email": "markdotto@gmail.com"
+                }
+            ],
+            "description": "The most popular front-end framework for developing responsive, mobile first projects on the web.",
+            "homepage": "http://getbootstrap.com",
+            "keywords": [
+                "JS",
+                "css",
+                "framework",
+                "front-end",
+                "less",
+                "mobile-first",
+                "responsive",
+                "web"
+            ],
+            "time": "2016-07-25 15:51:55"
+        },
+        {
             "name": "zendesk/zendesk_api_client_php",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendesk/zendesk_api_client_php.git",
-                "reference": "403d17e3851ef74b8e78ddd41dca9f85fa31b6a9"
+                "reference": "9ff98e708efaf83f3b90322fe422323d5a3834c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendesk/zendesk_api_client_php/zipball/403d17e3851ef74b8e78ddd41dca9f85fa31b6a9",
-                "reference": "403d17e3851ef74b8e78ddd41dca9f85fa31b6a9",
+                "url": "https://api.github.com/repos/zendesk/zendesk_api_client_php/zipball/9ff98e708efaf83f3b90322fe422323d5a3834c6",
+                "reference": "9ff98e708efaf83f3b90322fe422323d5a3834c6",
                 "shasum": ""
             },
             "require": {
@@ -1089,7 +1260,7 @@
             ],
             "description": "PHP Client for Zendesk REST API. See http://developer.zendesk.com/api-docs",
             "homepage": "https://github.com/zendesk/zendesk_api_client_php",
-            "time": "2017-09-20 09:19:42"
+            "time": "2017-12-14 02:17:18"
         }
     ],
     "packages-dev": [
@@ -1215,16 +1386,16 @@
         },
         {
             "name": "phpunit/php-file-iterator",
-            "version": "1.4.2",
+            "version": "1.4.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-file-iterator.git",
-                "reference": "3cc8f69b3028d0f96a9078e6295d86e9bf019be5"
+                "reference": "730b01bc3e867237eaac355e06a36b85dd93a8b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-file-iterator/zipball/3cc8f69b3028d0f96a9078e6295d86e9bf019be5",
-                "reference": "3cc8f69b3028d0f96a9078e6295d86e9bf019be5",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-file-iterator/zipball/730b01bc3e867237eaac355e06a36b85dd93a8b4",
+                "reference": "730b01bc3e867237eaac355e06a36b85dd93a8b4",
                 "shasum": ""
             },
             "require": {
@@ -1258,7 +1429,7 @@
                 "filesystem",
                 "iterator"
             ],
-            "time": "2016-10-03 07:40:28"
+            "time": "2017-11-27 13:52:08"
         },
         {
             "name": "phpunit/php-invoker",
@@ -2005,16 +2176,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v2.8.31",
+            "version": "v2.8.32",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "7cad097cf081c0ab3d0322cc38d34ee80484d86f"
+                "reference": "46270f1ca44f08ebc134ce120fd2c2baf5fd63de"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/7cad097cf081c0ab3d0322cc38d34ee80484d86f",
-                "reference": "7cad097cf081c0ab3d0322cc38d34ee80484d86f",
+                "url": "https://api.github.com/repos/symfony/console/zipball/46270f1ca44f08ebc134ce120fd2c2baf5fd63de",
+                "reference": "46270f1ca44f08ebc134ce120fd2c2baf5fd63de",
                 "shasum": ""
             },
             "require": {
@@ -2062,7 +2233,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2017-11-16 15:20:19"
+            "time": "2017-11-29 09:33:18"
         },
         {
             "name": "symfony/debug",
@@ -2182,16 +2353,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.8.31",
+            "version": "v2.8.32",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "d819bf267e901727141fe828ae888486fd21236e"
+                "reference": "968ef42161e4bc04200119da473077f9e7015128"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/d819bf267e901727141fe828ae888486fd21236e",
-                "reference": "d819bf267e901727141fe828ae888486fd21236e",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/968ef42161e4bc04200119da473077f9e7015128",
+                "reference": "968ef42161e4bc04200119da473077f9e7015128",
                 "shasum": ""
             },
             "require": {
@@ -2227,7 +2398,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2017-11-05 15:25:56"
+            "time": "2017-11-29 09:33:18"
         }
     ],
     "aliases": [],
@@ -2242,7 +2413,8 @@
     "platform": {
         "php": ">=5.3.2",
         "ext-soap": "*",
-        "ext-memcached": "*"
+        "ext-memcached": "*",
+        "ext-mbstring": "*"
     },
     "platform-dev": []
 }

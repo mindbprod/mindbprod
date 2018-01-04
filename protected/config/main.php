@@ -10,14 +10,18 @@ return array(
 	'name'=>'MBP',
 
 	// preloading 'log' component
-	'preload'=>array('log'),
+	'preload'=>array('log','errorHandler'), // handle fatal errors),
 
 	// autoloading model and component classes
 	'import'=>array(
 		'application.models.*',
-		'application.components.*',
+		'application.components.*',  
 	),
-
+        'aliases' => array(
+            'audit' => realpath(__DIR__."/../../vendor/cornernote/yii-audit-module/audit"),
+//            'vendor.twbs.bootstrap.dist' => realpath(__DIR__ . '/../extensions/bootstrap'),
+            'vendor.twbs.bootstrap.dist'=>realpath(__DIR__."/../../vendor/twbs/bootstrap/dist"),
+        ),
 	'modules'=>array(
             // uncomment the following to enable the Gii tool
             'gii'=>array(
@@ -26,10 +30,56 @@ return array(
                     // If removed, Gii defaults to localhost only. Edit carefully to taste.
                     'ipFilters'=>array('127.0.0.1','::1','192.168.0.*','192.168.1.*'),
             ),
+            'audit' => array(
+                // path to the AuditModule class
+                'class' => 'audit.AuditModule',
+
+                // set this to your user view url,
+                // AuditModule will replace --user_id-- with the actual user_id
+                'userViewUrl' => array('/user/view', 'id' => '--user_id--'),
+
+                // Set to false if you do not wish to track database audits.
+                'enableAuditField' => true,
+
+                // The ID of the CDbConnection application component. If not set, a SQLite3
+                // database will be automatically created in protected/runtime/audit-AuditVersion.db.
+                'connectionID' => 'db',
+
+                // Whether the DB tables should be created automatically if they do not exist. Defaults to true.
+                // If you already have the table created, it is recommended you set this property to be false to improve performance.
+                'autoCreateTables' => true,
+
+                // The layout used for module controllers.
+                'layout' => 'audit.views.layouts.column1',
+
+                // The widget used to render grid views.
+                'gridViewWidget' => 'bootstrap.widgets.TbGridView',
+
+                // The widget used to render detail views.
+                'detailViewWidget' => 'zii.widgets.CDetailView',
+
+                // Defines the access filters for the module.
+                // The default is AuditAccessFilter which will allow any user listed in AuditModule::adminUsers to have access.
+                'controllerFilters' => array(
+                    'auditAccess' => array('audit.components.AuditAccessFilter'),
+                ),
+
+                // A list of users who can access this module.
+                'adminUsers' => array('user.admin'),
+
+                // The path to YiiStrap.
+                // Only required if you do not want YiiStrap in your app config, for example, if you are running YiiBooster.
+                // Only required if you did not install using composer.
+                // Please note:
+                // - You must download YiiStrap even if you are using YiiBooster in your app.
+                // - When using this setting YiiStrap will only loaded in the menu interface (eg: index.php?r=menu).
+                'yiiStrapPath' => realpath(__DIR__."/../../vendor/crisu83/yiistrap"),
+            ),
 	),
 
 	// application components
 	'components'=>array(
+                
 		'user'=>array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
@@ -56,20 +106,41 @@ return array(
 			'emulatePrepare' => true,
 			'username' => 'root',
 			'password' => 'Nevulos$',
-			'charset' => 'utf8',
+			'charset' => 'utf8',  // set to true to enable database query logging
+                        // don't forget to put `profile` in the log route `levels` below
+                        'enableProfiling' => true,
+
+                        // set to true to replace the params with the literal values
+                        'enableParamLogging' => true,
 		),
 		
 		'errorHandler'=>array(
-			// use 'site/error' action to display errors
-			'errorAction'=>'site/error',
+			// path to the AuditErrorHandler class
+                    'class' => 'audit.components.AuditErrorHandler',
+
+                    // set this as you normally would for CErrorHandler
+                    'errorAction' => 'site/error',
+
+                    // Set to false to only track error requests.  Defaults to false.
+                    'trackAllRequests' => true,
+
+                    // Set to false to not handle fatal errors.  Defaults to true.
+                    'catchFatalErrors' => true,
+
+                    // Request keys that we do not want to save in the tracking data.
+                    'auditRequestIgnoreKeys' => array('PHP_AUTH_PW', 'password'),
 		),
 		'log'=>array(
 			'class'=>'CLogRouter',
 			'routes'=>array(
-				array(
-					'class'=>'CFileLogRoute',
-					'levels'=>'error, warning',
-				),
+                            array(
+                                    // path to the AuditLogRoute class
+                                'class' => 'audit.components.AuditLogRoute',
+
+                                // can be: trace, warning, error, info, profile
+                                // can also be anything else you want to pass as a level to `Yii::log()`
+                                'levels' => 'error, warning, profile, audit',
+                            ),
 				// uncomment the following to show log messages on web pages
 				/*
 				array(
