@@ -46,10 +46,10 @@ return array(
 		// uncomment the following to use a MySQL database
 		
 		'db'=>array(
-			'connectionString' => 'mysql:host=localhost;dbname=mbp',
+			'connectionString' => 'mysql:host=mbpapp.db.3324307.3a8.hostedresource.net;dbname=mbpapp',
 			'emulatePrepare' => true,
-			'username' => 'root',
-			'password' => 'Nevulos$',
+			'username' => 'mbpapp',
+			'password' => 'Mbap2017!',
 			'charset' => 'utf8',
 		),
 		
