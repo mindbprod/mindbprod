@@ -381,10 +381,31 @@ class CompanyController extends Controller{
             case "web":
                 $tableName="web";
                 $columnName="web";
-                $modelWeb= Web::model()->findByAttributes(array("id_company"=>$data["idCompany"]));
-                if(empty($modelWeb)){
-                    $updAct=false;
+                if(!empty($data["valueContent"])){
+                    $modelWeb= Web::model();
+                    $web=$modelWeb->findByAttributes(array("id_company"=>$data["idCompany"]));
+                    if(empty($web)){
+                        $modelWeb=new Web();
+                        $modelWeb->id_company=$data["idCompany"];
+                        $modelWeb->web=$data["valueContent"];
+                        if($modelWeb->save()){
+                            $msn="exito";
+                        }
+                        $updAct=false;
+                    }
+                    else{
+                        $web->id_company=$data["idCompany"];
+                        $web->web=$data["valueContent"];
+                        $web->update();
+                        $msn="exito";
+                    }
                 }
+                else{
+                    $msn="noexito";
+                }
+                $response["status"]=$msn;
+                echo CJSON::encode($response);
+                exit();
             break;
             case "email":
                 $tableName="email";

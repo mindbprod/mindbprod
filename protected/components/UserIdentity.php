@@ -18,10 +18,11 @@ class UserIdentity extends CUserIdentity
 //    private $keyString="_.$|°p8";
     const ERROR_USER_NOACTIVE=4;
     private $_id;
+    public $user_id;
     public function authenticate(){
         
         $criteria = new CDbCriteria;
-        $criteria->select = 'username,password,id_sperson,id_typeuser,active_user';
+        $criteria->select = 'id_user,username,password,id_sperson,id_typeuser,active_user';
         $userFromDb=  User::model()->findByAttributes(array('username'=>$this->username),$criteria);
 //        echo $this->username." ".$this->password;
         if(!is_object($userFromDb) && !isset($userFromDb->username)){
@@ -43,6 +44,7 @@ class UserIdentity extends CUserIdentity
                     $this->errorCode=self::ERROR_NONE;
                     $modelPerson=  Person::model()->findByPk($userFromDb->id_sperson);
                     $modelTypeUser= TypeUser::model()->findByPk($userFromDb->id_typeuser);
+                    $this->setState('id',$userFromDb->id_user);
                     Yii::app()->user->setState('nombrePerson',$modelPerson->person_name." ".$modelPerson->person_lastname);
                     Yii::app()->user->setState('nombreUsuario',$this->username);
                     Yii::app()->user->setState('nombreRole',$modelTypeUser->typeuser_name);

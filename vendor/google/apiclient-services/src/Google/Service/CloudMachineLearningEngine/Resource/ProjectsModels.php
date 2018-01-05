@@ -95,12 +95,17 @@ class Google_Service_CloudMachineLearningEngine_Resource_ProjectsModels extends 
    * Lists the models in a project.
    *
    * Each project can contain multiple models, and each model can have multiple
-   * versions. (models.listProjectsModels)
+   * versions.
+   *
+   * If there are no models that match the request parameters, the list request
+   * returns an empty response body: {}. (models.listProjectsModels)
    *
    * @param string $parent Required. The name of the project whose models are to
    * be listed.
    * @param array $optParams Optional parameters.
    *
+   * @opt_param string filter Optional. Specifies the subset of models to
+   * retrieve.
    * @opt_param string pageToken Optional. A page token to request the next page
    * of results.
    *
@@ -111,8 +116,6 @@ class Google_Service_CloudMachineLearningEngine_Resource_ProjectsModels extends 
    * response message will contain a valid value in the `next_page_token` field.
    *
    * The default value is 20, and the maximum page size is 100.
-   * @opt_param string filter Optional. Specifies the subset of models to
-   * retrieve.
    * @return Google_Service_CloudMachineLearningEngine_GoogleCloudMlV1ListModelsResponse
    */
   public function listProjectsModels($parent, $optParams = array())
