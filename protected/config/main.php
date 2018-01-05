@@ -104,9 +104,9 @@ return array(
 		'db'=>array(
 			'connectionString' => 'mysql:host=mbpapp.db.3324307.3a8.hostedresource.net;dbname=mbpapp',
 			'emulatePrepare' => true,
-			'username' => 'root',
-			'password' => 'Nevulos$',
-			'charset' => 'utf8',  // set to true to enable database query logging
+			'username' => 'mbpapp',
+			'password' => 'Mbap2017!',
+			'charset' => 'utf8',
                         // don't forget to put `profile` in the log route `levels` below
                         'enableProfiling' => true,
 
