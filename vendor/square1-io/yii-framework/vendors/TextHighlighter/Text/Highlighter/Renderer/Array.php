@@ -150,6 +150,7 @@ class Text_Highlighter_Renderer_Array extends Text_Highlighter_Renderer
         if ($this->_enumerated) {
             $this->_output[] = array($class, $content);
         } else {
+            $this->_output[]=array();
             $this->_output[][$class] = $content;
         }
         $this->_lastClass = $class;
