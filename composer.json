@@ -1,6 +1,6 @@
 {
     "require": {
-        "php": "<7.2",
+        "php": "<7.1",
         "square1-io/yii-framework": "1.1.14",
         "ext-soap": "*",
         "ext-memcached": "*",
