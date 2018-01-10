@@ -148,9 +148,10 @@ class Text_Highlighter_Renderer_Array extends Text_Highlighter_Renderer
             $content = htmlspecialchars($content);
         }
         if ($this->_enumerated) {
+            $this->_output=[];
             $this->_output[] = array($class, $content);
         } else {
-            $this->_output[]=array();
+            $this->_output[]=[];
             $this->_output[][$class] = $content;
         }
         $this->_lastClass = $class;
