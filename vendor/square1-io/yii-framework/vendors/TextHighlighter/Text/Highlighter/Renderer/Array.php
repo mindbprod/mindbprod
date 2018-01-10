@@ -83,7 +83,7 @@ class Text_Highlighter_Renderer_Array extends Text_Highlighter_Renderer
      *
      * @var array
      */
-    var $_output = [];
+    var $_output = array();
 
     /**#@-*/
 
@@ -151,10 +151,8 @@ class Text_Highlighter_Renderer_Array extends Text_Highlighter_Renderer
             $this->_output=[];
             $this->_output[] = array($class, $content);
         } else {
-//            $this->_output[][]=array();
-//            $this->_output=[];
-//            array_push($this->_output, array($class=>$content));
-            $this->_output[]=array($class, $content);
+            $this->_output=array();
+            $this->_output[][$class] = $content;
         }
         $this->_lastClass = $class;
 
