@@ -56,7 +56,6 @@ class Web extends CActiveRecord
 		// will receive user inputs.
 		return array(
                     array('web', 'required'),
-                    array('web', 'required'),
                     array('web','url','defaultScheme' => 'http'),
                     array('id_company', 'numerical', 'integerOnly'=>true),
                     // The following rule is used by search().

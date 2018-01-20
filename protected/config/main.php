@@ -17,6 +17,8 @@ return array(
 		'application.models.*',
 		'application.components.*',  
 	),
+        'sourceLanguage'=>'00',
+        'language'=>'en',
         'aliases' => array(
             'audit' => realpath(__DIR__."/../../vendor/cornernote/yii-audit-module/audit"),
 //            'vendor.twbs.bootstrap.dist' => realpath(__DIR__ . '/../extensions/bootstrap'),
@@ -106,6 +108,10 @@ return array(
 			'emulatePrepare' => true,
 			'username' => 'mbpapp',
 			'password' => 'Mbap2017!',
+//                    'connectionString' => 'mysql:host=localhost;dbname=mbp',
+//			'emulatePrepare' => true,
+//			'username' => 'root',
+//			'password' => 'root',
 			'charset' => 'utf8',
 			// don't forget to put `profile` in the log route `levels` below
 			

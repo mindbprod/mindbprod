@@ -6,7 +6,7 @@ class UserController extends Controller
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
-	public $layout='//layouts/column2';
+//	public $layout='//layouts/column2';
         /**
         * Acción que se ejecuta en segunda instancia para verificar si el usuario tiene sesión activa.
         * En caso contrario no podrá acceder a los módulos del aplicativo y generará error de acceso.
@@ -31,9 +31,10 @@ class UserController extends Controller
 	public function filters()
 	{
 		return array(
-			'accessControl', // perform access control for CRUD operations
-			'postOnly + delete', // we only allow deletion via POST request
-                        'enforcelogin',
+                    'enforcelogin',
+                    'accessControl', // perform access control for CRUD operations
+                    'postOnly + delete', // we only allow deletion via POST request
+                        
 		);
 	}
 
@@ -46,7 +47,7 @@ class UserController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
+				'actions'=>array('index','view','registerUser', 'changeState', 'listUsers', 'changePassword'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions

@@ -5,7 +5,6 @@
  *
  * The followings are the available columns in table 'company':
  * @property integer $id_company
- * @property integer $id_city
  * @property string $company_number
  * @property string $company_name
  * @property string $company_address
@@ -13,7 +12,6 @@
  * @property string $company_observations
  *
  * The followings are the available model relations:
- * @property City $idCity
  * @property TypeCompany[] $typeCompanies
  * @property Email[] $emails
  * @property Observation[] $observations
@@ -67,13 +65,12 @@ class Company extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('company_name, company_fest_desc', 'required'),
-			array('id_city', 'numerical', 'integerOnly'=>true),
 			array('company_number', 'length', 'max'=>50),
 			array('company_name, company_address', 'length', 'max'=>500),
 			array('company_observations', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_company, id_city, company_number, company_name, company_address, company_fest_desc, company_observations', 'safe', 'on'=>'search'),
+			array('id_company, company_number, company_name, company_address, company_fest_desc, company_observations', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -85,7 +82,6 @@ class Company extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'idCity' => array(self::BELONGS_TO, 'City', 'id_city'),
 			'typeCompanies' => array(self::MANY_MANY, 'TypeCompany', 'company_tcompany(id_company, id_typecompany)'),
 			'emails' => array(self::HAS_MANY, 'Email', 'id_company'),
 			'observations' => array(self::HAS_MANY, 'Observation', 'id_company'),
@@ -103,7 +99,6 @@ class Company extends CActiveRecord
 	{
 		return array(
 			'id_company' => 'Id Company',
-			'id_city' => 'Id City',
 			'company_number' => 'Company Number',
 			'company_name' => 'Company Name',
 			'company_address' => 'Company Address',
@@ -131,7 +126,6 @@ class Company extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id_company',$this->id_company);
-		$criteria->compare('id_city',$this->id_city);
 		$criteria->compare('company_number',$this->company_number,true);
 		$criteria->compare('company_name',$this->company_name,true);
 		$criteria->compare('company_address',$this->company_address,true);

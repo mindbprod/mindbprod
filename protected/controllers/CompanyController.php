@@ -38,13 +38,14 @@ class CompanyController extends Controller{
         $modeloEmail=new Email();
         $modelTypeEnt=new CompanyTcompany();
         $typeCompany=  TypeCompany::model()->findAll();
-        $modelWeb=new Web();
+        $modelWeb=Web::model();
         $modelSNetw=new SocialNetwork();
         $typeSNetwork=  TypeSnetwork::model()->findAll();
         $modelContinent=new Continent();
         $modelCountry=new Country();
         $modelState=new State();
         $modelCity=new City();
+        $modelUbication=new Ubication();
         if(empty($_POST)){
             $this->render('registercompany',array(
                 'modelCompany'=>$modelCompany,
@@ -58,11 +59,11 @@ class CompanyController extends Controller{
                 'modelContinent'=>$modelContinent,
                 'modelCountry'=>$modelCountry,
                 'modelState'=>$modelState,
-                'modelCity'=>$modelCity
+                'modelCity'=>$modelCity,
+                'modelUbication'=>$modelUbication
             ));
         }
         else{
-//            print_r($_POST);exit();
             $modelCompany->attributes=Yii::app()->request->getPost("Company");
             $modelTelephone->attributes=Yii::app()->request->getPost("Telephone");
             $typeEnt=Yii::app()->request->getPost("CompanyTcompany");
@@ -107,49 +108,37 @@ class CompanyController extends Controller{
             
 //            print_r($modelState->attributes);exit();
             if(!empty($modelContinent->continent_name)){
-                $modelContinent->continent_code=  strtoupper(preg_replace('/[^A-Za-z0-9]/', "", $modelContinent->continent_name));
-                $modelContinent->continent_name=strtoupper($modelContinent->continent_name);
+                $modelContinent->continent_code=  trim(strtoupper(preg_replace('/[^A-Za-z0-9]/', "", $modelContinent->continent_name)));
+                $modelContinent->continent_name=$modelContinent->continent_code;
             }
             if(!empty($modelCountry->country_name)){
-                $modelCountry->country_code=  strtoupper(preg_replace('/[^A-Za-z0-9]/', "", $modelCountry->country_name));
-                $modelCountry->country_name=strtoupper($modelCountry->country_name);
-                $modelCountry->id_continent=0;
+                $modelCountry->country_code=  trim(strtoupper(preg_replace('/[^A-Za-z0-9]/', "", $modelCountry->country_name)));
+                $modelCountry->country_name=$modelCountry->country_code;
             }
             if(!empty($modelState->state_name)){
-                $modelState->state_code=strtoupper(preg_replace('/[^A-Za-z0-9]/', "", $modelState->state_name));
-                $modelState->state_name=strtoupper($modelState->state_name);
-                $modelState->id_country=0;
+                $modelState->state_code=trim(strtoupper(preg_replace('/[^A-Za-z0-9]/', "", $modelState->state_name)));
+                $modelState->state_name= $modelState->state_code;
             }
             if(!empty($modelCity->city_name)){
-                $modelCity->city_code=strtoupper(preg_replace('/[^A-Za-z0-9]/', "", $modelCity->city_name));
-                $modelCity->city_name=strtoupper($modelCity->city_name);
-                $modelCity->id_state=0;
+                $modelCity->city_code=trim(strtoupper(preg_replace('/[^A-Za-z0-9]/', "", $modelCity->city_name)));
+                $modelCity->city_name=$modelCity->city_code;
             }
-            if(empty($modelContinent->id_continent) && $saveContinent==0){
-                $modelContinent->continent_name=NULL;
-            }
-            if(empty($modelCountry->id_country) && $saveCountry==0){
-                $modelCountry->country_name="";
-                $modelCountry->id_continent=null;
-            }
-//            print_r($modelContinent->attributes);
-            if(empty($modelState->id_state) && $saveState==0){
-                $modelState->state_name="";
-                $modelState->id_country=null;
-            }
-//            print_r($modelState->attributes);exit();
-//            print_r($modelCity->attributes);
-            if(empty($modelCity->id_city) && $saveCity==0){
-                $modelCity->city_name="";
-                $modelCity->id_state=null;
-            }
-//             print_r($modelCity->attributes);exit();
-//            print_r($modelCompany->validate());exit();
-            $this->performAjaxValidation(array($modelCompany,$modelTelephone,$modeloEmail,$modelTypeEnt,$modelWeb,$modelSNetwReg,$modelContinent,$modelCountry,$modelState,$modelCity),"entityreg-form");
-            if($modelCompany->validate()&&$modelTelephone->validate()&&$modelTypeEnt->validate()&&$modelWeb->validate()&&$modelContinent->validate()&&$modelCountry->validate()&&$modelState->validate()&&$modelCity->validate()&&$modeloEmail->validate()&&$modelSNetwReg->validate()){
+            $this->performAjaxValidation(array($modelCompany,$modelTelephone,$modeloEmail,$modelTypeEnt,$modelSNetwReg),"entityreg-form");
+            if($modelCompany->validate()&&$modelTelephone->validate()&&$modelTypeEnt->validate()&&$modeloEmail->validate()&&$modelSNetwReg->validate()){
+//                print_r($modelContinent->attributes);
+//                print_r($modelCountry->attributes);
+//                print_r($modelState->attributes);
+//                print_r($modelCity->attributes);
+//                echo $saveContinent."<br>";
+//                echo $saveCountry."<br>";
+//                echo $saveState."<br>";
+//                echo $saveCity."<br>";
+//                exit();
+                
                 $transaction=Yii::app()->db->beginTransaction();
                     try{
 //                        print_r($_POST);
+                        $modelUbication=new Ubication();
                         if(empty($modelContinent->id_continent) && $saveContinent==1){
                             $modelContinentN=new Continent();
                             $modelContinentN->continent_code_code=$modelContinent->continent_code;
@@ -157,40 +146,46 @@ class CompanyController extends Controller{
                             $modelContinentN->save();
                             $modelContinent->id_continent=$modelContinentN->getPrimaryKey();
                         }
+                        $modelUbication->id_continent=$modelContinent->id_continent;
                         if(empty($modelCountry->id_country) && $saveCountry==1){
                             $modelCountryN=new Country();
                             $modelCountryN->country_code=$modelCountry->country_code;
                             $modelCountryN->country_name=$modelCountry->country_name;
-                            $modelCountryN->id_continent=$modelContinent->id_continent;
                             $modelCountryN->save();
                             $modelCountry->id_country=$modelCountryN->getPrimaryKey();
                         }
+                        $modelUbication->id_country=$modelCountry->id_country;
                         if(empty($modelState->id_state) && $saveState==1){
                             $modelStateN=new State();
                             $modelStateN->state_code=$modelState->state_code;
                             $modelStateN->state_name=$modelState->state_name;
-                            $modelStateN->id_country=$modelState->state_name;
-                            $modelStateN->id_country=$modelCountry->id_country;
                             $modelStateN->save();
                             $modelState->id_state=$modelStateN->getPrimaryKey();
                         }
+                        $modelUbication->id_state=$modelState->id_state;
                         if(empty($modelCity->id_city) && $saveCity==1){
                             $modelCityN=new City();
                             $modelCityN->city_code=$modelCity->city_code;
                             $modelCityN->city_name=$modelCity->city_name;
-                            $modelCityN->id_state=$modelState->id_state;
                             $modelCityN->save();
                             $modelCity->id_city=$modelCityN->getPrimaryKey();
                         }
-                        $modelCompany->id_city=$modelCity->id_city;
+                        $modelUbication->id_city=$modelCity->id_city;
+//                        $modelCompany->id_city=$modelCity->id_city;
                         $modelCompany->save();
+                        $modelUbication->id_company=$modelCompany->getPrimaryKey();
+                        $modelUbication->save();
+                        
                         if(!empty($modelTelephone->telephone_number)){
                             $modelTelephone->id_company=$modelCompany->getPrimaryKey();
                             $modelTelephone->id_typetelephone=1;
                             $modelTelephone->save();
                         }
-                        $modelWeb->id_company=$modelCompany->getPrimaryKey();
-                        $modelWeb->save();
+                        if(!empty($modelWeb->web)){
+                            $modelWeb->id_company=$modelCompany->getPrimaryKey();
+                            $modelWeb->save();
+                        }
+                        
                         foreach($email as $em){
                             $modelEmailN=new Email();
                             $modelEmailN->id_company=$modelCompany->getPrimaryKey();
@@ -213,7 +208,10 @@ class CompanyController extends Controller{
                         $transaction->commit();
                         $response["status"]="exito";
                     }
-                    catch(ErrorException $e){
+                    catch(ErrorException  $e){
+                        $transaction->rollback();
+                        throw new CHttpException($e->get,$e->getMessage());
+                    }catch(CDbException  $e){
                         $transaction->rollback();
                         throw new CHttpException($e->get,$e->getMessage());
                     }
@@ -222,11 +220,9 @@ class CompanyController extends Controller{
 //                print_r($_POST);
             }
             else{
-                echo CActiveForm::validate(array($modelCompany,$modelTelephone,$modeloEmail,$modelTypeEnt,$modelWeb,$modelSNetwReg,$modelContinent,$modelCountry,$modelState,$modelCity));                
+                echo CActiveForm::validate(array($modelCompany,$modelTelephone,$modeloEmail,$modelTypeEnt,$modelSNetwReg));                
             }
-//            print_r($_POST);
         }
-        
     }
     public function actionEditDataUbication(){
         $data=Yii::app()->request->getPost("DCmp");
@@ -247,23 +243,20 @@ class CompanyController extends Controller{
         $saveState=$dataVal["saveState"];
         $saveCity=$dataVal["saveCity"];
         if(!empty($modelContinent->continent_name)){
-            $modelContinent->continent_code=strtoupper($this->removeAccents( $modelContinent->continent_name));
-            $modelContinent->continent_name=mb_strtoupper($modelContinent->continent_name, 'UTF-8');
+            $modelContinent->continent_code=trim(strtoupper($this->removeAccents( $modelContinent->continent_name)));
+            $modelContinent->continent_name=$modelContinent->continent_code;
         }
         if(!empty($modelCountry->country_name)){
-            $modelCountry->country_code=  strtoupper($this->removeAccents( $modelCountry->country_name));
-            $modelCountry->country_name= mb_strtoupper($modelCountry->country_name, 'UTF-8');
-            $modelCountry->id_continent=0;
+            $modelCountry->country_code=  trim(strtoupper($this->removeAccents( $modelCountry->country_name)));
+            $modelCountry->country_name= $modelCountry->country_code;
         }
         if(!empty($modelState->state_name)){
-            $modelState->state_code=strtoupper($this->removeAccents( $modelState->state_name));
-            $modelState->state_name=mb_strtoupper($modelState->state_name, 'UTF-8');
-            $modelState->id_country=0;
+            $modelState->state_code=trim(strtoupper($this->removeAccents( $modelState->state_name)));
+            $modelState->state_name=$modelState->state_code;
         }
         if(!empty($modelCity->city_name)){
-            $modelCity->city_code=strtoupper($this->removeAccents($modelCity->city_name));
-            $modelCity->city_name=mb_strtoupper($modelCity->city_name);
-            $modelCity->id_state=0;
+            $modelCity->city_code=trim(strtoupper($this->removeAccents($modelCity->city_name)));
+            $modelCity->city_name=$modelCity->city_code;
         }
 //        echo $modelCity->city_code;exit();
         if(empty($modelContinent->id_continent) && $saveContinent==0){
@@ -271,69 +264,73 @@ class CompanyController extends Controller{
         }
         if(empty($modelCountry->id_country) && $saveCountry==0){
             $modelCountry->country_name="";
-            $modelCountry->id_continent=null;
         }
 //            print_r($modelContinent->attributes);
         if(empty($modelState->id_state) && $saveState==0){
             $modelState->state_name="";
-            $modelState->id_country=null;
         }
 //            print_r($modelState->attributes);exit();
 //            print_r($modelCity->attributes);
         if(empty($modelCity->id_city) && $saveCity==0){
             $modelCity->city_name="";
-            $modelCity->id_state=null;
         }
-        $this->performAjaxValidation(array($modelContinent,$modelCountry,$modelState,$modelCity),"entityedit-form");
-        if($modelContinent->validate()&&$modelCountry->validate()&&$modelState->validate()&&$modelCity->validate()){
-            $transaction=Yii::app()->db->beginTransaction();
-            try{
-                if(empty($modelContinent->id_continent) && $saveContinent==1){
-                    $modelContinentN=new Continent();
-                    $modelContinentN->continent_code_code=$modelContinent->continent_code;
-                    $modelContinentN->continent_name=$modelCountry->continent_name;
-                    $modelContinentN->save();
-                    $modelContinent->id_continent=$modelContinentN->getPrimaryKey();
-                }
-                if(empty($modelCountry->id_country) && $saveCountry==1){
-                    $modelCountryN=new Country();
-                    $modelCountryN->country_code=$modelCountry->country_code;
-                    $modelCountryN->country_name=$modelCountry->country_name;
-                    $modelCountryN->id_continent=$modelContinent->id_continent;
-                    $modelCountryN->save();
-                    $modelCountry->id_country=$modelCountryN->getPrimaryKey();
-                }
-                if(empty($modelState->id_state) && $saveState==1){
-                    $modelStateN=new State();
-                    $modelStateN->state_code=$modelState->state_code;
-                    $modelStateN->state_name=$modelState->state_name;
-                    $modelStateN->id_country=$modelState->state_name;
-                    $modelStateN->id_country=$modelCountry->id_country;
-                    $modelStateN->save();
-                    $modelState->id_state=$modelStateN->getPrimaryKey();
-                }
-                if(empty($modelCity->id_city) && $saveCity==1){
-                    $modelCityN=new City();
-                    $modelCityN->city_code=$modelCity->city_code;
-                    $modelCityN->city_name=$modelCity->city_name;
-                    $modelCityN->id_state=$modelState->id_state;
-                    $modelCityN->save();
-                    $modelCity->id_city=$modelCityN->getPrimaryKey();
-                }
-                $modelCompany->updateByPk($data["idCompany"], array("id_city"=>$modelCity->id_city));
-                $transaction->commit();
-                $response["status"]="exito";
+        $modelUbication=Ubication::model();
+        $ubication=Ubication::model()->findByAttributes(["id_company"=>$data["idCompany"]]);
+        $modelUbication->id_ubication=$ubication["id_ubication"];
+        $modelUbication->id_company=$data["idCompany"];
+        $transaction=Yii::app()->db->beginTransaction();
+        try{
+            if(empty($modelContinent->id_continent) && $saveContinent==1){
+                $modelContinentN=new Continent();
+                $modelContinentN->continent_code_code=$modelContinent->continent_code;
+                $modelContinentN->continent_name=$modelCountry->continent_name;
+                $modelContinentN->save();
+                $modelContinent->id_continent=$modelContinentN->getPrimaryKey();
             }
-            catch(ErrorException $e){
-                $transaction->rollback();
+            $modelUbication->id_continent=$modelContinent->id_continent;
+            if(empty($modelCountry->id_country) && $saveCountry==1){
+                $modelCountryN=new Country();
+                $modelCountryN->country_code=$modelCountry->country_code;
+                $modelCountryN->country_name=$modelCountry->country_name;
+                $modelCountryN->save();
+                $modelCountry->id_country=$modelCountryN->getPrimaryKey();
+            }
+            $modelUbication->id_country=$modelCountry->id_country;
+            if(empty($modelState->id_state) && $saveState==1){
+                $modelStateN=new State();
+                $modelStateN->state_code=$modelState->state_code;
+                $modelStateN->state_name=$modelState->state_name;
+                $modelStateN->id_country=$modelState->state_name;
+                $modelStateN->save();
+                $modelState->id_state=$modelStateN->getPrimaryKey();
+            }
+            $modelUbication->id_state=$modelState->id_state;
+            if(empty($modelCity->id_city) && $saveCity==1){
+                $modelCityN=new City();
+                $modelCityN->city_code=$modelCity->city_code;
+                $modelCityN->city_name=$modelCity->city_name;
+                $modelCityN->save();
+                $modelCity->id_city=$modelCityN->getPrimaryKey();
+            }
+            $modelUbication->id_city=$modelCity->id_city;
+//            print_r($modelUbication->attributes);
+            $modelUbication->id_company=$data["idCompany"];
+            if($modelUbication->save()){
+                $transaction->commit();
+            }
+            else{
                 $response["status"]="noexito";
             }
-            echo CJSON::encode($response);
+            $response["status"]="exito";
         }
-        else{
-            echo CActiveForm::validate(array($modelContinent,$modelCountry,$modelState,$modelCity));
+        catch(ErrorException $e){
+            $transaction->rollback();
+            $response["status"]="noexito";
+        }catch(CDbException $e){
+            $transaction->rollback();
+            $response["status"]="noexito";
         }
-//        print_r($modelCity->attributes);
+        echo CJSON::encode($response);
     }
     private function removeAccents($str) {
         $a = array('À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Æ', 'Ç', 'È', 'É', 'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ð', 'Ñ', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ø', 'Ù', 'Ú', 'Û', 'Ü', 'Ý', 'ß', 'à', 'á', 'â', 'ã', 'ä', 'å', 'æ', 'ç', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ñ', 'ò', 'ó', 'ô', 'õ', 'ö', 'ø', 'ù', 'ú', 'û', 'ü', 'ý', 'ÿ', 'Ā', 'ā', 'Ă', 'ă', 'Ą', 'ą', 'Ć', 'ć', 'Ĉ', 'ĉ', 'Ċ', 'ċ', 'Č', 'č', 'Ď', 'ď', 'Đ', 'đ', 'Ē', 'ē', 'Ĕ', 'ĕ', 'Ė', 'ė', 'Ę', 'ę', 'Ě', 'ě', 'Ĝ', 'ĝ', 'Ğ', 'ğ', 'Ġ', 'ġ', 'Ģ', 'ģ', 'Ĥ', 'ĥ', 'Ħ', 'ħ', 'Ĩ', 'ĩ', 'Ī', 'ī', 'Ĭ', 'ĭ', 'Į', 'į', 'İ', 'ı', 'Ĳ', 'ĳ', 'Ĵ', 'ĵ', 'Ķ', 'ķ', 'Ĺ', 'ĺ', 'Ļ', 'ļ', 'Ľ', 'ľ', 'Ŀ', 'ŀ', 'Ł', 'ł', 'Ń', 'ń', 'Ņ', 'ņ', 'Ň', 'ň', 'ŉ', 'Ō', 'ō', 'Ŏ', 'ŏ', 'Ő', 'ő', 'Œ', 'œ', 'Ŕ', 'ŕ', 'Ŗ', 'ŗ', 'Ř', 'ř', 'Ś', 'ś', 'Ŝ', 'ŝ', 'Ş', 'ş', 'Š', 'š', 'Ţ', 'ţ', 'Ť', 'ť', 'Ŧ', 'ŧ', 'Ũ', 'ũ', 'Ū', 'ū', 'Ŭ', 'ŭ', 'Ů', 'ů', 'Ű', 'ű', 'Ų', 'ų', 'Ŵ', 'ŵ', 'Ŷ', 'ŷ', 'Ÿ', 'Ź', 'ź', 'Ż', 'ż', 'Ž', 'ž', 'ſ', 'ƒ', 'Ơ', 'ơ', 'Ư', 'ư', 'Ǎ', 'ǎ', 'Ǐ', 'ǐ', 'Ǒ', 'ǒ', 'Ǔ', 'ǔ', 'Ǖ', 'ǖ', 'Ǘ', 'ǘ', 'Ǚ', 'ǚ', 'Ǜ', 'ǜ', 'Ǻ', 'ǻ', 'Ǽ', 'ǽ', 'Ǿ', 'ǿ', 'Ά', 'ά', 'Έ', 'έ', 'Ό', 'ό', 'Ώ', 'ώ', 'Ί', 'ί', 'ϊ', 'ΐ', 'Ύ', 'ύ', 'ϋ', 'ΰ', 'Ή', 'ή');
@@ -590,15 +587,16 @@ class CompanyController extends Controller{
 //        print_r($data);exit();
         $columns="";
         $sql="SELECT *,a.id_company FROM company AS a "
-                . "LEFT JOIN city AS b ON b.id_city=a.id_city "
+                . "LEFT JOIN ubication AS b ON b.id_company=a.id_company "
                 . "LEFT JOIN telephone AS c ON c.id_company=a.id_company "
                 . "LEFT JOIN web AS d ON d.id_company=a.id_company "
                 . "LEFT JOIN email AS e ON e.id_company=a.id_company "
                 . "LEFT JOIN social_network AS f on f.id_company=a.id_company "
                 . "LEFT JOIN company_tcompany AS g on g.id_company=a.id_company "
                 . "LEFT JOIN state AS h ON h.id_state=b.id_state "
-                . "LEFT JOIN country AS i ON i.id_country=h.id_country "
-                . "LEFT JOIN continent AS j ON j.id_continent=i.id_continent ";
+                . "LEFT JOIN country AS i ON i.id_country=b.id_country "
+                . "LEFT JOIN continent AS j ON j.id_continent=b.id_continent "
+                . "LEFT JOIN city AS k ON k.id_city=b.id_city ";
 //        if(isset($data["chCmp"])||isset($data["chTl"])||isset($data["chWeb"])||isset($data["chEm"])||isset($data["chSN"])){
             $searchCriteria=" WHERE ";
 //        }
@@ -610,38 +608,39 @@ class CompanyController extends Controller{
             if(isset($data["Company"]["company_number"])&&!empty($data["Company"]["company_number"])){$dataSearch.=$ori." a.company_number LIKE :company_number ";$orii=" AND ";}
             if(isset($data["Company"]["company_address"])&&!empty($data["Company"]["company_address"])){if(!empty($ori)||!empty($orii)){$oriii=" AND ";}$dataSearch.=$oriii." a.company_address LIKE :company_address ";$oriii=" AND ";}
             if(isset($data["Company"]["company_fest_desc"])&&!empty($data["Company"]["company_fest_desc"])){if(!empty($ori)||!empty($orii)||!empty($oriii)){$oriv=" AND ";}$dataSearch.=$oriv." a.company_fest_desc LIKE :company_fest_desc ";$oriv=" AND ";}
-            if(isset($data["Company"]["id_city"])&&!empty($data["Company"]["id_city"])){if(!empty($ori)||!empty($orii)||!empty($oriii)||!empty($oriv)){$orv=" AND ";}$dataSearch.=$orv." a.id_city = :id_city ";$orv=" AND ";}           
+            if(isset($data["Company"]["id_country"])&&!empty($data["Company"]["id_country"])){if(!empty($ori)||!empty($orii)||!empty($oriii)||!empty($oriv)){$orv=" AND ";}$dataSearch.=$orv." b.id_country = :id_country ";$orv=" AND ";}           
+            if(isset($data["Company"]["id_city"])&&!empty($data["Company"]["id_city"])){if(!empty($ori)||!empty($orii)||!empty($oriii)||!empty($oriv)){$orvi=" AND ";}$dataSearch.=$orvi." b.id_city = :id_city ";$orvi=" AND ";}           
             if(isset($data["Company"]["company_type"])){
                 foreach($data["Company"]["company_type"] as $pk=>$cptype){
-                    if(!empty($ori)||!empty($orii)||!empty($oriii)||!empty($oriv)||!empty($orv)){
-                        $orvi=" AND ";
+                    if(!empty($ori)||!empty($orii)||!empty($oriii)||!empty($oriv)||!empty($orv)||!empty($orvi)){
+                        $orvii=" AND ";
                     }
                     $var=":id_typecompani".$pk;
-                    $dataSearch.=$orvi." g.id_typecompany=".$var;
-                    $orvi=" AND ";
+                    $dataSearch.=$orvii." g.id_typecompany=".$var;
+                    $orvii=" AND ";
                 }
             }
         }
         
         if(isset($data["chTl"])&&!empty($data["chTl"])){
-            $orvii="";
-            if(isset($data["Telephone"]["number"])&&!empty($data["Telephone"]["number"])){if(!empty($ori)||!empty($orii)||!empty($oriii)||!empty($oriv)||!empty($orv)||!empty($orvi)){$orvii=" AND ";}$dataSearch.=$orvii." c.telephone_number LIKE :telephone_number ";$orvii=" AND ";}           
+            $orviii="";
+            if(isset($data["Telephone"]["number"])&&!empty($data["Telephone"]["number"])){if(!empty($ori)||!empty($orii)||!empty($oriii)||!empty($oriv)||!empty($orv)||!empty($orvi)||!empty($orvii)){$orviii=" AND ";}$dataSearch.=$orviii." c.telephone_number LIKE :telephone_number ";$orviii=" AND ";}           
          }
          
          if(isset($data["chWeb"])&&!empty($data["chWeb"])){
-            $orviii="";
-            if(isset($data["Web"]["web"])&&!empty($data["Web"]["web"])){if(!empty($ori)||!empty($orii)||!empty($oriii)||!empty($oriv)||!empty($orv)||!empty($orvi)||!empty($orvii)){$orviii=" AND ";}$dataSearch.=$orviii." d.web LIKE :web ";$orviii=" AND ";}           
+            $orix="";
+            if(isset($data["Web"]["web"])&&!empty($data["Web"]["web"])){if(!empty($ori)||!empty($orii)||!empty($oriii)||!empty($oriv)||!empty($orv)||!empty($orvi)||!empty($orvii)||!empty($orviii)){$orix=" AND ";}$dataSearch.=$orix." d.web LIKE :web ";$orix=" AND ";}           
          }
          if(isset($data["chEm"])&&!empty($data["chEm"])){
-            $orix="";
-            if(isset($data["Email"]["email"])&&!empty($data["Email"]["email"])){if(!empty($ori)||!empty($orii)||!empty($oriii)||!empty($oriv)||!empty($orv)||!empty($orvi)||!empty($orvii)||!empty($orviii)){$orix=" AND ";}$dataSearch.=$orix." e.email LIKE :email ";$orix=" AND ";}           
+            $orx="";
+            if(isset($data["Email"]["email"])&&!empty($data["Email"]["email"])){if(!empty($ori)||!empty($orii)||!empty($oriii)||!empty($oriv)||!empty($orv)||!empty($orvi)||!empty($orvii)||!empty($orviii)|!empty($orix)){$orx=" AND ";}$dataSearch.=$orx." e.email LIKE :email ";$orx=" AND ";}           
          }
          if(isset($data["chSN"])&&!empty($data["chSN"])){
-            $orx="";
-            if(isset($data["Socialnetwork"]["snetwork"])&&!empty($data["Socialnetwork"]["snetwork"])){if(!empty($ori)||!empty($orii)||!empty($oriii)||!empty($oriv)||!empty($orv)||!empty($orvi)||!empty($orvii)||!empty($orviii)||!empty($orix)){$orx=" AND ";}$dataSearch.=$orx." f.snetwork LIKE :snetwork ";$orx=" AND ";}           
+            $orxi="";
+            if(isset($data["Socialnetwork"]["snetwork"])&&!empty($data["Socialnetwork"]["snetwork"])){if(!empty($ori)||!empty($orii)||!empty($oriii)||!empty($oriv)||!empty($orv)||!empty($orvi)||!empty($orvii)||!empty($orviii)||!empty($orix)||!empty($orx)){$orxi=" AND ";}$dataSearch.=$orxi." f.snetwork LIKE :snetwork ";$orxi=" AND ";}           
          }
          $orFin="";
-         if(!empty($ori)||!empty($orii)||!empty($oriii)||!empty($oriv)||!empty($orv)||!empty($orvi)||!empty($orvii)||!empty($orviii)||!empty($orix)||!empty($orx)){
+         if(!empty($ori)||!empty($orii)||!empty($oriii)||!empty($oriv)||!empty($orv)||!empty($orvi)||!empty($orvii)||!empty($orviii)||!empty($orix)||!empty($orx)||!empty($orxi)){
              $orFin=" AND ";
          }
         $sql.=$dataSearch.$orFin."  a.id_company IS NOT NULL GROUP BY a.id_company ";
@@ -653,6 +652,7 @@ class CompanyController extends Controller{
             if(isset($data["Company"]["company_number"])&&!empty($data["Company"]["company_number"])){$data["Company"]["company_number"]='%%'.$data["Company"]["company_number"].'%%';$query->bindParam(":company_number", $data["Company"]["company_number"]);}
             if(isset($data["Company"]["company_address"])&&!empty($data["Company"]["company_address"])){$data["Company"]["company_address"]='%%'.$data["Company"]["company_address"].'%%';$query->bindParam(":company_address", $data["Company"]["company_address"]);}
             if(isset($data["Company"]["company_fest_desc"])&&!empty($data["Company"]["company_fest_desc"])){$data["Company"]["company_fest_desc"]='%%'.$data["Company"]["company_fest_desc"].'%%';$query->bindParam(":company_fest_desc", $data["Company"]["company_fest_desc"]);}
+            if(isset($data["Company"]["id_country"])&&!empty($data["Company"]["id_country"])){$query->bindParam(":id_country", $data["Company"]["id_country"]);}
             if(isset($data["Company"]["id_city"])&&!empty($data["Company"]["id_city"])){$query->bindParam(":id_city", $data["Company"]["id_city"]);}
             if(isset($data["Company"]["company_type"])){
                 foreach($data["Company"]["company_type"] as $pk=>$cptype){
@@ -768,7 +768,7 @@ class CompanyController extends Controller{
         $sql="SELECT * FROM continent WHERE (continent_name LIKE :param1)
             or (continent_name LIKE :param2)
             or (continent_name LIKE :param3)
-            or (continent_name LIKE :param4) order by continent_name asc";
+            or (continent_name LIKE :param4) order by continent_name asc limit 10";
         $query=$conect->createCommand($sql);
         $param1='%%'.$searchItem.'%%';
         $param2='%%'.$searchItem;
@@ -791,11 +791,10 @@ class CompanyController extends Controller{
     */
     public function actionSearchCountry(){
         $stringCountry=Yii::app()->request->getPost("stringcountry");
-        $idContinent=Yii::app()->request->getPost("idcontinent");
         $json_arr=[];
         $display_json=[];
 //        $model= Beca::model();
-        $countries=$this->searchCountryScript($stringCountry,$idContinent);//->searchCountryScript($_POST["stringtitulo"]);
+        $countries=$this->searchCountryScript($stringCountry);//->searchCountryScript($_POST["stringtitulo"]);
         if(!empty($countries)){
             foreach($countries as $country){
                 $json_arr["id"] = $country["id_country"];
@@ -820,18 +819,17 @@ class CompanyController extends Controller{
     *
     * @return $result array de títulos de grado
     */
-    public function searchCountryScript($country,$idcontinent){
+    public function searchCountryScript($country){
         $conect= Yii::app()->db;
         $searchItem=  strtoupper($country);
-        $sql="SELECT * FROM country WHERE id_continent=:idcontinent and ((country_name LIKE :param1)
+        $sql="SELECT * FROM country WHERE ((country_name LIKE :param1)
             or (country_name LIKE :param2)
             or (country_name LIKE :param3)
-            or (country_name LIKE :param4)) order by country_name asc";
+            or (country_name LIKE :param4)) order by country_name asc limit 10";
         $query=$conect->createCommand($sql);
         $param1='%%'.$searchItem.'%%';
         $param2='%%'.$searchItem;
         $param3=$searchItem.'%%';
-        $query->bindParam(':idcontinent',$idcontinent,PDO::PARAM_STR);
         $query->bindParam(':param1',$param1,PDO::PARAM_STR);
         $query->bindParam(':param2',$param2,PDO::PARAM_STR);
         $query->bindParam(':param3',$param3,PDO::PARAM_STR);
@@ -851,11 +849,10 @@ class CompanyController extends Controller{
     */
     public function actionSearchState(){
         $stringState=Yii::app()->request->getPost("stringstate");
-        $idcountry=Yii::app()->request->getPost("idcountry");
         $json_arr=[];
         $display_json=[];
 //        $model= Beca::model();
-        $states=$this->searchStateScript($stringState,$idcountry);//->searchCountryScript($_POST["stringtitulo"]);
+        $states=$this->searchStateScript($stringState);//->searchCountryScript($_POST["stringtitulo"]);
         if(!empty($states)){
             foreach($states as $state){
                 $json_arr["id"] = $state["id_state"];
@@ -879,18 +876,17 @@ class CompanyController extends Controller{
     *
     * @return $result array de ciudades de grado
     */
-    public function searchStateScript($searchItem,$conditionItem){
+    public function searchStateScript($searchItem){
         $conect= Yii::app()->db;
         $item=  strtoupper($searchItem);
-        $sql="SELECT * FROM state WHERE id_country=:idcountry AND ((state_name LIKE :param1)
+        $sql="SELECT * FROM state WHERE ((state_name LIKE :param1)
             OR (state_name LIKE :param2)
             OR (state_name LIKE :param3)
-            OR (state_name LIKE :param4)) ORDER BY state_name asc";
+            OR (state_name LIKE :param4)) ORDER BY state_name asc limit 10";
         $query=$conect->createCommand($sql);
         $param1='%%'.$item.'%%';
         $param2='%%'.$item;
         $param3=$item.'%%';
-        $query->bindParam(':idcountry',$conditionItem,PDO::PARAM_INT);
         $query->bindParam(':param1',$param1,PDO::PARAM_STR);
         $query->bindParam(':param2',$param2,PDO::PARAM_STR);
         $query->bindParam(':param3',$param3,PDO::PARAM_STR);
@@ -909,11 +905,10 @@ class CompanyController extends Controller{
     */
     public function actionSearchCity(){
         $stringCity=Yii::app()->request->getPost("stringcity");
-        $idstate=Yii::app()->request->getPost("idstate");
         $json_arr=[];
         $display_json=[];
 //        $model= Beca::model();
-        $cities=$this->searchCityScript($stringCity,$idstate);//->searchCountryScript($_POST["stringtitulo"]);
+        $cities=$this->searchCityScript($stringCity);//->searchCountryScript($_POST["stringtitulo"]);
         if(!empty($cities)){
             foreach($cities as $city){
                 $json_arr["id"] = $city["id_city"];
@@ -937,18 +932,17 @@ class CompanyController extends Controller{
     *
     * @return $result array de ciudades de grado
     */
-    public function searchCityScript($searchItem,$conditionItem){
+    public function searchCityScript($searchItem){
         $conect= Yii::app()->db;
         $item=  strtoupper($searchItem);
-        $sql="SELECT * FROM city WHERE id_state=:idstate AND ((city_name LIKE :param1)
+        $sql="SELECT * FROM city WHERE ((city_name LIKE :param1)
             OR (city_name LIKE :param2)
             OR (city_name LIKE :param3)
-            OR (city_name LIKE :param4)) ORDER BY city_name asc";
+            OR (city_name LIKE :param4)) ORDER BY city_name asc limit 10";
         $query=$conect->createCommand($sql);
         $param1='%%'.$item.'%%';
         $param2='%%'.$item;
         $param3=$item.'%%';
-        $query->bindParam(':idstate',$conditionItem,PDO::PARAM_INT);
         $query->bindParam(':param1',$param1,PDO::PARAM_STR);
         $query->bindParam(':param2',$param2,PDO::PARAM_STR);
         $query->bindParam(':param3',$param3,PDO::PARAM_STR);

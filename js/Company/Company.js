@@ -62,7 +62,7 @@ var Company = function(){
                 $("#email-form").append('<div><input type="text" name="email[]"  readonly value="'+$('#entityedit-form #input_email').val()+'"/><a href="#" class="remove_field">Remove</a></div>');
             }
             else{
-                msg="Debe digitar un e-mail válido ";
+                msg="You have to type a valid email   ";
                 typeMsg="warn";
             $.notify(msg, typeMsg);
             }
@@ -77,7 +77,7 @@ var Company = function(){
                 $("#snetw-form").append('<div><input type="text" name="snetw[]"  readonly value="'+$('#entityedit-form #input_snet').val()+'"/><input size="10" type="text" readonly value="'+$("label[for='"+idVal+"']").text()+'"><input type="hidden" name="typesnet[]"  readonly value="'+$('input[name='+name+']:checked').val()+'"/><a href="#" class="remove_field_snet">Remove</a></div>');
             }
             else{
-                msg="Debe digitar una red social y seleccionar tipo de red social ";
+                msg="You have to type a social network and select a social network type ";
                 typeMsg="warn";
             $.notify(msg, typeMsg);
             }
@@ -89,9 +89,18 @@ var Company = function(){
                 $("#email-form").append('<div><input type="text" name="email[]"  readonly value="'+self.div.find('#input_email').val()+'"/><a href="#" class="remove_field">Remove</a></div>');
             }
             else{
-                msg="Debe digitar un e-mail válido ";
+                msg="You have to type a valid email  ";
                 typeMsg="warn";
             $.notify(msg, typeMsg);
+            }
+        });
+        self.div.find("#Web_web").on('blur',function(){
+            if(self.div.find("#Web_web").val()!=""){
+                if(!Mbp.validateUrl(self.div.find("#Web_web").val())){
+                    msg="You have to type a valid web ";
+                    typeMsg="warn";
+                    $.notify(msg, typeMsg);
+                }
             }
         });
         self.div.find("#btnAgregaRsocial").click(function(){
@@ -104,7 +113,7 @@ var Company = function(){
                 $("#snetw-form").append('<div><input type="text" name="snetw[]"  readonly value="'+self.div.find('#input_snet').val()+'"/><input size="10" type="text" readonly value="'+$("label[for='"+idVal+"']").text()+'"><input type="hidden" name="typesnet[]"  readonly value="'+$('input[name='+name+']:checked').val()+'"/><a href="#" class="remove_field_snet">Remove</a></div>');
             }
             else{
-                msg="Debe digitar una red social y seleccionar tipo de red social ";
+                msg="You have to type a social network and select a social network type  ";
                 typeMsg="warn";
             $.notify(msg, typeMsg);
             }
@@ -115,97 +124,89 @@ var Company = function(){
         $("#snetw-form").on("click",".remove_field_snet", function(e){ //user click on remove text
             e.preventDefault(); $(this).parent('div').remove();
         });
-        self.div.find("#entitysearch-form #Company_city").on("blur",function(){
-            
-            if(self.div.find("#entitysearch-form #Company_city").val()==""){
+        
+        self.div.find("#entitysearch-form #Company_city").on("keydown",function(){
+            if(e.which==8){
                 self.div.find("#entitysearch-form #Company_id_city").val("");
-            }
+             }
+        });
+        self.div.find("#entitysearch-form #Company_country").on("keydown",function(){
+            if(e.which==8){
+                self.div.find("#entitysearch-form #Company_id_country").val("");
+             }
         });
         /* <manage places content*/
-        $("#entityedit-form #Continent_continent_name").on("blur",function(){
-             if($("#entityedit-form #Continent_continent_name").val()==""){
-                $("#entityedit-form #Continent_id_continent").val("")
-                $("#entityedit-form #Country_id_country").val("");
-                $("#entityedit-form #Country_country_name").val("");
-                $("#entityedit-form #State_state_name").val("");
-                $("#entityedit-form #State_id_state").val("");
-                $("#entityedit-form #City_city_name").val("");
-                $("#entityedit-form #City_id_city").val("");
+        self.div.find("#entityedit-form #Continent_continent_name").on("keydown",function(e){
+             if(e.which==8){
+                $("#entityedit-form #Continent_id_continent").val("");
                 localStorage.setItem("saveContinent", 0);
-                localStorage.setItem("saveCountry", 0);
-                localStorage.setItem("saveState", 0);
-                localStorage.setItem("saveCity", 0);
              }
         });
-        $("#entityedit-form #Country_country_name").on("blur",function(){
-             if($("#entityedit-form #Country_country_name").val()==""){
+        self.div.find("#entityedit-form #Country_country_name").on("keydown",function(e){
+             if(e.which==8){
+                 console.log("borra");
                 $("#entityedit-form #Country_id_country").val("");
-                $("#entityedit-form #State_state_name").val("");
-                $("#entityedit-form #State_id_state").val("");
-                $("#entityedit-form #City_city_name").val("");
-                $("#entityedit-form #City_id_city").val("");
                 localStorage.setItem("saveCountry", 0);
-                localStorage.setItem("saveState", 0);
-                localStorage.setItem("saveCity", 0);
              }
         });
-        $("#entityedit-form #State_state_name").on("blur",function(){
-             if($("#entityedit-form #State_state_name").val()==""){
+        self.div.find("#entityedit-form #State_state_name").on("keydown",function(e){
+             if(e.which==8){
                 $("#entityedit-form #State_id_state").val("");
-                $("#entityedit-form #City_city_name").val("");
-                $("#entityedit-form #City_id_city").val("");
                 localStorage.setItem("saveState", 0);
-                localStorage.setItem("saveCity", 0);
              }
         });
-        $("#entityedit-form #City_city_name").on("blur",function(){
-             if($("#entityedit-form #City_city_name").val()==""){
+        self.div.find("#entityedit-form #City_city_name").on("keydown",function(e){
+             if(e.which==8){
                 $("#entityedit-form #City_id_city").val("");
                 localStorage.setItem("saveCity", 0);
              }
         });
         /* manage places content >*/
         
-        self.div.find("#entityreg-form #Continent_continent_name").on("blur",function(){
-             if(self.div.find("#entityreg-form #Continent_continent_name").val()==""){
-                self.div.find("#entityreg-form #Continent_id_continent").val("")
-                self.div.find("#entityreg-form #Country_id_country").val("");
-                self.div.find("#entityreg-form #Country_country_name").val("");
-                self.div.find("#entityreg-form #State_state_name").val("");
-                self.div.find("#entityreg-form #State_id_state").val("");
-                self.div.find("#entityreg-form #City_city_name").val("");
-                self.div.find("#entityreg-form #City_id_city").val("");
+        self.div.find("#entityreg-form #Continent_continent_name").on("keydown",function(e){
+             if(e.which==8){
+                self.div.find("#entityreg-form #Continent_id_continent").val("");
                 localStorage.setItem("saveContinent", 0);
-                localStorage.setItem("saveCountry", 0);
-                localStorage.setItem("saveState", 0);
-                localStorage.setItem("saveCity", 0);
              }
         });
-        self.div.find("#entityreg-form #Country_country_name").on("blur",function(){
-             if(self.div.find("#entityreg-form #Country_country_name").val()==""){
+        self.div.find("#entityreg-form #Continent_continent_name").on("blur",function(e){
+             if(self.div.find("#entityreg-form #Continent_id_continent").val()==""&&localStorage.getItem("saveContinent")==0){
+                self.div.find("#entityreg-form #Continent_continent_name").val("");
+             }
+        });
+        self.div.find("#entityreg-form #Country_country_name").on("keydown",function(e){
+             if(e.which==8){
                 self.div.find("#entityreg-form #Country_id_country").val("");
-                self.div.find("#entityreg-form #State_state_name").val("");
-                self.div.find("#entityreg-form #State_id_state").val("");
-                self.div.find("#entityreg-form #City_city_name").val("");
-                self.div.find("#entityreg-form #City_id_city").val("");
                 localStorage.setItem("saveCountry", 0);
-                localStorage.setItem("saveState", 0);
-                localStorage.setItem("saveCity", 0);
              }
         });
-        self.div.find("#entityreg-form #State_state_name").on("blur",function(){
-             if(self.div.find("#entityreg-form #State_state_name").val()==""){
+        self.div.find("#entityreg-form #Country_country_name").on("blur",function(e){
+             if(self.div.find("#entityreg-form #Country_id_country").val()==""&&localStorage.getItem("saveCountry")==0){
+                self.div.find("#entityreg-form #Country_country_name").val("");
+             }
+        });
+        
+        self.div.find("#entityreg-form #State_state_name").on("keydown",function(e){
+             if(e.which==8){
                 self.div.find("#entityreg-form #State_id_state").val("");
-                self.div.find("#entityreg-form #City_city_name").val("");
-                self.div.find("#entityreg-form #City_id_city").val("");
                 localStorage.setItem("saveState", 0);
+             }
+        });
+        self.div.find("#entityreg-form #State_state_name").on("blur",function(e){
+             if(self.div.find("#entityreg-form #State_id_state").val()==""&&localStorage.getItem("saveState")==0){
+                self.div.find("#entityreg-form #State_state_name").val("");
+             }
+        });
+        self.div.find("#entityreg-form #City_city_name").on("keydown",function(e){
+             if(e.which==8){
+                self.div.find("#entityreg-form #City_id_city").val("");
                 localStorage.setItem("saveCity", 0);
              }
         });
-        self.div.find("#entityreg-form #City_city_name").on("blur",function(){
-             if(self.div.find("#entityreg-form #City_city_name").val()==""){
-                self.div.find("#entityreg-form #City_id_city").val("");
-                localStorage.setItem("saveCity", 0);
+        self.div.find("#entityreg-form #City_city_name").on("blur",function(e){
+             if(self.div.find("#entityreg-form #City_id_city").val()==""&&localStorage.getItem("saveCity")==0){
+                self.div.find("#entityreg-form #City_city_name").val("");
+                self.div.find('.ui-helper-hidden-accessible').hide();
              }
         });
         self.div.find("#entityreg-form").change(function (){
@@ -359,8 +360,8 @@ var Company = function(){
             self.saveDataCompany(tableName,columnName,valueContent,localStorage.getItem("idcompany"));
         });
         $('#entityedit-form #btnEditCmpCity').on('click',function(){
-            var tableName="social_network";
-            var columnName="snetwork";
+            var tableName="city";
+            var columnName="city_name";
             var valueContent=$("#entityedit-form #groupUbication :input").serialize();
             var saveContinent=localStorage.getItem("saveContinent");
             var saveCountry=localStorage.getItem("saveCountry");
@@ -423,6 +424,16 @@ var Company = function(){
      * Consume servicio para registrar la compañía o empresa
      */
     self.registerCompany=function(data){
+        if(self.div.find("#Web_web").val()!=""){
+            if(!Mbp.validateUrl(self.div.find("#Web_web").val())){
+                msg="You have to type a valid web ";
+                typeMsg="warn";
+                $.notify(msg, typeMsg);
+                self.div.find("#btnRegCmp").show();
+                event.preventDefault();
+                event.stopPropagation();
+            }
+        }
         $.ajax({
             type: "POST",
             dataType:'json',
@@ -673,8 +684,6 @@ var Company = function(){
             }
             
         });
-        
-//        
         $("#editDataCmp").dialog("open");
     };
     /**
@@ -789,15 +798,9 @@ var Company = function(){
                 $.ajax({
                     type: "POST",
                     url:"searchCountry",
-                    data: {stringcountry:self.div.find("#entityreg-form #Country_country_name").val(),idcontinent:self.div.find("#entityreg-form #Continent_id_continent").val()},
+                    data: {stringcountry:self.div.find("#entityreg-form #Country_country_name").val()},
                     beforeSend:function (){
                         self.div.find("#entityreg-form #Country_id_country").val("");
-                        if(self.div.find("#entityreg-form #Continent_id_continent").val()==""&&self.div.find("#entityreg-form #Continent_continent_name").val()==""){
-                            var msg="Debe seleccionar un Continente";
-                            var typeMsg="warn";
-                            $.notify(msg, typeMsg);
-                            return false;
-                        }
                     },
                     success: response,
                     dataType: 'json',
@@ -837,16 +840,9 @@ var Company = function(){
                     $.ajax({
                         type: "POST",
                         url:"searchState",
-                        data: {stringstate:self.div.find("#entityreg-form #State_state_name").val(),idcountry:self.div.find("#entityreg-form #Country_id_country").val()},
+                        data: {stringstate:self.div.find("#entityreg-form #State_state_name").val()},
                         beforeSend:function (){
                             self.div.find("#entityreg-form #State_id_state").val("");
-                            if(self.div.find("#entityreg-form #Country_id_country").val()==""&&self.div.find("#entityreg-form #Country_country_name").val()==""){
-                                var msg="Debe seleccionar un País";
-                                var typeMsg="warn";
-                                $.notify(msg, typeMsg);
-                                return false;
-                            }
-//                            return false;
                         },
                         success: response,
                         dataType: 'json',
@@ -886,15 +882,9 @@ var Company = function(){
                     $.ajax({
                         type: "POST",
                         url:"searchCity",
-                        data: {stringcity:self.div.find("#entityreg-form #City_city_name").val(),idstate:self.div.find("#entityreg-form #State_id_state").val()},
+                        data: {stringcity:self.div.find("#entityreg-form #City_city_name").val()},
                         beforeSend:function (){
                             self.div.find("#entityreg-form #City_id_city").val("");
-                            if(self.div.find("#entityreg-form #State_id_state").val()==""&&self.div.find("#entityreg-form #State_state_name").val()==""){
-                                var msg="You have to select a state";
-                                var typeMsg="warn";
-                                $.notify(msg, typeMsg);
-                                return false;
-                            }
                         },
                         success: response,
                         dataType: 'json',
@@ -974,15 +964,9 @@ var Company = function(){
                 $.ajax({
                     type: "POST",
                     url:"searchCountry",
-                    data: {stringcountry:$("#entityedit-form #Country_country_name").val(),idcontinent:$("#entityedit-form #Continent_id_continent").val()},
+                    data: {stringcountry:$("#entityedit-form #Country_country_name").val()},
                     beforeSend:function (){
                         $("#entityedit-form #Country_id_country").val("");
-                        if($("#entityedit-form #Continent_id_continent").val()==""&&$("#entityedit-form #Continent_continent_name").val()==""){
-                            var msg="Debe seleccionar un Continente";
-                            var typeMsg="warn";
-                            $.notify(msg, typeMsg);
-                            return false;
-                        }
                     },
                     success: response,
                     dataType: 'json',
@@ -1022,16 +1006,9 @@ var Company = function(){
                     $.ajax({
                         type: "POST",
                         url:"searchState",
-                        data: {stringstate:$("#entityedit-form #State_state_name").val(),idcountry:$("#entityedit-form #Country_id_country").val()},
+                        data: {stringstate:$("#entityedit-form #State_state_name").val()},
                         beforeSend:function (){
                             $("#entityedit-form #State_id_state").val("");
-                            if($("#entityedit-form #Country_id_country").val()==""&&$("#entityedit-form #Country_country_name").val()==""){
-                                var msg="Debe seleccionar un País";
-                                var typeMsg="warn";
-                                $.notify(msg, typeMsg);
-                                return false;
-                            }
-//                            return false;
                         },
                         success: response,
                         dataType: 'json',
@@ -1069,15 +1046,9 @@ var Company = function(){
                 $.ajax({
                     type: "POST",
                     url:"searchCity",
-                    data: {stringcity:$("#entityedit-form #City_city_name").val(),idstate:$("#entityedit-form #State_id_state").val()},
+                    data: {stringcity:$("#entityedit-form #City_city_name").val()},
                     beforeSend:function (){
                         $("#entityedit-form #City_id_city").val("");
-                        if($("#entityedit-form #State_id_state").val()==""&&$("#entityedit-form #State_state_name").val()==""){
-                            var msg="You have to select a state";
-                            var typeMsg="warn";
-                            $.notify(msg, typeMsg);
-                            return false;
-                        }
                     },
                     success: response,
                     dataType: 'json',
@@ -1119,7 +1090,6 @@ var Company = function(){
                         data: {stringcity:self.div.find("#entitysearch-form #Company_city").val()},
                         beforeSend:function (){
                             self.div.find("#entitysearch-form #Company_id_city").val("");
-                            
                         },
                         success: response,
                         dataType: 'json',
@@ -1134,6 +1104,45 @@ var Company = function(){
                     }
                     else{
                         self.div.find("#entitysearch-form #Company_id_city").val(ui.item.id);
+                    }
+                    $(".ui-helper-hidden-accessible").hide();
+                },
+                html: true,
+                open: function(event, ui) {
+                    $(".ui-autocomplete").css("z-index", 1000);
+                }
+            });
+    };
+    /*
+     * Filtra por ciudades disponibles para realizar un autocomplet
+     * @param {type} param
+     */
+    
+    self.filterCountryToSearch=function(){
+//        console.log("pasa");
+        
+            self.div.find("#entitysearch-form #Company_country").autocomplete({
+                source: function(request, response){
+                    $.ajax({
+                        type: "POST",
+                        url:"searchCountry",
+                        data: {stringcity:self.div.find("#entitysearch-form #Company_country").val()},
+                        beforeSend:function (){
+                            self.div.find("#entitysearch-form #Company_id_country").val("");
+                        },
+                        success: response,
+                        dataType: 'json',
+                        minLength: 1,
+                        delay: 100
+                    });
+                },
+                minLength: 1,
+                select: function(event, ui) {
+                    if(ui.item.id=="#"){
+                        self.div.find("#entitysearch-form #Company_id_country").val("");
+                    }
+                    else{
+                        self.div.find("#entitysearch-form #Company_id_country").val(ui.item.id);
                     }
                     $(".ui-helper-hidden-accessible").hide();
                 },
@@ -1163,4 +1172,5 @@ $(document).ready(function() {
     Company.filterStateEdit();
     Company.filterCityEdit();
     Company.filterContinentEdit();
+    Company.filterCountryToSearch();
 });

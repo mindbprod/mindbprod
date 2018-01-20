@@ -58,7 +58,7 @@ class Email extends CActiveRecord
 		return array(
 			'id_email' => 'Id Email',
 			'id_company' => 'Id Company',
-			'email' => 'Email',
+			'email' => 'Email e.g.: aaa@bbb.com',
 		);
 	}
 

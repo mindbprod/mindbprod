@@ -3,31 +3,18 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/var/www/html/mbp/protected/views/user/registerUser.php</file>
-            <file>file:/var/www/html/mbp/protected/config/main.php</file>
-            <file>file:/var/www/html/mbp/protected/views/importfile/importfile.php</file>
-            <file>file:/var/www/html/mbp/protected/models/Company.php</file>
-            <file>file:/var/www/html/mbp/protected/views/user/view.php</file>
-            <file>file:/var/www/html/mbp/protected/views/company/registercompany.php</file>
-            <file>file:/var/www/html/mbp/protected/models/Person.php</file>
-            <file>file:/var/www/html/mbp/protected/views/user/index.php</file>
-            <file>file:/var/www/html/mbp/protected/config/test.php</file>
-            <file>file:/var/www/html/mbp/protected/views/company/showeditcompany.php</file>
-            <file>file:/var/www/html/mbp/protected/controllers/SiteController.php</file>
-            <file>file:/var/www/html/mbp/protected/controllers/ImportfileController.php</file>
             <file>file:/var/www/html/mbp/protected/controllers/UserController.php</file>
+            <file>file:/var/www/html/mbp/protected/models/Continent.php</file>
+            <file>file:/var/www/html/mbp/protected/models/Web.php</file>
             <file>file:/var/www/html/mbp/js/Company/Company.js</file>
-            <file>file:/var/www/html/mbp/js/User/User.js</file>
-            <file>file:/var/www/html/mbp/protected/views/layouts/main.php</file>
-            <file>file:/var/www/html/mbp/protected/components/UserIdentity.php</file>
-            <file>file:/var/www/html/mbp/protected/extensions/phpexcelreader/excel_reader2.php</file>
-            <file>file:/var/www/html/mbp/js/User/UserChPss.js</file>
-            <file>file:/var/www/html/mbp/protected/views/user/_view.php</file>
-            <file>file:/var/www/html/mbp/protected/views/user/changepassword.php</file>
-            <file>file:/var/www/html/mbp/protected/models/ImportFile.php</file>
+            <file>file:/var/www/html/mbp/protected/messages/en/app.php</file>
+            <file>file:/var/www/html/mbp/protected/config/main.php</file>
+            <file>file:/var/www/html/mbp/protected/models/Company.php</file>
+            <file>file:/var/www/html/mbp/protected/views/company/registercompany.php</file>
+            <file>file:/var/www/html/mbp/protected/models/Email.php</file>
             <file>file:/var/www/html/mbp/protected/models/Country.php</file>
-            <file>file:/var/www/html/mbp/protected/views/site/login.php</file>
-            <file>file:/var/www/html/mbp/protected/views/site/index.php</file>
+            <file>file:/var/www/html/mbp/protected/views/company/showeditcompany.php</file>
+            <file>file:/var/www/html/mbp/protected/models/State.php</file>
             <file>file:/var/www/html/mbp/protected/models/City.php</file>
             <file>file:/var/www/html/mbp/protected/controllers/CompanyController.php</file>
         </group>

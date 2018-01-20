@@ -53,6 +53,11 @@ var Mbp = function(){
 
         return $.trim(email).match(pattern) ? true : false;
     };
+    
+    self.validateUrl=function(web){
+        var pattern=/^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/;
+        return $.trim(web).match(pattern) ? true : false;
+    }
     /**************************************************************************/
     /******************************* SYNC METHODS *****************************/
     /**************************************************************************/ 

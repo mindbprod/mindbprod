@@ -19,14 +19,14 @@ $this->breadcrumbs=array(
             <?php $form=$this->beginWidget('CActiveForm', array(
                 'id'=>'entitysearch-form',
                 'enableClientValidation'=>true,
-                'enableAjaxValidation'=>true,
+                'enableAjaxValidation'=>false,
                 'clientOptions'=>array(
                     'validateOnSubmit'=>true,
                 )
             )); ?>
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    Search criterials <input type="checkbox" id="aSearchCriteria"  checked="">show/hide
+                    <?php echo Yii::t('app','criterio_busqueda')?> <input type="checkbox" id="aSearchCriteria"  checked=""><?php echo Yii::t('app','mostrar_ocultar')?>
                 </div>
                 <div class="panel-body" id="divSearchCrit">
                     <div class="row">
@@ -47,7 +47,11 @@ $this->breadcrumbs=array(
                                 
                                     <label for="Company_description" class="required">Company Festival description</label>
                                     <?php echo CHtml::textField('Company[company_fest_desc]', "",array('id'=>'company_fest_desc','class'=>"form-control",'placeholder'=>'Type keyword')); ?>
-
+                                    
+                                    <label for="Company_country" class="required">Company Country</label>
+                                    <?php echo CHtml::textField('Company[country]', "",array('id'=>'Company_country','class'=>"form-control",'placeholder'=>'Type company country')); ?>
+                                    <input name="Company[id_country]" id="Company_id_country" type="hidden">
+                                    
                                     <label for="Company_city" class="required">Company City</label>
                                     <?php echo CHtml::textField('Company[city]', "",array('id'=>'Company_city','class'=>"form-control",'placeholder'=>'Type company city')); ?>
                                     <input name="Company[id_city]" id="Company_id_city" type="hidden">
@@ -173,7 +177,7 @@ $this->breadcrumbs=array(
     <?php $form=$this->beginWidget('CActiveForm', array(
         'id'=>'entityedit-form',
         'enableClientValidation'=>true,
-        'enableAjaxValidation'=>true,
+        'enableAjaxValidation'=>false,
         'clientOptions'=>array(
             'validateOnSubmit'=>true,
         )
@@ -248,7 +252,7 @@ $this->breadcrumbs=array(
                                 <?php echo $form->labelEx($modelCity,'city_name'); ?>
                                 <?php echo $form->textField($modelCity,'city_name', array ('class' => 'form-control','placeholder'=>'Digite Ciudad')); ?>
                                 <?php echo $form->error($modelCity,'city_name'); ?>
-                                <?php echo CHtml::button('Edit', array ('class' => 'btn btn-warning','id'=>'btnEditCmpCity')); ?>
+                                <?php echo CHtml::button('Edit ubication', array ('class' => 'btn btn-warning','id'=>'btnEditCmpCity')); ?>
                                 <input name="City[id_city]" id="City_id_city" type="hidden">
                             </div>
                         </div>

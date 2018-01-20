@@ -1,21 +1,25 @@
 <?php
 
 /**
- * This is the model class for table "state".
+ * This is the model class for table "ubication".
  *
- * The followings are the available columns in table 'state':
+ * The followings are the available columns in table 'ubication':
+ * @property integer $id_ubication
+ * @property integer $id_company
  * @property integer $id_state
- * @property string $state_code
- * @property string $state_name
+ * @property integer $id_city
+ * @property integer $id_continent
+ * @property integer $id_country
+ * @property string $latlong
  */
-class State extends CActiveRecord
+class Ubication extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'state';
+		return 'ubication';
 	}
 
 	/**
@@ -26,12 +30,12 @@ class State extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('state_code, state_name', 'required'),
-			array('state_code, state_name', 'length', 'max'=>100),
+			array('id_company', 'required'),
+			array('id_company, id_state, id_city, id_continent, id_country', 'numerical', 'integerOnly'=>true),
+			array('latlong', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-                        array('id_state', 'safe'),
-			array('state_code, state_name', 'safe', 'on'=>'search'),
+			array('id_ubication, id_company, id_state, id_city, id_continent, id_country, latlong', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -52,9 +56,13 @@ class State extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
+			'id_ubication' => 'Id Ubication',
+			'id_company' => 'Id Company',
 			'id_state' => 'Id State',
-			'state_code' => 'State Code',
-			'state_name' => 'State Name',
+			'id_city' => 'Id City',
+			'id_continent' => 'Id Continent',
+			'id_country' => 'Id Country',
+			'latlong' => 'Latlong',
 		);
 	}
 
@@ -76,9 +84,13 @@ class State extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
+		$criteria->compare('id_ubication',$this->id_ubication);
+		$criteria->compare('id_company',$this->id_company);
 		$criteria->compare('id_state',$this->id_state);
-		$criteria->compare('state_code',$this->state_code,true);
-		$criteria->compare('state_name',$this->state_name,true);
+		$criteria->compare('id_city',$this->id_city);
+		$criteria->compare('id_continent',$this->id_continent);
+		$criteria->compare('id_country',$this->id_country);
+		$criteria->compare('latlong',$this->latlong,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -89,7 +101,7 @@ class State extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return State the static model class
+	 * @return Ubication the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
