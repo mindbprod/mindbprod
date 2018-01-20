@@ -73,33 +73,33 @@ var Mbp = function(){
          */
         self.getDatatableLang=function(){
             return {
-                "sProcessing":     "Procesando...",
-                "sLengthMenu":     "Mostrar _MENU_ registros",
-                "sZeroRecords":    "No se encontraron resultados",
-                "sEmptyTable":     "Ningún dato disponible en esta tabla",
-                "sInfo":           "_START_ al _END_ de _TOTAL_ registros",
-                "sInfoEmpty":      "0 registros",
-                "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+                "sProcessing":     "Processing...",
+                "sLengthMenu":     "Show _MENU_ records",
+                "sZeroRecords":    "No results found",
+                "sEmptyTable":     "No data available in this table",
+                "sInfo":           "_START_ to _END_ of _TOTAL_ records",
+                "sInfoEmpty":      "0 records",
+                "sInfoFiltered":   "(filtering a total of _MAX_ records)",
                 "sInfoPostFix":    "",
-                "sSearch":         "Buscar",
+                "sSearch":         "Search",
                 "sUrl":            "",
                 "sInfoThousands":  ",",
-                "sLoadingRecords": "Cargando...",
+                "sLoadingRecords": "Load...",
                 "oPaginate": {
-                    "sFirst":    "Primero",
-                    "sLast":     "Último",
-                    "sNext":     "Siguiente",
-                    "sPrevious": "Anterior"
+                    "sFirst":    "First",
+                    "sLast":     "Last",
+                    "sNext":     "Next",
+                    "sPrevious": "Previous"
                 },
                 "oAria": {
-                    "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    "sSortAscending":  ": Activate to order the column ascending",
+                    "sSortDescending": ": Activate to order the column descending"
                 },
                 buttons: {
-                    colvis: 'Columnas visibles',
-                    copy: 'Copiar al portapapeles',
+                    colvis: 'Visible columns',
+                    copy: 'Copy to clipboard',
                     excel: 'Excel',
-                    selectAll: 'Seleccionar todo'
+                    selectAll: 'Select all'
                 },
                 select: {
                     rows: {

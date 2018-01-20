@@ -47,11 +47,21 @@ var Company = function(){
 //       
         dataTableAct=self.div.find("#dataTableCompany").DataTable({
             oLanguage: Mbp.getDatatableLang(),
-            scrollX: true
+            scrollX: true,
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
         });
         dataTableShowDataCmp=self.div.find("#dataTableShowDataCmp").DataTable({
             oLanguage: Mbp.getDatatableLang(),
-            scrollX: true
+            scrollX: true,
+            responsive: true,
+            dom: 'lBfrtip',
+            buttons: [
+                'csv', 'excel', 'print'
+            ],
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
         });
         self.dataToEdit=[];
         self.div.find("#btnEditaCmp").hide();
