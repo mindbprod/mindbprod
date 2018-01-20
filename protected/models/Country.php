@@ -5,13 +5,9 @@
  *
  * The followings are the available columns in table 'country':
  * @property integer $id_country
- * @property integer $id_continent
  * @property string $country_code
  * @property string $country_name
  *
- * The followings are the available model relations:
- * @property Continent $idContinent
- * @property State[] $states
  */
 class Country extends CActiveRecord
 {
@@ -31,14 +27,12 @@ class Country extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('country_code, country_name,id_continent', 'required'),
-			array('id_continent', 'numerical', 'integerOnly'=>true),
+			array('country_code, country_name', 'required'),
 			array('country_code, country_name', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-//                        array('id_country', 'safe'),
                         array('id_country', 'safe'),
-			array('id_continent, country_code, country_name', 'safe', 'on'=>'search'),
+			array('country_code, country_name', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -49,10 +43,7 @@ class Country extends CActiveRecord
 	{
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
-		return array(
-			'idContinent' => array(self::BELONGS_TO, 'Continent', 'id_continent'),
-			'states' => array(self::HAS_MANY, 'State', 'id_country'),
-		);
+		return array();
 	}
 
 	/**
@@ -62,7 +53,6 @@ class Country extends CActiveRecord
 	{
 		return array(
 			'id_country' => 'Id Country',
-			'id_continent' => 'Id Continent',
 			'country_code' => 'Country Code',
 			'country_name' => 'Country Name',
 		);
@@ -87,7 +77,6 @@ class Country extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id_country',$this->id_country);
-		$criteria->compare('id_continent',$this->id_continent);
 		$criteria->compare('country_code',$this->country_code,true);
 		$criteria->compare('country_name',$this->country_name,true);
 

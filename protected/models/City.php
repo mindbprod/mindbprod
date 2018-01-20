@@ -5,13 +5,8 @@
  *
  * The followings are the available columns in table 'city':
  * @property integer $id_city
- * @property integer $id_state
  * @property string $city_code
  * @property string $city_name
- *
- * The followings are the available model relations:
- * @property State $idState
- * @property Company[] $companies
  */
 class City extends CActiveRecord
 {
@@ -31,14 +26,12 @@ class City extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('city_code, city_name,id_state', 'required'),
-			array('id_state', 'numerical', 'integerOnly'=>true),
+			array('city_code, city_name', 'required'),
 			array('city_code, city_name', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-//                        array('id_city', 'safe'),
                         array('id_city', 'safe'),
-			array('id_state, city_code, city_name', 'safe', 'on'=>'search'),
+			array('city_code, city_name', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -50,8 +43,6 @@ class City extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'idState' => array(self::BELONGS_TO, 'State', 'id_state'),
-			'companies' => array(self::HAS_MANY, 'Company', 'id_city'),
 		);
 	}
 
@@ -62,7 +53,6 @@ class City extends CActiveRecord
 	{
 		return array(
 			'id_city' => 'Id City',
-			'id_state' => 'Id State',
 			'city_code' => 'City Code',
 			'city_name' => 'City Name',
 		);
@@ -87,7 +77,6 @@ class City extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id_city',$this->id_city);
-		$criteria->compare('id_state',$this->id_state);
 		$criteria->compare('city_code',$this->city_code,true);
 		$criteria->compare('city_name',$this->city_name,true);
 
