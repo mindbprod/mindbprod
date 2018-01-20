@@ -3,6 +3,13 @@
     Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl."/plugins/datatables/jquery.dataTables.min.js",CClientScript::POS_END);
     Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl."/plugins/datatables/dataTables.bootstrap.min.js",CClientScript::POS_END);
     Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl."/js/Company/Company.js",CClientScript::POS_END);
+    Yii::app()->clientScript->registerScriptFile("https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js",CClientScript::POS_END);
+    Yii::app()->clientScript->registerScriptFile("https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js",CClientScript::POS_END);
+    Yii::app()->clientScript->registerScriptFile("https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js",CClientScript::POS_END);
+    Yii::app()->clientScript->registerScriptFile("https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js",CClientScript::POS_END);
+    Yii::app()->clientScript->registerScriptFile("https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js",CClientScript::POS_END);
+    Yii::app()->clientScript->registerScriptFile("https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js",CClientScript::POS_END);
+    Yii::app()->clientScript->registerScriptFile("https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js",CClientScript::POS_END);
     
     
 ?>
