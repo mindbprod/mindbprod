@@ -27,7 +27,6 @@ $this->breadcrumbs=array(
 		'person_lastname',
                 'person_email',
 		'username',
-		'active_user',
-		'user_id',
+		'active_user'
 	),
 )); ?>

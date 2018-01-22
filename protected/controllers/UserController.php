@@ -32,8 +32,8 @@ class UserController extends Controller
 	{
 		return array(
                     'enforcelogin',
-                    'accessControl', // perform access control for CRUD operations
-                    'postOnly + delete', // we only allow deletion via POST request
+//                    'accessControl', // perform access control for CRUD operations
+//                    'postOnly + delete', // we only allow deletion via POST request
                         
 		);
 	}
@@ -43,26 +43,26 @@ class UserController extends Controller
 	 * This method is used by the 'accessControl' filter.
 	 * @return array access control rules
 	 */
-	public function accessRules()
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','registerUser', 'changeState', 'listUsers', 'changePassword'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
-	}
+//	public function accessRules()
+//	{
+//		return array(
+//			array('allow',  // allow all users to perform 'index' and 'view' actions
+//				'actions'=>array('index','view','registerUser', 'changeState', 'listUsers', 'changePassword'),
+//				'users'=>array('*'),
+//			),
+//			array('allow', // allow authenticated user to perform 'create' and 'update' actions
+//				'actions'=>array('create','update'),
+//				'users'=>array('@'),
+//			),
+//			array('allow', // allow admin user to perform 'admin' and 'delete' actions
+//				'actions'=>array('admin','delete'),
+//				'users'=>array('admin'),
+//			),
+//			array('deny',  // deny all users
+//				'users'=>array('*'),
+//			),
+//		);
+//	}
 
         
         
@@ -72,18 +72,24 @@ class UserController extends Controller
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
 	 */
-	public function actionView($id){
+	public function actionView(){
+            $get=Yii::app()->request->getQuery("iduser");
             $conn=Yii::app()->db;
-            $sql="SELECT p.*,u.username,u.active_user,u.id_user FROM user AS u LEFT JOIN person AS p ON u.id_sperson=p.id_sperson WHERE u.id_user=:iduser";
+            $sql="SELECT p.*,u.username,u.active_user,u.id_user FROM user AS u LEFT JOIN person AS p ON u.id_sperson=p.id_sperson WHERE u.username=:iduser";
             $query=$conn->createCommand($sql);
-            $query->bindParam(":iduser",$id);
+            $query->bindParam(":iduser",$get);
             $read=$query->query();
             $res=$read->read();
             $read->close();
+//            print_r($res);exit();
 		$this->render('view',array(
 			'model'=>$res,
 		));
 	}
+        public function actionViewuser(){
+            $id=Yii::app()->request->getQuery("id");
+            echo $id.'--------------------'.print_r($_GET);exit();
+        }
 
 	/**
 	 * Creates a new model.
@@ -180,7 +186,7 @@ class UserController extends Controller
 	 * @throws CHttpException
 	 */
 	public function loadModel($id){
-            $sql="SELECT p.*,u.username,u.active_user,u.id_user FROM user AS u LEFT JOIN person AS p ON u.id_sperson=p.id_sperson WHERE u.id_user=:iduser";
+            $sql="SELECT p.*,u.username,u.active_user,u.id_user FROM user AS u LEFT JOIN person AS p ON u.id_sperson=p.id_sperson WHERE u.username=:iduser";
 		$model=User::model()->findBySql($sql,array(":iduser"=>$id));
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');

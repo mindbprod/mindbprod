@@ -38,7 +38,7 @@ return array(
 
                 // set this to your user view url,
                 // AuditModule will replace --user_id-- with the actual user_id
-                'userViewUrl' => array('/user/view', 'id' => '--user_id--'),
+                'userViewUrl' => array('/user/view', 'iduser' => '--user_id--'),
 
                 // Set to false if you do not wish to track database audits.
                 'enableAuditField' => true,

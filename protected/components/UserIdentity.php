@@ -41,6 +41,13 @@ class UserIdentity extends CUserIdentity
                     $this->_id=$userFromDb->username;
     //                $this->username=$userFromDb->username;
 
+                    
+                    $this->user_id=$userFromDb->username;
+    //                $this->username=$userFromDb->username;
+
+                   
+                    $this->setState('user_id',$userFromDb->username);
+                    
                     $this->errorCode=self::ERROR_NONE;
                     $modelPerson=  Person::model()->findByPk($userFromDb->id_sperson);
                     $modelTypeUser= TypeUser::model()->findByPk($userFromDb->id_typeuser);

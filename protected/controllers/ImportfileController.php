@@ -43,11 +43,14 @@ class ImportfileController extends Controller{
                 try{
                     $uploaded = $file->saveAs($dir.$file->getName());
                     $data=new JPhpExcelReader($dir.$file->getName());
-                    if($data->sheets[0]['numRows']<=2000&&$data->sheets[0]['numRows']>1&&$data->sheets[0]['numCols']<=32&&$data->sheets[0]['numCols']>0){
+                    if($data->sheets[0]['numRows']<=2000&&$data->sheets[0]['numRows']>1&&$data->sheets[0]['numCols']<=33&&$data->sheets[0]['numCols']>0){
                         $registros=0;
                         for($i = 2; $i <= $data->sheets[0]['numRows']; $i++){
+                            if(empty($data->sheets[0]['cells'][$i][1])){
+                                break;  
+                            }
                             try{
-                                $save=1;
+//                                $save=1;
                                 $continent="";
                                 $country="";
                                 $state="";
@@ -66,70 +69,66 @@ class ImportfileController extends Controller{
                                 $whatsApp="";
                                 $address="";
                                 $observations="";
-                                if(!empty($data->sheets[0]['cells'][$i][1])){$continent=trim($data->sheets[0]['cells'][$i][1]);}
-                                if(!empty($data->sheets[0]['cells'][$i][2])){$country=trim($data->sheets[0]['cells'][$i][2]);}
-                                if(!empty($data->sheets[0]['cells'][$i][3])){$state=trim($data->sheets[0]['cells'][$i][3]);}
-                                if(!empty($data->sheets[0]['cells'][$i][4])){$city=trim($data->sheets[0]['cells'][$i][4]);}
-                                if(!empty($data->sheets[0]['cells'][$i][5])){$companyName=trim($data->sheets[0]['cells'][$i][5]);}
-                                if(!empty($data->sheets[0]['cells'][$i][6])){$companyTypei=trim($data->sheets[0]['cells'][$i][6]);}
-                                if(!empty($data->sheets[0]['cells'][$i][7])){$companyTypeii=trim($data->sheets[0]['cells'][$i][7]);}
+                               
+                                if(!empty($data->sheets[0]['cells'][$i][6])){$companyName=trim($data->sheets[0]['cells'][$i][6]);}
+                                if(!empty($data->sheets[0]['cells'][$i][7])){$companyTypei=trim($data->sheets[0]['cells'][$i][7]);}
+                                if(!empty($data->sheets[0]['cells'][$i][8])){$companyTypeii=trim($data->sheets[0]['cells'][$i][8]);}
                                 $companyNumber=$companyName;
-                                if(!empty($data->sheets[0]['cells'][$i][8])){$companyFestDesc=trim($data->sheets[0]['cells'][$i][8]);}
+                                if(!empty($data->sheets[0]['cells'][$i][9])){$companyFestDesc=trim($data->sheets[0]['cells'][$i][9]);}
                                 for($j=1;$j<=10;$j++){
-                                    if(!empty($data->sheets[0]['cells'][$i][$j+8])){
-                                        array_push($email,trim($data->sheets[0]['cells'][$i][$j+8]));
+                                    if(!empty($data->sheets[0]['cells'][$i][$j+9])){
+                                        array_push($email,trim($data->sheets[0]['cells'][$i][$j+9]));
                                     }
                                 }
-                                if(!empty($data->sheets[0]['cells'][$i][19])){$web=trim($data->sheets[0]['cells'][$i][19]);}
+                                if(!empty($data->sheets[0]['cells'][$i][20])){$web=trim($data->sheets[0]['cells'][$i][20]);}
 //                                $web=trim($data->sheets[0]['cells'][$i][19]);
                                 for($k=1;$k<=7;$k++){
-                                    if(!empty($data->sheets[0]['cells'][$i][$k+19])){
-                                        array_push($facebook,trim($data->sheets[0]['cells'][$i][$k+8]));
+                                    if(!empty($data->sheets[0]['cells'][$i][$k+20])){
+                                        array_push($facebook,trim($data->sheets[0]['cells'][$i][$k+20]));
                                     }
                                 }
-                                if(!empty($data->sheets[0]['cells'][$i][27])){$twitter=trim($data->sheets[0]['cells'][$i][27]);}
-                                if(!empty($data->sheets[0]['cells'][$i][28])){$instagram=trim($data->sheets[0]['cells'][$i][28]);}
-                                if(!empty($data->sheets[0]['cells'][$i][29])){$googlePl=trim($data->sheets[0]['cells'][$i][29]);}
-                                if(!empty($data->sheets[0]['cells'][$i][30])){$whatsApp=trim($data->sheets[0]['cells'][$i][30]);}
-                                if(!empty($data->sheets[0]['cells'][$i][31])){$address=trim($data->sheets[0]['cells'][$i][31]);}
-                                if(!empty($data->sheets[0]['cells'][$i][32])){$observations=trim($data->sheets[0]['cells'][$i][32]);}
+                                if(!empty($data->sheets[0]['cells'][$i][28])){$twitter=trim($data->sheets[0]['cells'][$i][28]);}
+                                if(!empty($data->sheets[0]['cells'][$i][29])){$instagram=trim($data->sheets[0]['cells'][$i][29]);}
+                                if(!empty($data->sheets[0]['cells'][$i][30])){$googlePl=trim($data->sheets[0]['cells'][$i][30]);}
+                                if(!empty($data->sheets[0]['cells'][$i][31])){$whatsApp=trim($data->sheets[0]['cells'][$i][31]);}
+                                if(!empty($data->sheets[0]['cells'][$i][32])){$address=trim($data->sheets[0]['cells'][$i][32]);}
+                                if(!empty($data->sheets[0]['cells'][$i][33])){$observations=trim($data->sheets[0]['cells'][$i][33]);}
                                 
-                                $resContinent=$this->setIdContinent(strtoupper($this->removeAccents($continent)));
-                                if($resContinent==0){
-                                    $save=0;
-                                    continue;
-                                    
+                                $modelUbication=new Ubication();
+                                $resContinent="";
+                                if(!empty($data->sheets[0]['cells'][$i][2])){
+                                    $continent=trim($data->sheets[0]['cells'][$i][2]);
+                                    $resContinent=$this->setIdContinent(mb_strtoupper($this->removeAccents($continent)));
                                 }
-                                $resCountry=$this->setIdCountry(strtoupper($this->removeAccents($country)),$resContinent);
-                                if($resCountry==0){
-                                    $save=0;
-                                    continue;
+                                $modelUbication->id_continent=$resContinent;
+                                $resCountry="";
+                                if(!empty($data->sheets[0]['cells'][$i][3])){
+                                    $country=trim($data->sheets[0]['cells'][$i][3]);
+                                    $resCountry=$this->setIdCountry(mb_strtoupper($this->removeAccents($country)),$resContinent);
                                 }
-                                
-                                $resState=$this->setIdState(strtoupper($this->removeAccents($state)),$resCountry);
-                                if($resState==0){
-                                    $save=0;
-                                    continue;
+                                $modelUbication->id_country=$resCountry;
+                                $resState="";
+                                if(!empty($data->sheets[0]['cells'][$i][4])){
+                                    $state=trim($data->sheets[0]['cells'][$i][4]);
+                                    $resState=$this->setIdState(mb_strtoupper($this->removeAccents($state)),$resCountry);
                                 }
-//                                echo $resState."--";continue;
-                                $resCity=$this->setIdCity(strtoupper($this->removeAccents($city)),$resState);
-                                if($resCity==0){
-                                    $save=0;
-                                    continue;
+                                $modelUbication->id_state=$resState;
+                                $resCity="";
+                                if(!empty($data->sheets[0]['cells'][$i][5])){
+                                    $city=trim($data->sheets[0]['cells'][$i][5]);
+                                    $resCity=$this->setIdCity(mb_strtoupper($this->removeAccents($city)),$resState);
                                 }
-                                if(empty($resCity)){
-                                    $vacio;
-                                    continue;
-                                }
+                                $modelUbication->id_city=$resCity;
                                 $modelCompany=new Company();
                                 $modelCompany->company_name=$companyName;
                                 $modelCompany->company_number=$companyNumber;
                                 $modelCompany->company_address=$address;
                                 $modelCompany->company_fest_desc=$companyFestDesc;
                                 $modelCompany->company_observations=$observations;
-                                $modelCompany->id_city=$resCity;
                                 if($modelCompany->validate()){
                                     if($modelCompany->save()){
+                                        $modelUbication->id_company=$modelCompany->getPrimaryKey();
+                                        $modelUbication->save();
                                         if(!empty($companyTypei)){
                                             $ctype=1;
                                             $modelTCompany=new CompanyTcompany();
@@ -221,7 +220,7 @@ class ImportfileController extends Controller{
                             $msn="The file is empty--".$data->sheets[0]['numCols'];
 
                         }else{
-                            $msn="The file must not have more than 2000 records and not have mor than 31 columns  --".$data->sheets[0]['numCols'];
+                            $msn="The file must not have more than 2000 records and not have mor than 33 columns  --";
                         }
                         Yii::app()->getUser()->setFlash('error',$msn);
                         $this->refresh();
@@ -248,7 +247,7 @@ class ImportfileController extends Controller{
     }
     public function setIdContinent($continent){
        if(empty($continent)){
-           return 0;
+           return "";
        }
        $conn=Yii::app()->db;
        $sql="SELECT id_continent FROM continent WHERE continent_name LIKE :continentname ";
@@ -270,24 +269,23 @@ class ImportfileController extends Controller{
                    return $modelContinent->getPrimaryKey();
                }
                else{
-                   return 0;
+                   return "";
                }
            }
            else{
-               return 0;
+               return "";
            }
        }
     }
-    public function setIdCountry($country,$idContinent){
+    public function setIdCountry($country){
         if(empty($country)){
-           return 0;
+           return "";
         }
        $conn=Yii::app()->db;
-       $sql="SELECT id_country FROM country WHERE country_name LIKE :countryname and id_continent=:idcontinent ";
+       $sql="SELECT id_country FROM country WHERE country_name LIKE :countryname ";
        $search='%%'.$country.'%%';
        $query=$conn->createCommand($sql);
        $query->bindParam(":countryname", $search);
-       $query->bindParam(":idcontinent", $idContinent);
        $read=$query->query();
        $res=$read->read();
        $read->close();
@@ -298,30 +296,28 @@ class ImportfileController extends Controller{
            $modelCountry=new Country();
            $modelCountry->country_code=strtoupper($this->removeAccents($country));
            $modelCountry->country_name=  $modelCountry->country_code;
-           $modelCountry->id_continent=$idContinent;
            if($modelCountry->validate()){
                if($modelCountry->save()){
                    return $modelCountry->getPrimaryKey();
                }
                else{
-                   return 0;
+                   return "";
                }
            }
            else{
-               return 0;
+               return "";
            }
        }
     }
-    private function setIdState($state,$idCountry){
+    private function setIdState($state){
         if(empty($state)){
-           return 0;
+           return "";
         }
         $conn=Yii::app()->db;
-        $sql="SELECT id_state FROM state WHERE state_name LIKE :statename and id_country=:idcountry ";
+        $sql="SELECT id_state FROM state WHERE state_name LIKE :statename ";
         $search='%%'.$state.'%%';
         $query=$conn->createCommand($sql);
         $query->bindParam(":statename", $search);
-        $query->bindParam(":idcountry", $idCountry);
         $read=$query->query();
         $res=$read->read();
         $read->close();
@@ -332,30 +328,28 @@ class ImportfileController extends Controller{
             $modelState=new State();
             $modelState->state_code=strtoupper($this->removeAccents($state));
             $modelState->state_name=  $modelState->state_code;
-            $modelState->id_country=$idCountry;
             if($modelState->validate()){
                 if($modelState->save()){
                     return $modelState->getPrimaryKey();
                 }
                 else{
-                    return 0;
+                    return "";
                 }
             }
             else{
-                return 0;
+                return "";
             }
         }
     }
-    private function setIdCity($city,$idState){
+    private function setIdCity($city){
         if(empty($city)){
-           return 0;
+           return "";
         }
         $conn=Yii::app()->db;
-       $sql="SELECT id_city FROM city WHERE city_name LIKE :cityname and id_state=:idstate ";
+       $sql="SELECT id_city FROM city WHERE city_name LIKE :cityname ";
        $search='%%'.$city.'%%';
        $query=$conn->createCommand($sql);
        $query->bindParam(":cityname", $search);
-       $query->bindParam(":idstate", $idState);
        $read=$query->query();
        $res=$read->read();
        $read->close();
@@ -366,17 +360,16 @@ class ImportfileController extends Controller{
            $modelCity=new City();
            $modelCity->city_code=strtoupper($this->removeAccents($city));
            $modelCity->city_name=  $modelCity->city_code;
-           $modelCity->id_state=$idState;
            if($modelCity->validate()){
                if($modelCity->save()){
                    return $modelCity->getPrimaryKey();
                }
                else{
-                   return 0;
+                   return "";
                }
            }
            else{
-               return 0;
+               return "";
            }
        }
     }
