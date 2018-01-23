@@ -20,7 +20,33 @@ class TypeCompany extends CActiveRecord
 	{
 		return 'type_company';
 	}
+    public function behaviors(){
+        return array(
+            'AuditFieldBehavior' => array(
+                // Path to AuditFieldBehavior class.
+                'class' => 'audit.components.AuditFieldBehavior',
 
+                // Set to false if you just want to use getDbAttribute and other methods in this class.
+                // If left unset the value will come from AuditModule::enableAuditField
+//                'enableAuditField' => null,
+
+                // Any additional models you want to use to write model and model_id audits to.  If this array is not empty then
+                // each field modifed will result in an AuditField being created for each additionalAuditModels.
+//                'additionalAuditModels' => array(
+//                    'Post' => 'post_id',
+//                ),
+
+                // A list of fields to be ignored on update and delete
+//                'ignoreFields' => array(
+//                    'insert' => array('modified', 'modified_by', 'deleted', 'deleted_by'),
+//                    'update' => array('created', 'created_by', 'modified'),
+//                ),
+
+                // A list of values that will be treated as if they were null.
+//            'ignoreValues' => array('0', '0.0', '0.00', '0.000', '0.0000', '0.00000', '0.000000', '0000-00-00', '0000-00-00 00:00:00'),
+            ),
+        );
+    }
 	/**
 	 * @return array validation rules for model attributes.
 	 */
