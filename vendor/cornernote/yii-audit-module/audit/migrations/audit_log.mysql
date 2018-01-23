@@ -1,7 +1,7 @@
 CREATE TABLE `audit_log` (
 `id` int(11) NOT NULL AUTO_INCREMENT,
 `audit_request_id` int(11),
-`user_id` varchar(11),
+`user_id` varchar(50),
 `level` varchar(128),
 `category` varchar(128),
 `message` blob,

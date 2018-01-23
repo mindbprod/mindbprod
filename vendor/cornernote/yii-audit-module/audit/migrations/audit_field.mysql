@@ -1,7 +1,7 @@
 CREATE TABLE `audit_field` (
 `id` int(11) NOT NULL AUTO_INCREMENT,
 `audit_request_id` int(11),
-`user_id` varchar(11),
+`user_id` varchar(50),
 `old_value` text,
 `new_value` text,
 `action` varchar(20),

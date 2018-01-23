@@ -348,32 +348,63 @@ class CompanyController extends Controller{
         $updAct=true;
         switch ($data["tableName"]){
             case "company":
-                $tableName="company";
+                $modelCompany= Company::model();
+                $company=$modelCompany->findByPk($data["idCompany"]);
+//                $modelCompany->id_company=$data["idCompany"];
                 switch ($data["columnName"]){
                     case "company_name":
-                        $columnName="company_name";
+                        $company->company_name=$data["valueContent"];
                     break;
                     case "company_number":
-                        $columnName="company_number";
+                        $company->company_number=$data["valueContent"];
                     break;
                     case "company_address":
-                        $columnName="company_address";
+                        $company->company_address=$data["valueContent"];
                     break;
                     case "company_fest_desc":
-                        $columnName="company_fest_desc";
+                        $company->company_fest_desc=$data["valueContent"];
                     break;
                     case "company_observations":
-                        $columnName="company_observations";
+                        $company->company_observations=$data["valueContent"];
                     break;
                 }
+                if($company->update()){
+                    $msn="exito";
+                }
+                else{
+                    $msn="noexito";
+                }
+                $response["status"]=$msn;
+                echo CJSON::encode($response);
+                exit();
             break;
             case "telephone":
                 $tableName="telephone";
                 $columnName="telephone_number";
-                $modelTelephone=  Telephone::model()->findByAttributes(array("id_company"=>$data["idCompany"]));
-                if(empty($modelTelephone)){
-                    $updAct=false;
+                if(!empty($data["valueContent"])){
+                    $modelTelephone= Telephone::model();
+                    $telephone=$modelTelephone->findByAttributes(array("id_company"=>$data["idCompany"]));
+                    if(empty($telephone)){
+                        $modelTelephone=new Telephone();
+                        $modelTelephone->id_company=$data["idCompany"];
+                        $modelTelephone->telephone_number=$data["valueContent"];
+                        if($modelTelephone->save()){
+                            $msn="exito";
+                        }
+                    }
+                    else{
+                        $modelTelephone->id_company=$data["idCompany"];
+                        $modelTelephone->telephone_number=$data["valueContent"];
+                        $modelTelephone->update();
+                        $msn="exito";
+                    }
+                } 
+                else{
+                    $msn="noexito";
                 }
+                $response["status"]=$msn;
+                echo CJSON::encode($response);
+                exit();
             break;
             case "web":
                 $tableName="web";
@@ -388,7 +419,6 @@ class CompanyController extends Controller{
                         if($modelWeb->save()){
                             $msn="exito";
                         }
-                        $updAct=false;
                     }
                     else{
                         $web->id_company=$data["idCompany"];
@@ -427,37 +457,6 @@ class CompanyController extends Controller{
                 $this->saveDataTyCompany($data["idCompany"],$dataVal);
             break;
         }
-        if(!empty($tableName)&&!empty($columnName)&&!empty($data["valueContent"])){
-            $conn=Yii::app()->db;
-            if($updAct){
-                $sql="update ".$tableName." set ".$columnName."=:datatoedit where id_company=:id_company";
-                $query=$conn->createCommand($sql);
-                $query->bindParam(":datatoedit",$data["valueContent"]);
-                $query->bindParam(":id_company",$data["idCompany"]);
-                if($query->execute()==0){
-                    $response["status"]="noexito";
-                }
-                else{
-                   $response["status"]="exito"; 
-                }
-            }
-            else{
-                $sql="INSERT INTO ".$tableName." (id_company,".$columnName.") VALUES (:id_company,:datatoedit)";
-                $query=$conn->createCommand($sql);
-                $query->bindParam(":id_company",$data["idCompany"]);
-                $query->bindParam(":datatoedit",$data["valueContent"]);
-                if($query->execute()==0){    
-                    $response["status"]="noexito";
-                }
-                else{
-                   $response["status"]="exito"; 
-                }
-            }
-        }
-        else{
-            $response["status"]="noexito";
-        }
-        echo CJSON::encode($response);
     }
     public function saveDataEmailSn($tableName,$columname,$idCompany,$valueContent){
         if(!empty($valueContent)&&!empty($idCompany)){
@@ -468,12 +467,11 @@ class CompanyController extends Controller{
                 $query=$conn->createCommand($sqlDel);
                 $query->bindParam(":id_company",$idCompany);
                 $query->execute();
-                $sql="INSERT INTO email (id_company,email) VALUES (:id_company,:email) ";
                 foreach($valueContent["email"] as $val){
-                    $query=$conn->createCommand($sql);
-                    $query->bindParam(":id_company",$idCompany);
-                    $query->bindParam(":email",$val);
-                    $query->execute();
+                    $modelEmail=new Email();
+                    $modelEmail->id_company=$idCompany;
+                    $modelEmail->email=$val;
+                    $modelEmail->save();
                 }
                 $transaction->commit();
                 $response["status"]="exito";
@@ -498,12 +496,11 @@ class CompanyController extends Controller{
                 $query=$conn->createCommand($sqlDel);
                 $query->bindParam(":id_company",$idCompany);
                 $query->execute();
-                $sql="INSERT INTO company_tcompany (id_company,id_typecompany) VALUES (:id_company,:id_typecompany) ";
                 foreach($dataVal["company_type"] as $val){
-                    $query=$conn->createCommand($sql);
-                    $query->bindParam(":id_company",$idCompany);
-                    $query->bindParam(":id_typecompany",$val);
-                    $query->execute();
+                    $modelTyCompany=new CompanyTcompany();
+                    $modelTyCompany->id_company=$idCompany;
+                    $modelTyCompany->id_typecompany=$val;
+                    $modelTyCompany->save();
                 }
                 $transaction->commit();
                 $response["status"]="exito";
@@ -530,11 +527,11 @@ class CompanyController extends Controller{
                 $query->execute();
                 $sql="INSERT INTO social_network (id_company,id_typesnetwork,snetwork) VALUES (:id_company,:typesnet,:snetwork) ";
                 foreach($valueContent["snetw"] as $pk=>$val){
-                    $query=$conn->createCommand($sql);
-                    $query->bindParam(":id_company",$idCompany);
-                    $query->bindParam(":typesnet",$valueContent["typesnet"][$pk]);
-                    $query->bindParam(":snetwork",$val);
-                    $query->execute();
+                    $modelSNetwork= new SocialNetwork();
+                    $modelSNetwork->id_company=id_company;
+                    $modelSNetwork->id_typesnetwork=$valueContent["typesnet"][$pk];
+                    $modelSNetwork->snetwork=$val;
+                    $modelSNetwork->save();
                 }
                 $transaction->commit();
                 $response["status"]="exito";
