@@ -30,3 +30,4 @@ $this->breadcrumbs=array(
 		'active_user'
 	),
 )); ?>
+<a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/audit"><i class="fa fa-user-secret fa-fw"></i>Return to audit</a>

@@ -86,28 +86,31 @@
                         ?>
                             <ul class="nav" id="side-menu">
                                 <li>
-                                    <a href="#"><i class="fa fa-sitemap fa-fw"></i> Company Manager<span class="fa arrow"></span></a>
+                                    <a href="#"><i class="fa fa-industry fa-fw"></i> Company Manager<span class="fa arrow"></span></a>
                                     <ul class="nav nav-second-level">
                                         <li>
-                                            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/company/registercompany">Register company information</a>
+                                            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/company/registercompany"><i class="fa fa-database fa-fw"></i>Register company information</a>
                                         </li>
                                         <li>
-                                            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/company/showEditcompany">Show/Edit company information</a>
+                                            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/company/showEditcompany"><i class="fa fa-edit fa-fw"></i>Show/Edit company information</a>
                                         </li>
                                         <li>
-                                            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/importfile">Load information from file</a>
+                                            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/importfile"><i class="fa fa-file-excel-o fa-fw"></i>Load information from file</a>
                                         </li>
                                     </ul>
                                     <!-- /.nav-second-level -->
                                 </li>
                                 <li>
-                                    <a href="#"><i class="fa fa-sitemap fa-fw"></i> User Manager <span class="fa arrow"></span></a>
+                                    <a href="#"><i class="fa fa-group fa-fw"></i> User Manager <span class="fa arrow"></span></a>
                                     <ul class="nav nav-second-level">
                                         <li>
-                                            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/user/registerUser">Register user</a>
+                                            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/user/registerUser"><i class="fa fa-edit fa-fw"></i>Register user</a>
                                         </li>
                                     </ul>
                                     <!-- /.nav-second-level -->
+                                </li>
+                                <li>
+                                    <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/audit"><i class="fa fa-user-secret fa-fw"></i>Audit</a>
                                 </li>
                             </ul>
                         <?php endif;?>
@@ -116,16 +119,16 @@
                         ?>
                             <ul class="nav" id="side-menu">
                                 <li>
-                                    <a href="#"><i class="fa fa-sitemap fa-fw"></i> Company Manager<span class="fa arrow"></span></a>
+                                    <a href="#"><i class="fa fa-industry fa-fw"></i> Company Manager<span class="fa arrow"></span></a>
                                     <ul class="nav nav-second-level">
                                         <li>
-                                            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/company/registercompany">Register company information</a>
+                                            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/company/registercompany"><i class="fa fa-database fa-fw"></i>Register company information</a>
                                         </li>
                                         <li>
-                                            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/company/showEditcompany">Show/Edit company information</a>
+                                            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/company/showEditcompany"><i class="fa fa-edit fa-fw"></i>Show/Edit company information</a>
                                         </li>
                                         <li>
-                                            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/importfile">Load information from file</a>
+                                            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/importfile"><i class="fa fa-file-excel-o fa-fw"></i>Load information from file</a>
                                         </li>
                                     </ul>
                                     <!-- /.nav-second-level -->
@@ -137,7 +140,7 @@
                         ?>
                             <ul class="nav" id="side-menu">
                                 <li>
-                                    <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/company/showEditcompany">Show/Edit company information</a>
+                                    <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/company/showEditcompany"><i class="fa fa-edit fa-fw"></i>Show/Edit company information</a>
                                 </li>
                             </ul>
                         <?php endif;?>
