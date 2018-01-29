@@ -614,6 +614,7 @@ var Company = function(){
                                 value.company_name,
                                 value.company_address,
                                 value.company_fest_desc,
+                                value.country_name,
                                 value.city_name,
                                 value.telephone_number,
                                 value.web,
