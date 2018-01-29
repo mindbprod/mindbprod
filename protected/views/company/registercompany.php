@@ -52,7 +52,7 @@ $this->breadcrumbs=array(
                         </div>
                         <div class="form-group">
                             <?php echo $form->labelEx($modelTypeEnt,'id_typecompany'); ?><br>
-                            <?php echo $form->checkBoxList($modelTypeEnt,'id_typecompany',CHtml::listData($typeCompany,'id_typecompany',Yii::t('app','tipo_empresa')));  ?>
+                            <?php echo $form->checkBoxList($modelTypeEnt,'id_typecompany',CHtml::listData($typeCompany,'id_typecompany','typecompany_name'));  ?>
                             <?php echo $form->error($modelTypeEnt,'id_typecompany'); ?>
                         </div>
                         <div class="form-group">
