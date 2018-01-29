@@ -108,20 +108,20 @@ class CompanyController extends Controller{
             
 //            print_r($modelState->attributes);exit();
             if(!empty($modelContinent->continent_name)){
-                $modelContinent->continent_code=  trim(strtoupper(preg_replace('/[^A-Za-z0-9]/', "", $modelContinent->continent_name)));
-                $modelContinent->continent_name=$modelContinent->continent_code;
+                $modelContinent->continent_code=  trim(mb_strtoupper($this->removeAccents($modelContinent->continent_name)));
+                $modelContinent->continent_name=trim(mb_strtoupper( $modelContinent->continent_name));
             }
             if(!empty($modelCountry->country_name)){
-                $modelCountry->country_code=  trim(strtoupper(preg_replace('/[^A-Za-z0-9]/', "", $modelCountry->country_name)));
-                $modelCountry->country_name=$modelCountry->country_code;
+                $modelCountry->country_code=  trim(mb_strtoupper($this->removeAccents($modelCountry->country_name)));
+                $modelCountry->country_name=trim(mb_strtoupper( $modelCountry->country_name));
             }
             if(!empty($modelState->state_name)){
-                $modelState->state_code=trim(strtoupper(preg_replace('/[^A-Za-z0-9]/', "", $modelState->state_name)));
-                $modelState->state_name= $modelState->state_code;
+                $modelState->state_code=trim(mb_strtoupper($this->removeAccents( $modelState->state_name)));
+                $modelState->state_name= trim(mb_strtoupper( $modelState->state_name));
             }
             if(!empty($modelCity->city_name)){
-                $modelCity->city_code=trim(strtoupper(preg_replace('/[^A-Za-z0-9]/', "", $modelCity->city_name)));
-                $modelCity->city_name=$modelCity->city_code;
+                $modelCity->city_code=trim(mb_strtoupper($this->removeAccents( $modelCity->city_name)));
+                $modelCity->city_name=trim(mb_strtoupper( $modelCity->city_name));
             }
             $this->performAjaxValidation(array($modelCompany,$modelTelephone,$modeloEmail,$modelTypeEnt,$modelSNetwReg),"entityreg-form");
             if($modelCompany->validate()&&$modelTelephone->validate()&&$modelTypeEnt->validate()&&$modeloEmail->validate()&&$modelSNetwReg->validate()){
@@ -141,7 +141,7 @@ class CompanyController extends Controller{
                         $modelUbication=new Ubication();
                         if(empty($modelContinent->id_continent) && $saveContinent==1){
                             $modelContinentN=new Continent();
-                            $modelContinentN->continent_code_code=$modelContinent->continent_code;
+                            $modelContinentN->continent_code=$modelContinent->continent_code;
                             $modelContinentN->continent_name=$modelCountry->continent_name;
                             $modelContinentN->save();
                             $modelContinent->id_continent=$modelContinentN->getPrimaryKey();
@@ -244,19 +244,19 @@ class CompanyController extends Controller{
         $saveCity=$dataVal["saveCity"];
         if(!empty($modelContinent->continent_name)){
             $modelContinent->continent_code=trim(strtoupper($this->removeAccents( $modelContinent->continent_name)));
-            $modelContinent->continent_name=$modelContinent->continent_code;
+            $modelContinent->continent_name=trim(mb_strtoupper($modelContinent->continent_name));
         }
         if(!empty($modelCountry->country_name)){
             $modelCountry->country_code=  trim(strtoupper($this->removeAccents( $modelCountry->country_name)));
-            $modelCountry->country_name= $modelCountry->country_code;
+            $modelCountry->country_name= trim(mb_strtoupper($modelCountry->country_name));
         }
         if(!empty($modelState->state_name)){
             $modelState->state_code=trim(strtoupper($this->removeAccents( $modelState->state_name)));
-            $modelState->state_name=$modelState->state_code;
+            $modelState->state_name=trim(mb_strtoupper( $modelState->state_name));
         }
         if(!empty($modelCity->city_name)){
             $modelCity->city_code=trim(strtoupper($this->removeAccents($modelCity->city_name)));
-            $modelCity->city_name=$modelCity->city_code;
+            $modelCity->city_name=trim(mb_strtoupper($modelCity->city_name));
         }
 //        echo $modelCity->city_code;exit();
         if(empty($modelContinent->id_continent) && $saveContinent==0){
@@ -1020,6 +1020,7 @@ class CompanyController extends Controller{
             Yii::app()->end();
         }
     }    
+    
 //    public function actionRegisterCompany(){
 //        print_r($_POST);
 //    }

@@ -98,25 +98,25 @@ class ImportfileController extends Controller{
                                 $resContinent="";
                                 if(!empty($data->sheets[0]['cells'][$i][2])){
                                     $continent=trim($data->sheets[0]['cells'][$i][2]);
-                                    $resContinent=$this->setIdContinent(mb_strtoupper($this->removeAccents($continent)));
+                                    $resContinent=$this->setIdContinent($continent);
                                 }
                                 $modelUbication->id_continent=$resContinent;
                                 $resCountry="";
                                 if(!empty($data->sheets[0]['cells'][$i][3])){
                                     $country=trim($data->sheets[0]['cells'][$i][3]);
-                                    $resCountry=$this->setIdCountry(mb_strtoupper($this->removeAccents($country)),$resContinent);
+                                    $resCountry=$this->setIdCountry($country);
                                 }
                                 $modelUbication->id_country=$resCountry;
                                 $resState="";
                                 if(!empty($data->sheets[0]['cells'][$i][4])){
                                     $state=trim($data->sheets[0]['cells'][$i][4]);
-                                    $resState=$this->setIdState(mb_strtoupper($this->removeAccents($state)),$resCountry);
+                                    $resState=$this->setIdState($state);
                                 }
                                 $modelUbication->id_state=$resState;
                                 $resCity="";
                                 if(!empty($data->sheets[0]['cells'][$i][5])){
                                     $city=trim($data->sheets[0]['cells'][$i][5]);
-                                    $resCity=$this->setIdCity(mb_strtoupper($this->removeAccents($city)),$resState);
+                                    $resCity=$this->setIdCity($city);
                                 }
                                 $modelUbication->id_city=$resCity;
                                 $modelCompany=new Company();
@@ -246,12 +246,14 @@ class ImportfileController extends Controller{
             $this->render('importfile');
     }
     public function setIdContinent($continent){
+//        mb_strtoupper($this->removeAccents());
        if(empty($continent)){
            return "";
        }
+       $continent=mb_strtoupper($continent);
        $conn=Yii::app()->db;
-       $sql="SELECT id_continent FROM continent WHERE continent_name LIKE :continentname ";
-       $search='%'.$continent.'%';
+       $sql="SELECT id_continent FROM continent WHERE UPPER(continent_name) LIKE :continentname ";
+       $search='%%'.$continent.'%%';
        $query=$conn->createCommand($sql);
        $query->bindParam(":continentname", $search);
        $read=$query->query();
@@ -262,8 +264,8 @@ class ImportfileController extends Controller{
        }
        else{
            $modelContinent=new Continent();
-           $modelContinent->continent_code=strtoupper($continent);
-           $modelContinent->continent_name=  $modelContinent->continent_code;
+           $modelContinent->continent_code=$this->removeAccents($continent);
+           $modelContinent->continent_name=  $continent;
            if($modelContinent->validate()){
                if($modelContinent->save()){
                    return $modelContinent->getPrimaryKey();
@@ -281,8 +283,9 @@ class ImportfileController extends Controller{
         if(empty($country)){
            return "";
         }
+        $country=mb_strtoupper($country);
        $conn=Yii::app()->db;
-       $sql="SELECT id_country FROM country WHERE country_name LIKE :countryname ";
+       $sql="SELECT id_country FROM country WHERE UPPER(country_name) LIKE :countryname ";
        $search='%%'.$country.'%%';
        $query=$conn->createCommand($sql);
        $query->bindParam(":countryname", $search);
@@ -294,8 +297,8 @@ class ImportfileController extends Controller{
        }
        else{
            $modelCountry=new Country();
-           $modelCountry->country_code=strtoupper($this->removeAccents($country));
-           $modelCountry->country_name=  $modelCountry->country_code;
+           $modelCountry->country_code=$this->removeAccents($country);
+           $modelCountry->country_name=  $country;
            if($modelCountry->validate()){
                if($modelCountry->save()){
                    return $modelCountry->getPrimaryKey();
@@ -313,8 +316,9 @@ class ImportfileController extends Controller{
         if(empty($state)){
            return "";
         }
+        $state=mb_strtoupper($state);
         $conn=Yii::app()->db;
-        $sql="SELECT id_state FROM state WHERE state_name LIKE :statename ";
+        $sql="SELECT id_state FROM state WHERE UPPER(state_name) LIKE :statename ";
         $search='%%'.$state.'%%';
         $query=$conn->createCommand($sql);
         $query->bindParam(":statename", $search);
@@ -326,8 +330,8 @@ class ImportfileController extends Controller{
         }
         else{
             $modelState=new State();
-            $modelState->state_code=strtoupper($this->removeAccents($state));
-            $modelState->state_name=  $modelState->state_code;
+            $modelState->state_code=$this->removeAccents($state);
+            $modelState->state_name=  $state;
             if($modelState->validate()){
                 if($modelState->save()){
                     return $modelState->getPrimaryKey();
@@ -345,8 +349,9 @@ class ImportfileController extends Controller{
         if(empty($city)){
            return "";
         }
+        $city=mb_strtoupper($city);
         $conn=Yii::app()->db;
-       $sql="SELECT id_city FROM city WHERE city_name LIKE :cityname ";
+       $sql="SELECT id_city FROM city WHERE UPPER(city_name) LIKE :cityname ";
        $search='%%'.$city.'%%';
        $query=$conn->createCommand($sql);
        $query->bindParam(":cityname", $search);
@@ -358,8 +363,8 @@ class ImportfileController extends Controller{
        }
        else{
            $modelCity=new City();
-           $modelCity->city_code=strtoupper($this->removeAccents($city));
-           $modelCity->city_name=  $modelCity->city_code;
+           $modelCity->city_code=$this->removeAccents($city);
+           $modelCity->city_name=  $city;
            if($modelCity->validate()){
                if($modelCity->save()){
                    return $modelCity->getPrimaryKey();
