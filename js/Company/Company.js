@@ -135,12 +135,12 @@ var Company = function(){
             e.preventDefault(); $(this).parent('div').remove();
         });
         
-        self.div.find("#entitysearch-form #Company_city").on("keydown",function(){
+        self.div.find("#entitysearch-form #Company_city").on("keydown",function(e){
             if(e.which==8){
                 self.div.find("#entitysearch-form #Company_id_city").val("");
              }
         });
-        self.div.find("#entitysearch-form #Company_country").on("keydown",function(){
+        self.div.find("#entitysearch-form #Company_country").on("keydown",function(e){
             if(e.which==8){
                 self.div.find("#entitysearch-form #Company_id_country").val("");
              }

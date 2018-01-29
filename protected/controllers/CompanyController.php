@@ -609,6 +609,7 @@ class CompanyController extends Controller{
             if(isset($data["Company"]["id_city"])&&!empty($data["Company"]["id_city"])){if(!empty($ori)||!empty($orii)||!empty($oriii)||!empty($oriv)){$orvi=" AND ";}$dataSearch.=$orvi." b.id_city = :id_city ";$orvi=" AND ";}           
             if(isset($data["Company"]["company_type"])){
                 foreach($data["Company"]["company_type"] as $pk=>$cptype){
+                    $orvii="";
                     if(!empty($ori)||!empty($orii)||!empty($oriii)||!empty($oriv)||!empty($orv)||!empty($orvi)){
                         $orvii=" AND ";
                     }
