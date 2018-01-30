@@ -1137,7 +1137,7 @@ var Company = function(){
                     $.ajax({
                         type: "POST",
                         url:"searchCountry",
-                        data: {stringcity:self.div.find("#entitysearch-form #Company_country").val()},
+                        data: {stringcountry:self.div.find("#entitysearch-form #Company_country").val()},
                         beforeSend:function (){
                             self.div.find("#entitysearch-form #Company_id_country").val("");
                         },
