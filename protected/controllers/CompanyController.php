@@ -747,7 +747,7 @@ class CompanyController extends Controller{
         else{
             $json_arr["id"] = "#";
             $json_arr["value"] = $stringContinent;
-            $json_arr["label"] = "No hay resultados, desea agregar ".$stringContinent."?";
+            $json_arr["label"] = "No hay resultados para ".$stringContinent;
             array_push($display_json, $json_arr);
         }
         echo CJSON::encode($display_json);
@@ -975,7 +975,7 @@ class CompanyController extends Controller{
         else{
             $json_arr["id"] = "#";
             $json_arr["value"] = $stringCity;
-            $json_arr["label"] = "No hay resultados, desea agregar ".$stringCity."?";
+            $json_arr["label"] = "No hay resultados para ".$stringCity;
             array_push($display_json, $json_arr);
         }
         echo CJSON::encode($display_json);
