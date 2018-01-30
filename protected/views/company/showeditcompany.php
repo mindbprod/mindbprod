@@ -140,6 +140,7 @@ $this->breadcrumbs=array(
                                 <th>Company name</th>
                                 <th>Company address</th>
                                 <th>Company/fest description</th>
+                                <th>Company country</th>
                                 <th>Company city</th>
                                 <th>Company telephon</th>
                                 <th>Company web</th>
@@ -157,6 +158,7 @@ $this->breadcrumbs=array(
                                 <th>Company name</th>
                                 <th>Company address</th>
                                 <th>Company/fest description</th>
+                                <th>Company country</th>
                                 <th>Company city</th>
                                 <th>Company telephon</th>
                                 <th>Company web</th>
@@ -238,27 +240,23 @@ $this->breadcrumbs=array(
                         </div>
                         <div id="groupUbication">
                             <div class="form-group">
-                                <?php echo $form->labelEx($modelContinent,'continent_name'); ?>
-                                <?php echo $form->textField($modelContinent,'continent_name', array ('class' => 'form-control','placeholder'=>'Digite Continente')); ?>
-                                <?php echo $form->error($modelContinent,'continent_name'); ?>
+                                <label for="Continent_continent_name" class="required">Continent Name</label>
+                                <?php echo $form->textField($modelContinent,'continent_name', array ('class' => 'form-control','placeholder'=>'Digite Continente')); ?>                                
                                 <input name="Continent[id_continent]" id="Continent_id_continent" type="hidden">
                             </div>
                             <div class="form-group">
-                                <?php echo $form->labelEx($modelCountry,'country_name'); ?>
+                                <label for="Country_country_name" class="required">Country Name </label>
                                 <?php echo $form->textField($modelCountry,'country_name', array ('class' => 'form-control','placeholder'=>'Digite País')); ?>
-                                <?php echo $form->error($modelCountry,'country_name'); ?>
                                 <input name="Country[id_country]" id="Country_id_country" type="hidden">
                             </div>
                             <div class="form-group">
-                                <?php echo $form->labelEx($modelState,'state_name'); ?>
-                                <?php echo $form->textField($modelState,'state_name', array ('class' => 'form-control','placeholder'=>'Digite Estado o departamento')); ?>
-                                <?php echo $form->error($modelState,'state_name'); ?>
+                                <label for="State_state_name" class="required">State Name </label> 
+                                <?php echo $form->textField($modelState,'state_name', array ('class' => 'form-control','placeholder'=>'Digite Estado o departamento')); ?>                               
                                 <input name="State[id_state]" id="State_id_state" type="hidden">
                             </div>
                             <div class="form-group">
-                                <?php echo $form->labelEx($modelCity,'city_name'); ?>
-                                <?php echo $form->textField($modelCity,'city_name', array ('class' => 'form-control','placeholder'=>'Digite Ciudad')); ?>
-                                <?php echo $form->error($modelCity,'city_name'); ?>
+                                <label for="City_city_name" class="required">City Name</label>
+                                <?php echo $form->textField($modelCity,'city_name', array ('class' => 'form-control','placeholder'=>'Digite Ciudad')); ?>                              
                                 <?php echo CHtml::button('Edit ubication', array ('class' => 'btn btn-warning','id'=>'btnEditCmpCity')); ?>
                                 <input name="City[id_city]" id="City_id_city" type="hidden">
                             </div>

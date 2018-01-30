@@ -819,11 +819,11 @@ class CompanyController extends Controller{
     */
     public function searchCountryScript($country){
         $conect= Yii::app()->db;
-        $searchItem=  strtoupper($country);
-        $sql="SELECT * FROM country WHERE ((country_name LIKE :param1)
-            or (country_name LIKE :param2)
-            or (country_name LIKE :param3)
-            or (country_name LIKE :param4)) order by country_name asc limit 10";
+        $searchItem=  mb_strtoupper($country);
+        $sql="SELECT * FROM country WHERE ((UPPER(country_name) LIKE :param1)
+            or (UPPER(country_name) LIKE :param2)
+            or (UPPER(country_name) LIKE :param3)
+            or (UPPER(country_name) LIKE :param4)) order by country_name asc limit 10";
         $query=$conect->createCommand($sql);
         $param1='%%'.$searchItem.'%%';
         $param2='%%'.$searchItem;

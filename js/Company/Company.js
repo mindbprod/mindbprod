@@ -614,6 +614,7 @@ var Company = function(){
                                 value.company_name,
                                 value.company_address,
                                 value.company_fest_desc,
+                                value.country_name,
                                 value.city_name,
                                 value.telephone_number,
                                 value.web,
@@ -1136,7 +1137,7 @@ var Company = function(){
                     $.ajax({
                         type: "POST",
                         url:"searchCountry",
-                        data: {stringcity:self.div.find("#entitysearch-form #Company_country").val()},
+                        data: {stringcountry:self.div.find("#entitysearch-form #Company_country").val()},
                         beforeSend:function (){
                             self.div.find("#entitysearch-form #Company_id_country").val("");
                         },
