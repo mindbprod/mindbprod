@@ -152,21 +152,6 @@ $this->breadcrumbs=array(
                         <tbody>
 
                         </tbody>
-                        <tfoot>
-                            <tr>
-                                <th>Company number</th>
-                                <th>Company name</th>
-                                <th>Company address</th>
-                                <th>Company/fest description</th>
-                                <th>Company country</th>
-                                <th>Company city</th>
-                                <th>Company telephon</th>
-                                <th>Company web</th>
-                                <th>Company email(s)</th>
-                                <th>Company Social networks(s)</th>
-                                <th>Action</th>
-                            </tr>
-                        </tfoot>
                     </table>
                 </div>
                 <!-- /.panel-body -->

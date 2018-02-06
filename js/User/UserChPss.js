@@ -119,7 +119,6 @@ var UserChPss = function(params,callback){
         }).fail(function(error, textStatus, xhr) {
             msg="Error, contact support ";
             typeMsg="error";
-        }).always(function(){
             $.notify(msg, typeMsg);
         });
     }; 

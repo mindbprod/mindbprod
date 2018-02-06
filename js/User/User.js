@@ -139,9 +139,16 @@ var User = function(params,callback){
         self.div.find(".formUsuario").trigger("reset");
     };
     self.changeStatePre=function(state,personid){
+        var statMsg="";
+        if(state==2){
+            statMsg="disable";
+        }
+        else{
+            statMsg="enable";
+        }
         $.confirm({
             title: 'Confirm!',
-            content: 'Are you shure you want to disable this user '+personid+'?',
+            content: 'Are you sure you want to '+statMsg+' this user '+personid+'?',
             buttons: {
                 confirm: function () {
                     self.changeState(state,personid);
