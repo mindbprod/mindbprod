@@ -113,14 +113,21 @@ var Company = function(){
                 }
             }
         });
-        self.div.find("#btnAgregaRsocial").click(function(){
+        self.div.find("#btnAgregaRsocial").click(function(event){
             var name='TypeSNetwork';
-            var idVal = $('input[name='+name+']:checked').attr("id");
             
 //            alert($("label[for='"+idVal+"']").text());
             
             if(self.div.find('#input_snet').val()!="" && $('input[name='+name+']:checked').length){
-                $("#snetw-form").append('<div><input type="text" name="snetw[]"  readonly value="'+self.div.find('#input_snet').val()+'"/><input size="10" type="text" readonly value="'+$("label[for='"+idVal+"']").text()+'"><input type="hidden" name="typesnet[]"  readonly value="'+$('input[name='+name+']:checked').val()+'"/><a href="#" class="remove_field_snet">Remove</a></div>');
+                var idVal = $('input[name='+name+']:checked').attr("id");
+                if(!Mbp.validateSNetwork($("label[for='"+idVal+"']").text(),self.div.find('#input_snet').val())){
+                    msg="You have to type a valid "+$("label[for='"+idVal+"']").text();
+                        typeMsg="warn";
+                        $.notify(msg, typeMsg);
+                        return false;
+                }
+                    $("#snetw-form").append('<div><input type="text" name="snetw[]"  readonly value="'+self.div.find('#input_snet').val()+'"/><input size="10" type="text" readonly value="'+$("label[for='"+idVal+"']").text()+'"><input type="hidden" name="typesnet[]"  readonly value="'+$('input[name='+name+']:checked').val()+'"/><a href="#" class="remove_field_snet">Remove</a></div>');
+            
             }
             else{
                 msg="You have to type a social network and select a social network type  ";
