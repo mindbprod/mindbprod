@@ -58,6 +58,30 @@ var Mbp = function(){
         var pattern=/^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/;
         return $.trim(web).match(pattern) ? true : false;
     }
+    self.validateSNetwork=function(typeSN,sNetwork){
+        var pattern="";
+//        console.log(typeSN);
+        switch(typeSN){
+            case "Facebook":
+                pattern=/^(https?:\/\/)?(www\.)?facebook.com\/([A-Za-z0-9_]{1,15})$/;
+                console.log($.trim(sNetwork).match(pattern) ? true : false);
+                return $.trim(sNetwork).match(pattern) ? true : false;
+                break;
+            case "Twitter":
+                pattern=/^@([A-Za-z0-9_]{1,15})$/;
+                return $.trim(sNetwork).match(pattern) ? true : false;
+                break;
+            case "Instagram":
+                pattern=/^(https?:\/\/)?(www\.)?instagram.com\/([A-Za-z0-9_]{1,15})$/;
+                return $.trim(sNetwork).match(pattern) ? true : false;
+                break;
+            case "Google +":
+//                pattern=/^https?:\/\/plus\.google\.com\/\+[^/]+|\d{21}$/;
+                pattern=/^(https?:\/\/)?plus\.google\.com\/([0-9]{21})$/;
+                return $.trim(sNetwork).match(pattern) ? true : false;
+                break;
+        }
+    };
     /**************************************************************************/
     /******************************* SYNC METHODS *****************************/
     /**************************************************************************/ 
