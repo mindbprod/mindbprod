@@ -61,7 +61,7 @@ var Company = function(){
             buttons: [
                 'csv', 'excel', 'print'
             ],
-            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
+            "lengthMenu": [[10, 25, 50], [10, 25, 50]]
         });
         self.dataToEdit=[];
         self.div.find("#btnEditaCmp").hide();
@@ -609,6 +609,18 @@ var Company = function(){
                         self.dataToEdit=response.data;
     //                    localStorage.setItem('dataSearch',response.data);
                         $.each(response.data,function(key,value){
+//                            console.log(value.emails);
+                            var emails=""; 
+                            var i=1;
+                            $.each(value.emails,function(keye,valuee){
+                                console.log(valuee.email);
+                                if(i<=3){
+                                   emails+="-."+valuee.email+"</br>"; 
+                                }
+                                   i++;
+                                 
+                            });
+                            console.log("------||");
                             dataTableShowDataCmp.row.add([
                                 value.company_number,
                                 value.company_name,
@@ -618,7 +630,7 @@ var Company = function(){
                                 value.city_name,
                                 value.telephone_number,
                                 value.web,
-                                value.email,
+                                emails,
                                 value.snetwork,
                                 "<a href='javascript:Company.editDataCompany("+value.id_company+");'>View more/Edit</a>"
                             ]).draw();
