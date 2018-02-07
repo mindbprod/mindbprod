@@ -433,10 +433,57 @@ var Company = function(){
                      });
             });
     };
-      
+    self.deleteDataCompany=function(idCompany,nameCompany){
+        $.confirm({
+            title: 'Confirm!',
+            content: 'Are you sure you want to delete this company "'+nameCompany+'"?',
+            buttons: {
+                confirm: function () {
+                    self.deleteCompany(idCompany);
+                },
+                cancel: function () {
+                    return;
+                }
+            }
+        });
+    };
+    
     /**************************************************************************/
     /******************************* SYNC METHODS *****************************/
     /**************************************************************************/ 
+    self.deleteCompany=function(idCompany){
+        $.ajax({
+            type: "POST",
+            dataType:'json',
+            url: 'deleteCompany',
+            data:{'idCompany':idCompany}
+        }).done(function(response) {
+            if(response.status=="nosession"){
+                $.notify("The session has expired, you have to login again", "warn");
+                setTimeout(function(){document.location.href="site/login";}, 3000);
+                Mbp.estadoGuarda=true;
+                return;
+            }
+            else{
+                if(response.status=="exito"){
+                    msg="Company deleted ";
+                    typeMsg="success";
+                    self.searchDataCompany();
+                }
+                else{
+                    msg="Company not deleted ";
+                    typeMsg="warn";
+                }
+                
+                $.notify(msg, typeMsg);
+            }
+        }).fail(function(error, textStatus, xhr) {
+            msg="Error, contact support ";
+            typeMsg="error";
+            $.notify(msg, typeMsg);
+        });
+    };
+    
     /**
      * Consume servicio para registrar la compañía o empresa
      */
@@ -639,7 +686,7 @@ var Company = function(){
                                 value.web,
                                 emails,
                                 value.snetwork,
-                                "<a href='javascript:Company.editDataCompany("+value.id_company+");'>View more/Edit</a>"
+                                value.links
                             ]).draw();
                         });
                     }
