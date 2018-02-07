@@ -224,6 +224,17 @@ class CompanyController extends Controller{
             }
         }
     }
+    public function actionDeleteCompany(){
+        $data=Yii::app()->request->getPost("idCompany");
+        $modelCompany= Company::model()->findByPk($data);
+        if($modelCompany->delete()){
+            $response["status"]="exito";
+        }
+        else{
+            $response["status"]="noexito";
+        }
+        echo CJSON::encode($response);
+    }
     public function actionEditDataUbication(){
         $data=Yii::app()->request->getPost("DCmp");
         $dataVal=[];
@@ -715,6 +726,10 @@ class CompanyController extends Controller{
                 $readTC->close();
                 $res[$pk]["tcompanys"]=$resTC;
                 
+                $res[$pk]["links"]="<a href='javascript:Company.editDataCompany(".$row["id_company"].");'>View more/Edit</a>";
+                if(Yii::app()->user->getState('codeRole')=="SUPERADMIN"){
+                    $res[$pk]["links"].=" | <a href=\"javascript:Company.deleteDataCompany('".$row["id_company"]."','".$row["company_name"]."');\">Delete</a>";
+                }
             }
         }
         

@@ -142,7 +142,7 @@ $this->breadcrumbs=array(
                                 <th>Company/fest description</th>
                                 <th>Company country</th>
                                 <th>Company city</th>
-                                <th>Company telephon</th>
+                                <th>Company telephone</th>
                                 <th>Company web</th>
                                 <th>Company email(s)</th>
                                 <th>Company Social networks(s)</th>
