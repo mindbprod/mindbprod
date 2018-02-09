@@ -31,7 +31,262 @@ class CompanyController extends Controller{
     public function actionIndex(){
             $this->render('index');
     }
-    
+    public function actionLoadErrors(){
+        $this->render("_showErrors");
+    }
+    public function actionLoadErrorsTable(){
+        $connect=Yii::app()->db;
+        // initilize all variable
+        $params = $columns = $sqlRC = $data = array();
+
+        $params = $_REQUEST;
+
+        //define index of column
+        $columns = array( 
+            0=>'created',
+            1 =>'id',
+            2 =>'audit_request_id', 
+            3 => 'user_id',
+            4 => 'hash',
+            5 =>'code',
+            6 =>'type', 
+            7 => 'error_code',
+            8 => 'message',
+            9 => 'file',
+            10 => 'line'
+        );
+        $where = $sqlTot = $sqlRec = "";
+        // check search value exist
+        if( !empty($params['search']['value']) ) {   
+            $where .=" WHERE ";
+            $where .=" ( au.created LIKE '".$params['search']['value']."%' ";
+            $where .=" OR au.id LIKE '".$params['search']['value']."%' ";
+            $where .=" OR audit_request_id LIKE '".$params['search']['value']."%' ";
+            $where .=" OR user_id LIKE '".$params['search']['value']."%' ";
+            $where .=" OR hash LIKE '".$params['search']['value']."%' ";
+            $where .=" OR code LIKE '".$params['search']['value']."%' ";
+            $where .=" OR type LIKE '".$params['search']['value']."%' ";
+            $where .=" OR error_code LIKE '".$params['search']['value']."%'  ";
+            $where .=" OR message LIKE '".$params['search']['value']."%' ";
+            $where .=" OR file LIKE '".$params['search']['value']."%' ";
+            $where .=" OR line LIKE '".$params['search']['value']."%' )";
+        }
+
+        // getting total number records without any search
+        $sql = "SELECT au.*,ar.user_id FROM audit_error AS au LEFT JOIN audit_request AS ar ON ar.id=au.audit_request_id";
+        $sqlTot .= $sql;
+        $sqlRec .= $sql;
+        //concatenate search sql if value exist
+        if(isset($where) && $where != '') {
+
+                $sqlTot .= $where;
+                $sqlRec .= $where;
+        }
+        $sqlRec .=  " ORDER BY ". $columns[$params['order'][0]['column']]."   ".$params['order'][0]['dir']."  LIMIT ".$params['start']." ,".$params['length']." ";
+        $query=$connect->createCommand($sqlRec);
+        $read=$query->query();
+        $results=$read->readAll();
+        $read->close();
+
+        /*total rows*/
+        $sqlRC = "SELECT * FROM audit_error AS au LEFT JOIN audit_request AS ar ON ar.id=au.audit_request_id";
+        $queryNR=$connect->createCommand($sqlRC);
+        $readNR=$queryNR->query();
+        $resultsNC=$readNR->rowCount;
+        $readNR->close();
+        foreach($results as $pk=>$result){
+            $dataResult[0]=date("Y-m-d h:i:s A", $result["created"]);
+            $dataResult[1]="<a href='".Yii::app()->request->baseUrl."/index.php/audit/error/view/id/".$result["id"]."' target='_blank'>".$result["id"]."</a>";
+            $dataResult[2]="<a href='".Yii::app()->request->baseUrl."/index.php/audit/request/view/id/".$result["audit_request_id"]."' target='_blank'>".$result["audit_request_id"]."</a>";
+            $dataResult[3]="<a href='".Yii::app()->request->baseUrl."/index.php/user/view?iduser=".$result["user_id"]."' target='_blank'>".$result["user_id"]."</a>";
+            $dataResult[4]=$result["hash"];
+            $dataResult[5]=$result["code"];
+            $dataResult[6]=$result["type"];
+            $dataResult[7]=$result["error_code"];
+            $dataResult[8]=$result["message"];
+            $dataResult[9]=$result["file"];
+            $dataResult[10]=$result["line"];
+            $data[$pk]=$dataResult;
+        }
+
+        $json_data = array(
+            "draw"            => intval( $params['draw'] ),   
+            "recordsTotal"    => intval( $resultsNC ),  
+            "recordsFiltered" => intval($resultsNC),
+            "data"            => $data   // total data array
+        );
+        echo CJSON::encode($json_data);
+    }
+    public function actionLoadFields(){
+        $this->render("_showFields");
+    }
+    public function actionLoadFieldsTable(){
+        $connect=Yii::app()->db;
+        // initilize all variable
+        $params = $columns = $sqlRC = $data = array();
+
+        $params = $_REQUEST;
+
+        //define index of column
+        $columns = array( 
+            0=>'created',
+            1 =>'id',
+            2 =>'audit_request_id', 
+            3 => 'user_id',
+            4 => 'old_value',
+            5 =>'new_value',
+            6 =>'action', 
+            7 => 'model_name',
+            8 => 'model_id',
+            9 => 'field',
+        );
+        $where = $sqlTot = $sqlRec = "";
+        // check search value exist
+        if( !empty($params['search']['value']) ) {   
+            $where .=" WHERE ";
+            $where .=" ( created LIKE '".$params['search']['value']."%' ";
+            $where .=" OR id LIKE '".$params['search']['value']."%' ";
+            $where .=" OR audit_request_id LIKE '".$params['search']['value']."%' ";
+            $where .=" OR user_id LIKE '".$params['search']['value']."%' ";
+            $where .=" OR old_value LIKE '".$params['search']['value']."%' ";
+            $where .=" OR new_value LIKE '".$params['search']['value']."%' ";
+            $where .=" OR action LIKE '".$params['search']['value']."%' ";
+            $where .=" OR model_name LIKE '".$params['search']['value']."%'  ";
+            $where .=" OR model_id LIKE '".$params['search']['value']."%' ";
+            $where .=" OR field LIKE '".$params['search']['value']."%' )";
+        }
+
+        // getting total number records without any search
+        $sql = "SELECT * FROM audit_field";
+        $sqlTot .= $sql;
+        $sqlRec .= $sql;
+        //concatenate search sql if value exist
+        if(isset($where) && $where != '') {
+
+                $sqlTot .= $where;
+                $sqlRec .= $where;
+        }
+        $sqlRec .=  " ORDER BY ". $columns[$params['order'][0]['column']]."   ".$params['order'][0]['dir']."  LIMIT ".$params['start']." ,".$params['length']." ";
+        $query=$connect->createCommand($sqlRec);
+        $read=$query->query();
+        $results=$read->readAll();
+        $read->close();
+
+        /*total rows*/
+        $sqlRC = "SELECT * FROM audit_field";
+        $queryNR=$connect->createCommand($sqlRC);
+        $readNR=$queryNR->query();
+        $resultsNC=$readNR->rowCount;
+        $readNR->close();
+        foreach($results as $pk=>$result){
+            $dataResult[0]=date("Y-m-d h:i:s A", $result["created"]);
+            $dataResult[1]="<a href='".Yii::app()->request->baseUrl."/index.php/audit/error/view/id/".$result["id"]."' target='_blank'>".$result["id"]."</a>";
+            $dataResult[2]="<a href='".Yii::app()->request->baseUrl."/index.php/audit/request/view/id/".$result["audit_request_id"]."' target='_blank'>".$result["audit_request_id"]."</a>";
+            $dataResult[3]="<a href='".Yii::app()->request->baseUrl."/index.php/user/view?iduser=".$result["user_id"]."' target='_blank'>".$result["user_id"]."</a>";
+            $dataResult[4]=$result["old_value"];
+            $dataResult[5]=$result["new_value"];
+            $dataResult[6]=$result["action"];
+            $dataResult[7]=$result["model_name"];
+            $dataResult[8]=$result["model_id"];
+            $dataResult[9]=$result["field"];
+            $data[$pk]=$dataResult;
+        }
+
+        $json_data = array(
+            "draw"            => intval( $params['draw'] ),   
+            "recordsTotal"    => intval( $resultsNC ),  
+            "recordsFiltered" => intval($resultsNC),
+            "data"            => $data   // total data array
+        );
+        echo CJSON::encode($json_data);
+    }
+    public function actionLoadRequests(){
+        $this->render("_showRequests");
+    }
+    public function actionLoadRequestsTable(){
+        $connect=Yii::app()->db;
+        // initilize all variable
+        $params = $columns = $sqlRC = $data = array();
+
+        $params = $_REQUEST;
+
+        //define index of column
+        $columns = array( 
+            0=>'created',
+            1 =>'id',
+            2 => 'user_id',
+            3 => 'app',
+            4 =>'lnk',
+            5 =>'referrer', 
+            6 => 'redirect',
+            7 => 'audit_field_count',
+            8 => 'total_time',
+            9 => 'memory_peak',
+            10 => 'ip',
+        );
+        
+        $where = $sqlTot = $sqlRec = "";
+        // check search value exist
+        if( !empty($params['search']['value']) ) {   
+            $where .=" WHERE ";
+            $where .=" ( created LIKE '".$params['search']['value']."%' ";
+            $where .=" OR id LIKE '".$params['search']['value']."%' ";
+            $where .=" OR user_id LIKE '".$params['search']['value']."%' ";
+            $where .=" OR app LIKE '".$params['search']['value']."%' ";
+            $where .=" OR link LIKE '".$params['search']['value']."%' ";
+            $where .=" OR referrer LIKE '".$params['search']['value']."%' ";
+            $where .=" OR redirect LIKE '".$params['search']['value']."%'  ";
+            $where .=" OR audit_field_count LIKE '".$params['search']['value']."%' ";
+            $where .=" OR total_time LIKE '".$params['search']['value']."%' ";
+            $where .=" OR memory_peak LIKE '".$params['search']['value']."%' ";
+            $where .=" OR ip LIKE '".$params['search']['value']."%' )";
+        }
+
+        // getting total number records without any search
+        $sql = "SELECT * FROM audit_request";
+        $sqlTot .= $sql;
+        $sqlRec .= $sql;
+        //concatenate search sql if value exist
+        if(isset($where) && $where != '') {
+
+                $sqlTot .= $where;
+                $sqlRec .= $where;
+        }
+        $sqlRec .=  " ORDER BY ". $columns[$params['order'][0]['column']]."   ".$params['order'][0]['dir']."  LIMIT ".$params['start']." ,".$params['length']." ";
+        $query=$connect->createCommand($sqlRec);
+        $read=$query->query();
+        $results=$read->readAll();
+        $read->close();
+
+        /*total rows*/
+        $sqlRC = "SELECT * FROM audit_request";
+        $queryNR=$connect->createCommand($sqlRC);
+        $readNR=$queryNR->query();
+        $resultsNC=$readNR->rowCount;
+        $readNR->close();
+        foreach($results as $pk=>$result){
+            $dataResult[0]=date("Y-m-d h:i:s A", $result["created"]);
+            $dataResult[1]="<a href='".Yii::app()->request->baseUrl."/index.php/audit/error/view/id/".$result["id"]."' target='_blank'>".$result["id"]."</a>";
+            $dataResult[2]="<a href='".Yii::app()->request->baseUrl."/index.php/user/view?iduser=".$result["user_id"]."' target='_blank'>".$result["user_id"]."</a>";
+            $dataResult[3]=$result["app"];
+            $dataResult[4]=$result["link"];
+            $dataResult[5]=$result["referrer"];
+            $dataResult[6]=$result["redirect"];
+            $dataResult[7]=$result["audit_field_count"];
+            $dataResult[8]=$result["total_time"];
+            $dataResult[9]=$result["memory_peak"];
+            $dataResult[10]=$result["ip"];
+            $data[$pk]=$dataResult;
+        }
+
+        $json_data = array(
+            "draw"            => intval( $params['draw'] ),   
+            "recordsTotal"    => intval( $resultsNC ),  
+            "recordsFiltered" => intval($resultsNC),
+            "data"            => $data   // total data array
+        );
+        echo CJSON::encode($json_data);
+    }
     public function actionRegisterCompany(){
         $modelCompany=new Company();
         $modelTelephone=new Telephone();

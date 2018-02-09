@@ -59,6 +59,7 @@ $columns[] = array(
 );
 
 // grid
+
 $this->widget(Yii::app()->getModule('audit')->gridViewWidget, array(
     'id' => 'auditRequest-grid',
     'dataProvider' => $auditRequest->search(),
