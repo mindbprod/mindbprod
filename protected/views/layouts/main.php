@@ -110,7 +110,21 @@
                                     <!-- /.nav-second-level -->
                                 </li>
                                 <li>
-                                    <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/audit"><i class="fa fa-user-secret fa-fw"></i>Audit</a>
+                                    <a href="#"><i class="fa fa-user-secret fa-fw"></i> Audit<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-second-level">
+                                        <li>
+                                            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/audit"><i class="fa fa-user-secret fa-fw"></i>View audit</a>
+                                        </li>
+                                        <li>
+                                            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/company/loadErrors"><i class="fa fa-file-excel-o fa-fw"></i>Show Errors</a>
+                                        </li>
+                                        <li>
+                                            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/company/loadFields"><i class="fa fa-file-excel-o fa-fw"></i>Show Fields</a>
+                                        </li>
+                                        <li>
+                                            <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/company/loadRequests"><i class="fa fa-file-excel-o fa-fw"></i>Show Requests</a>
+                                        </li>
+                                    </ul>
                                 </li>
                             </ul>
                         <?php endif;?>
